@@ -86,6 +86,7 @@ class particle_point
 			else
 				return true;
 		}
+		return false; // Just to remove the warning
     }
     int checkpoint(){
         int status = 0;
