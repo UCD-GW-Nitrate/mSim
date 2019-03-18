@@ -33,7 +33,7 @@ classdef CSGobj_v2
                     end
                     CSG.dummy=1;
                     for ii=1:size(SH,1)
-                        [Xs Ys]=polysplit(SH(ii,1).X,SH(ii,1).Y);
+                        [Xs, Ys]=msim_polysplit(SH(ii,1).X,SH(ii,1).Y);
                         for jj=1:size(Xs,1)
                             if jj>size(CSG.PL.pl_id,1)
                                 CSG.PL=CSG.PL.allocate(1);
@@ -49,7 +49,7 @@ classdef CSGobj_v2
                     CSG.dummy=2;
                     for ii=1:size(SH,1)
                         ii;
-                        [Xs Ys]=polysplit(SH(ii,1).X,SH(ii,1).Y);
+                        [Xs, Ys]=msim_polysplit(SH(ii,1).X,SH(ii,1).Y);
                         if isfield(SH(ii,1),'DistMin');thresh.DistMin=SH(ii,1).DistMin;else thresh.DistMin=nan;end
                         if isfield(SH(ii,1),'DistMax');thresh.DistMax=SH(ii,1).DistMax;else thresh.DistMax=nan;end
                         if isfield(SH(ii,1),'LcMin');thresh.LcMin=SH(ii,1).LcMin;else thresh.LcMin=nan;end
@@ -86,7 +86,7 @@ classdef CSGobj_v2
                                       CSG.PS.coord(CSG.LS.l_id(L_ID,2),1),...
                                       CSG.PS.coord(CSG.LS.l_id(L_ID,2),2));
                 id_cross_line=find(~isnan(t), 1);
-                if ~isempty(id_cross_line);
+                if ~isempty(id_cross_line)
                     p_cros=[CSG.PS.coord(CSG.LS.l_id(id_cross_line,1),1)+(CSG.PS.coord(CSG.LS.l_id(id_cross_line,2),1)-CSG.PS.coord(CSG.LS.l_id(id_cross_line,1),1))*t(id_cross_line) ...
                             CSG.PS.coord(CSG.LS.l_id(id_cross_line,1),2)+(CSG.PS.coord(CSG.LS.l_id(id_cross_line,2),2)-CSG.PS.coord(CSG.LS.l_id(id_cross_line,1),2))*t(id_cross_line)];
                     px=p_cros(1);py=p_cros(2);
@@ -107,7 +107,7 @@ classdef CSGobj_v2
             end
             CSG.PS.type(id)=CSG.dummy;
             if ~isempty(L_ID)
-                if ~isempty(id_cross_line);
+                if ~isempty(id_cross_line)
                     id_line1=CSG.LS.isLineinSet(CSG.LS.l_id(id_cross_line,1),id);
                     id_line2=CSG.LS.isLineinSet(id,CSG.LS.l_id(id_cross_line,2));
                     if ~((isinf(id_line1) && ~isnan(id_line2)) || (isinf(id_line2) && ~isnan(id_line1)))
@@ -149,7 +149,7 @@ classdef CSGobj_v2
                 id_x=find(~isnan(pint(:,1)));
                 if ~isempty(id_x)
                     t=CSG.LS.find_parametric_point(ln,pint(id_x,:));
-                    [c_t d_t]=sort(t,'ascend');
+                    [c_t, d_t]=sort(t,'ascend');
                     LN=[ln(1:2) pint(id_x(d_t(1)),:)];
                     for ii=2:length(c_t)
                         LN=[LN;pint(id_x(d_t(ii-1)),:) pint(id_x(d_t(ii)),:)];
@@ -217,7 +217,7 @@ classdef CSGobj_v2
             id_fields=(1:size(fields,1))';
             id_nan=isnan(fields(:,2));
             id_fields(id_nan,:)=[];%fields(id_nan,:)=[] ;  
-            [b m n]=unique(fields(id_fields,2:5),'rows');
+            [b, m, n]=unique(fields(id_fields,2:5),'rows');
             id_atr_thr=[(1:size(b,1))' size(b,1)+(1:size(b,1))'];
             for i=1:size(b,1)
                 fprintf(fid,'b%g_DistMin = %f;\n',i,b(i,1));

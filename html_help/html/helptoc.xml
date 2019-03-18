@@ -203,6 +203,8 @@
 				</tocitem>
 				<tocitem target="msim_mesh_options_help.html" image="HelpIcon.FUNCTION"> msim_mesh_options
 				</tocitem>
+				<tocitem target="msim_polysplit_help.html" image="HelpIcon.FUNCTION"> msim_polysplit
+				</tocitem>
 				<tocitem target="read_2D_Gmsh_help.html" image="HelpIcon.FUNCTION"> read_2D_Gmsh
 				</tocitem>
 				<tocitem target="readArcGisASCIIfile_help.html" image="HelpIcon.FUNCTION"> readArcGisASCIIfile
