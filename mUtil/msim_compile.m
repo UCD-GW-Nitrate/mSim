@@ -13,22 +13,22 @@ function msim_compile()
 % Department of Land Air and Water
 % University of California Davis
 
-msim_root = cd;
+mroot = msim_root;
 if exist('OCTAVE_VERSION')
-    cd([msim_root '/mPart/'])
+    cd([mroot '/mPart/'])
     mkoctfile Part_Track_oct.cpp
     
-    cd([msim_root '/mNPSAT/'])
+    cd([mroot '/mNPSAT/'])
     mkoctfile calcbtc_oct.cpp
     
 else
-    cd([msim_root '/mPart/'])
+    cd([mroot '/mPart/'])
     mex Part_Track_mat.cpp
     
-    cd([msim_root '/mNPSAT/'])
+    cd([mroot '/mNPSAT/'])
     mex calcbtc_mat.cpp
     
-    cd([msim_root '/mUtil/'])
+    cd([mroot '/mUtil/'])
     mex Build2Dmeshinfocpp.cpp
     mex read_2D_mesh_cpp.cpp
     
