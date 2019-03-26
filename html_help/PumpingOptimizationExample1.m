@@ -27,8 +27,15 @@
 % We will consider 6 wells around a site that we need to lower the water
 % table.
 %%%
+% The goal of optimization is to keep the water table around the center of
+% the aquifer (2500,2500) at a radious 650 m below 30 m with the minimum
+% possible pumping. There are two constraints regarding the well locations.
+% The wells cannot be within the area we want to lower the water table and
+% not close to the aquifer boundaries.
+%%%
 % If you have followed any of the other tutorials the following snippet
-% should make sense.
+% should make sense. (_Here we do not explain in great detail the parts
+% that the explanations can be found in other tutorials_)
 dom.Geometry = 'Polygon';
 dom.X = [0 0 5000 5000 0 nan];
 dom.Y = [0 5000 5000 0 0 nan];
@@ -62,8 +69,8 @@ Tnd=100*ones(Np, 1); %m^2/day.
 %%%
 % *Fluxes*
 %%%
-% Groundwater recharge is the only flux considered in this example with
-% rate equal to 4mm/day
+% Groundwater recharge is the only flux considered in this example, besides the wells, with
+% rate equal to 4 mm/day.
 FLUX(1,1).id = [1:Nel]';
 FLUX(1,1).val = 0.0004*ones(Nel,1);
 FLUX(1,1).dim = 2; %is the dimension of the elements
@@ -71,27 +78,28 @@ FLUX(1,1).el_type = 'triangle'; %This is the type of element
 FLUX(1,1).el_order = 'linear'; %This is the element order
 FLUX(1,1).id_el = 1; %This is the index of the elements in the MSH.elem array
 %%%
-% Another flux type are the wells. However their locations and rates will
+% For the wells, their locations and rates will
 % be determined via optimization. However we will add 6 wells in the
-% model with random locations and rates that will be used as placeholders
-% when we setup the optimization.
+% model with random locations and rates that will be used as placeholders.
 random_wells = [500 + 4000*rand(6,2) -(500 + 1500*rand(6,1))];
 %%%
 % When the mesh of the domain was constructed the well locations
 % where not taken into account. To assign the well fluxes in the mesh we
 % will first identify in which elements the wells are laying and then assign
-% the rate to the nodes of that triangle proportionaly with the distance
+% the rate to the nodes of that element proportionaly with the distance
 % from the nodes.
 FLUX_point = [];
 %%%
-% We will need the element barycenters, and initialize a weight vector
+% We need the element barycenters, and we initialize a weight vector
 cc = Calc_Barycenters(p, MSH(3,1).elem(1,1).id);
 weights = zeros(size(MSH(3).elem.id,2), 1);
 %%%
 % Then for each well we find the distances from the element barycenter, and
 % starting from the closest one we check if the well is in that element.
-% This is actually always the case so the loop breaks after jj = 1. The we
-% compute the weights as the inverse distance from the element nodes.
+% This is actually always true so the loop breaks after jj = 1. The we
+% compute the weights as the 
+% <https://en.wikipedia.org/wiki/Inverse_distance_weighting inverse distance>
+% from the element nodes.
 for ii = 1:size(random_wells, 1)
     dst = sqrt((random_wells(ii,1) - cc(:,1)).^2 + (random_wells(ii,2) - cc(:,2)).^2);
     [c, d] = sort(dst);
@@ -113,18 +121,19 @@ end
 %%%
 % *Boundary conditions*
 %%%
-% The nodes of the left side of the domain where x = 0, will be assigned a
+% The nodes at the left side of the domain (x = 0), will be assigned a
 % hydraulic head equal to 30 m.
 id_left = find(p(:,1) < 0.1);
 CH = [id_left 30*ones(length(id_left),1)];
 %%%
-% The nodes of the right side (x = 5000) will be assigned a hydraulic head
+% The nodes at the right side (x = 5000) will be assigned a hydraulic head
 % equal to 40 m
 id_right = find(p(:,1) > 4999.9);
 CH = [CH; id_right 40*ones(length(id_right),1)];
 %% Assemble, solve, visualize
 % The following is the standard code to assemble the system matrices, solve
-% the groundwater flow equation and visualize.
+% the groundwater flow equation and visualize. (If you follow along the
+% plot will look different than this one)
 simopt.dim=2;
 simopt.el_type='triangle';
 simopt.el_order='linear';
@@ -140,16 +149,19 @@ camlight right
 view(-40, 30);
 drawnow
 %% Getting ready for the optimization
-% In general any optimization problem that involves the simulation of
-% groundwater flow in fact will solve a linear system of equations in the
+% In general, any optimization problem that involves the simulation of
+% groundwater flow will actually solve a linear system of equations in the
 % form KH = F where in our case K is the conductance matrix, F represent the fluxes
 % and boundary conditions and H is the unknown vector. In this example we
-% have made some assumptions so that the desicion variables do not affect
+% have made some assumptions so that the decision variables do not affect
 % the matrix K. Therefore we can assemble the matrix K once and use it
 % during the optimization. However we can further optimize the procedure.
 %%%
 % Let's first delve into the system_solve function. The following snippet
 % partitions the system to account for the boundary conditions.
+%%%
+% First identifies the constant head nodes *id_cnst* and then partitions
+% the matrices.
 id_cnst=find(~isnan(H)); 
 id_var=find(isnan(H));
 KK=Kglo(id_var,id_var);
@@ -157,7 +169,7 @@ GG=Kglo(id_var,id_cnst);
 DD=H(id_cnst);
 B=Fall(id_var)-GG*DD;
 %%%
-% Then the actual system to solve is KK*H = B, which we can solve using the
+% After partitioning he actual system to solve is KK*H = B, which we can solve using the
 % / matlab operator (lets repeat this many times to calculate an avarege solution time)
 for ii = 1:200
     tic
@@ -165,10 +177,10 @@ for ii = 1:200
     t1(ii,1) = toc;
 end
 %%
-% An alternative we be to decompose the matrix KK as:
+% An alternative is to decompose first the matrix KK as:
 [L,U,P,Q,R] = lu(KK);
 %%% 
-% and then solve (Again repeat multiple times to get an average solve time)
+% and then solve (again repeat multiple times to get an average solve time)
 for ii = 1:200
     tic;
     Q * (U \ (L \ (P * (R \ B))));
@@ -185,14 +197,21 @@ disp([sum(t2) mean(t2)])
 % optimization that requires 1000s of runs.
 %% Objective function
 % First we will create the objective function. The following code should be
-% put in a separete file named as *dewater_obj_fun.m*
+% put in a separete file named as *dewater_obj_fun.m* 
+% (This file can be also found the repository)
 %%%
 % The code penalizes the wells when they are inside to the dewatering area
 % or far away from it.
 % It also penalizes the solutions that violate the dewatering constraint,
 % which is the groundwater elevation should be less than 30 m.
+%%%
+% *Important note:*
+% _This objective function is not the best way to describe the constraints.
+% In fact if you start the optimization from a non valid solution then the
+% optimization will most likely fail, and this is because the objective
+% function cannot guide the derivatives to suggest a path from infeasible to feasible space._
 %{
-function y = dewater_obj_fun(x, L, U, GGDD, H, F, id_var, p, trimesh, cc, id_cnstr)
+function y = dewater_obj_fun(x, L, U, P, R, Q, GGDD, H, F, id_var, p, trimesh, cc, id_cnstr)
 % x is a vector 6*3 of the decision variables.
 % we reshape it so that they correspond to X Y Q
 x = reshape(x, 6,3);
@@ -239,11 +258,11 @@ else
 end
 %}
 %% 
-% Note that this objective function requires more inputs that just the
-% vector of the decision variables. However the optimization algorithm requires
-% that the functions have just one input. According to matlab documentations
-% we can create an anonymous objective
-% function with one input and all other required inputs as parameters at
+% Note that this objective function requires more inputs than just the
+% vector of the decision variables. However the Matlab optimization algorithms require
+% that the objective functions have just one input. According to matlab documentation
+% we can create an <https://www.mathworks.com/help/optim/ug/passing-extra-parameters.html anonymous function>
+% with one input with all other required inputs defined as parameters at
 % creation time.
 id_cnstr = find(sqrt((p(:,1)-2500).^2 + (p(:,2)-2500).^2) < 650);
 f = @(x)dewater_obj_fun(x, L, U, P, R, Q, GG*DD, H, F_rch, id_var, p, MSH(3).elem.id, cc, id_cnstr);
