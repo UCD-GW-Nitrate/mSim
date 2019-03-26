@@ -68,10 +68,9 @@ end
 
 if Use_Cpp
     [p, TEMP] = read_2D_mesh_cpp([filename '.msh']);
-    Np = size(p,1);
     TEMP(:,1)=[];
 else
-    display('Reading points...');
+    
     fid=fopen([filename '.msh'],'r');
     
     while 1
@@ -79,122 +78,18 @@ else
         if strcmp(temp,'$MeshFormat')
             temp = fscanf(fid, '%d', 3);
             GMSHVersion = floor(temp(1));
+            fclose(fid);
             break
         end
     end
     
-    while 1
-        temp=fgetl(fid);
-        if strcmp(temp,'$Nodes') || strcmp(temp,'$NOD')
-            break
-        end
+    if GMSHVersion == 4
+        [p, TEMP] = readGmsh_version4(filename);
+    else
+        error('Older versions of GMSH are no longer supported')
     end
-    
-    
-    if GMSHVersion == 2
-        Nnd=fscanf(fid,'%d',1);
-        p=zeros(Nnd,3);
-        for i=1:Nnd
-            id=fscanf(fid,'%d',1);
-            tmp=fscanf(fid,'%f',3)';
-            p(id,:)=tmp;
-        end
-    elseif GMSHVersion == 4
-        temp = fscanf(fid,'%d',2);
-        Nentities = temp(1);
-        Nnd = temp(2);
-        p=zeros(Nnd,3);
-        for ii = 1:Nentities
-           temp = fscanf(fid,'%d',4);
-           n = temp(4); % number of nodes per entity
-           for jj = 1:n
-               id=fscanf(fid,'%d',1);
-               tmp=fscanf(fid,'%f',3)';
-               p(id,:)=tmp;
-           end
-        end
-    end
-    
-    Np = size(p,1);
-
-    %read triangulation
-    while 1
-        temp=fgetl(fid);
-        if strcmp(temp,'$Elements') || strcmp(temp,'$ELM')
-            break
-        end
-    end
-    
-    if GMSHVersion == 2
-        Nel=fscanf(fid,'%d',1);
-        Nentities = 1;
-    elseif GMSHVersion == 4
-        temp = fscanf(fid,'%d',2);
-        Nentities = temp(1);
-        Nel = temp(2);
-    end
-    
-    TEMP=nan(Nel,30);TEMP_dom=nan(Nel,1);
-    cnt=1;
-    disp('Reading Elements...');
-    for j = 1:Nentities %% loop through entinties
-        if GMSHVersion == 2
-            n = Nel;  % for version 2 the hypothetical entity is supposed to hold Nel elements and the entity code will be read later
-        elseif GMSHVersion == 4
-            temp = fscanf(fid,'%d',4); 
-            n = temp(4);
-            elcode = temp(3);
-        end
-        
-        for i = 1:n
-            temp=fgetl(fid);
-            while isempty(temp)
-                temp=fgetl(fid);
-            end
-            A=textscan(temp,'%s');
-            if GMSHVersion == 2
-               elcode = str2double(A{1,1}{2,1});
-%                eln = 1;
-%            elseif GMSHVersion == 4
-%                A=textscan(temp,'%s');
-%                elcode = str2double(B{1,1}{3,1});
-%                eln = str2double(B{1,1}{3,1});
-            end
-
-               
-            if elcode == 15
-               TEMP(cnt,1:2) = [elcode str2double(A{1,1}{end,1})];
-               cnt=cnt+1;
-             elseif elcode == 1
-               TEMP(cnt,1:3) = [elcode str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-               cnt=cnt+1;
-            elseif elcode == 2
-                TEMP(cnt,1:4)=[elcode str2double(A{1,1}{end-2,1}) str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-                cnt=cnt+1;
-            elseif elcode == 3
-                TEMP(cnt,1:5)=[elcode str2double(A{1,1}{end-3,1}) str2double(A{1,1}{end-2,1}) str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-                cnt=cnt+1;
-            elseif elcode == 8
-                TEMP(cnt,1:4)=[elcode str2double(A{1,1}{end-2,1}) str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-                cnt=cnt+1;
-            elseif elcode == 9
-                TEMP(cnt,1:7)=[elcode str2double(A{1,1}{end-5,1}) str2double(A{1,1}{end-4,1}) str2double(A{1,1}{end-3,1}) str2double(A{1,1}{end-2,1})...
-                                      str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-                cnt=cnt+1;
-            elseif elcode == 10
-                TEMP(cnt,1:10)=[elcode str2double(A{1,1}{end-8,1}) str2double(A{1,1}{end-7,1}) str2double(A{1,1}{end-6,1}) str2double(A{1,1}{end-5,1})...
-                                str2double(A{1,1}{end-4,1}) str2double(A{1,1}{end-3,1}) str2double(A{1,1}{end-2,1}) str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-                cnt=cnt+1;
-            elseif elcode==16
-                TEMP(cnt,1:9)=[elcode str2double(A{1,1}{end-7,1}) str2double(A{1,1}{end-6,1}) str2double(A{1,1}{end-5,1}) str2double(A{1,1}{end-4,1})...
-                              str2double(A{1,1}{end-3,1}) str2double(A{1,1}{end-2,1}) str2double(A{1,1}{end-1,1}) str2double(A{1,1}{end,1})];
-                cnt=cnt+1;
-            end
-        end
-    end
-    
-    fclose(fid);
 end
+Np = size(p,1);
 
 b=unique(TEMP(:,1));
 cnt0D=1;cnt1D=1;cnt2D=1;cnt3D=1;
@@ -289,8 +184,8 @@ end
 TestMat=sparse(Np,Np);
 dim=size(MSH,1);
 for k=1:size(MSH(dim,1).elem,1)
-    for i = 1:size(MSH(dim,1).elem(k,1).id,2);
-        for j = 1:size(MSH(dim,1).elem(k,1).id,2);
+    for i = 1:size(MSH(dim,1).elem(k,1).id,2)
+        for j = 1:size(MSH(dim,1).elem(k,1).id,2)
             TestMat = TestMat + sparse(MSH(dim,1).elem(k,1).id(:,i), MSH(dim,1).elem(k,1).id(:,j), ones(size(MSH(dim,1).elem(k,1).id,1),1),Np, Np);
         end
     end
@@ -311,7 +206,7 @@ for i=length(dlt):-1:1
         %other nodes in the main mesh may have connections on other lower
         %dimension elements. However these elements must be removed
         for k=1:size(MSH(j,1).elem,1)
-            [ii jj]=find(MSH(j,1).elem(k,1).id==dlt(i));
+            [ii, jj]=find(MSH(j,1).elem(k,1).id==dlt(i));
             MSH(j,1).elem(k,1).id(ii,:)=[];
             %MSH(j,1).elem(k,1).dom(ii,:)=[];
             ind=find(MSH(j,1).elem(k,1).id>dlt(i));

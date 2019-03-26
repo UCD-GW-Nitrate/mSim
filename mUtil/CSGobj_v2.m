@@ -334,19 +334,19 @@ classdef CSGobj_v2
             fprintf(fid,'Mesh.CharacteristicLengthMax = %f;\n',opt.lc_gen);
             fprintf(fid,'Mesh.SecondOrderIncomplete = %d;\n',opt.incomplete);
             
-            fprintf(fid,'// ---- Partition options ----//\n');
-            part_method=1;%1:chaco, 2:Metis
-            fprintf(fid,'Mesh.Partitioner = %g;\n',part_method);
-            fprintf(fid,'//Mesh.NbPartitions = %g;\n',7);
-            fprintf(fid,'Mesh.ColorCarousel = %g;\n',3);
-            fprintf(fid,'Mesh.MshFilePartitioned = 0;\n');
-            if part_method==1
-                fprintf(fid,'Mesh.ChacoGlobalMethod = 2;\n');
-                fprintf(fid,'Mesh.ChacoArchitecture = 1;\n');
-                fprintf(fid,'Mesh.ChacoParamREFINE_MAP = 0;\n');
-            else
-                fprintf(fid,'Mesh.MetisAlgorithm = 1;\n');
-            end
+            %fprintf(fid,'// ---- Partition options ----//\n');
+            %part_method=1;%1:chaco, 2:Metis
+            %fprintf(fid,'Mesh.Partitioner = %g;\n',part_method);
+            %fprintf(fid,'//Mesh.NbPartitions = %g;\n',7);
+            %fprintf(fid,'Mesh.ColorCarousel = %g;\n',3);
+            %fprintf(fid,'Mesh.MshFilePartitioned = 0;\n');
+            %if part_method==1
+            %    fprintf(fid,'Mesh.ChacoGlobalMethod = 2;\n');
+            %    fprintf(fid,'Mesh.ChacoArchitecture = 1;\n');
+            %    fprintf(fid,'Mesh.ChacoParamREFINE_MAP = 0;\n');
+            %else
+            %    fprintf(fid,'Mesh.MetisAlgorithm = 1;\n');
+            %end
             fprintf(fid,'// ------------------------//\n');
             
             fclose(fid);

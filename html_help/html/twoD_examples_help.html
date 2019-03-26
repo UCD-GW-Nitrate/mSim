@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Examples in 2D</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-06-09"><meta name="DC.source" content="twoD_examples_help.m"><style type="text/css">
+      --><title>Examples in 2D</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-03-25"><meta name="DC.source" content="twoD_examples_help.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -23,7 +23,7 @@ a:visited { color:#004aa0; text-decoration:none; }
 
 p { padding:0px; margin:0px 0px 20px; }
 img { padding:0px; margin:0px 0px 20px; border:none; }
-p img, pre img, tt img, li img { margin-bottom:0px; } 
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
 
 ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
 ul li { padding:0px; margin:0px 0px 7px 0px; }
@@ -38,11 +38,12 @@ ol li ul li { list-style:square; }
 
 .content { font-size:1.2em; line-height:140%; padding: 20px; }
 
-pre, tt, code { font-size:12px; }
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
 pre { margin:0px 0px 20px; }
-pre.error { color:red; }
 pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
 pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
 
 @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
 
@@ -65,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Examples in 2D</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>In this section you can find few tutorials on how to use mSim functions for simulating steady state groundwater flow in 2D. The tutorials cover most of the type of elements, boundary conditions and stress types that one encounters in groundwater flow simulations.</p><div><ol><li><a href="example_1_help.html">Example 1</a> Triangular elements, constant head boundary conditions, general head boundary conditions, non-uniform diffuse groundwater recharge, uniform hydraulic conductivity</li><li><a href="example_2_help.html">Example 2</a> Quadrilateral elements, non-uniform hydraulic conductivity, lateral fluxes, quadratic elements</li><li><a href="Coastal_Aquifer.html">Coastal Aquifer Simulation</a> This is a real world example that uses the 2D groundwater flow equation to simulate the seawater intrusion based on the sharp interface approxination</li></ol></div><!--/introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+  </style></head><body><div class="content"><h1>Examples in 2D</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>In this section you can find few tutorials on how to use mSim functions for simulating steady state groundwater flow in 2D. The tutorials cover most of the type of elements, boundary conditions and stress types that one encounters in groundwater flow simulations.</p><div><ol><li><a href="example_1_help.html">Example 1</a> Triangular elements, constant head boundary conditions, general head boundary conditions, non-uniform diffuse groundwater recharge, uniform hydraulic conductivity</li><li><a href="example_2_help.html">Example 2</a> Quadrilateral elements, non-uniform hydraulic conductivity, lateral fluxes, quadratic elements</li><li><a href="Coastal_Aquifer.html">Coastal Aquifer Simulation</a> This is a real world example that uses the 2D groundwater flow equation to simulate the seawater intrusion based on the sharp interface approxination</li><li><a href="PumpingOptimizationExample1.html">Pumping optimization</a> This is a hypothetical example that shows how to combine mSim with matlab optimization algorithms.</li></ol></div><!--/introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Examples in 2D
 % 
@@ -85,6 +86,9 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 % # <Coastal_Aquifer.html Coastal Aquifer Simulation> This is a real world
 % example that uses the 2D groundwater flow equation to simulate the
 % seawater intrusion based on the sharp interface approxination
+% # <PumpingOptimizationExample1.html Pumping optimization> This is a
+% hypothetical example that shows how to combine mSim with matlab
+% optimization algorithms.
 %  
 %%
 % 

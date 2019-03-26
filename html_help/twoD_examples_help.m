@@ -16,6 +16,9 @@
 % # <Coastal_Aquifer.html Coastal Aquifer Simulation> This is a real world
 % example that uses the 2D groundwater flow equation to simulate the
 % seawater intrusion based on the sharp interface approxination
+% # <PumpingOptimizationExample1.html Pumping optimization> This is a
+% hypothetical example that shows how to combine mSim with matlab
+% optimization algorithms.
 %  
 %%
 % 
