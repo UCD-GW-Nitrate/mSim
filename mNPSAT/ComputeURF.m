@@ -94,6 +94,11 @@ end
 
 
 aL = opt.aL.alpha.*P(end).^opt.aL.beta;
+
+if opt.dx > 0.1*aL
+   opt.dx = 0.1*aL;
+end
+
 if P(end) < opt.Lmin
     lambda = mean(lambda);
     P=flipud(P(end)-P);
