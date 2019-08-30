@@ -18,7 +18,7 @@ function A = Calc_Area(p,MSH)
 % Author : George Kourakos
 % email: giorgk@gmail.com
 % web : http://groundwater.ucdavis.edu/msim
-% Date 22-Mar_2014 
+% Date 22-Mar-2014 
 % Department of Land Air and Water
 % University of California Davis
 

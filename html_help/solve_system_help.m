@@ -4,8 +4,10 @@
 % <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
 %
 %
-% Computes the shape functions for a given parametric point and element
-% type.
+% This function solves the linear system of equations Kglo*H = F using default matlab
+% methods. Note that this function takes care of the boundary conditions.
+% It can also calculate the secondary variables which are the F terms on
+% the constant head nodes.
 % 
 %
 % Version : 1.0
@@ -14,9 +16,10 @@
 %
 % email: giorgk@gmail.com
 %
-% web : http://groundwater.ucdavis.edu/msim
+% web : <https://gwt.ucdavis.edu/research-tools-and-applications/msim
+% https://gwt.ucdavis.edu/research-tools-and-applications/msim>
 %
-% Date 18-Mar-2014
+% Date : 18-Mar-2014 | update : 30-Aug-2019
 %
 % Department of Land Air and Water
 %
@@ -24,7 +27,10 @@
 %
 %% Usage
 % H = solve_system(Kglo, H, F)
-%
+%%%
+% or
+%%%
+% [Hnew, Fnew] = solve_system(Kglo, H, F)
 %% Input
 % _*Kglo*_: System matrix 
 %

@@ -177,6 +177,8 @@
 				</tocitem>
 			</tocitem>
 			<tocitem target="msim_function_categories.html#4">mUtil
+                <tocitem target="BaryCoord2D_help.html" image="HelpIcon.FUNCTION"> BaryCoord2D_help
+				</tocitem>
 				<tocitem target="Build2Dmeshinfocpp_help.html" image="HelpIcon.FUNCTION"> Build2Dmeshinfocpp
 				</tocitem>
 				<tocitem target="Calc_Area_help.html" image="HelpIcon.FUNCTION"> Calc_Area

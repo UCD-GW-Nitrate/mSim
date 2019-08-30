@@ -1,0 +1,172 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BaryCoord2D</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-08-30"><meta name="DC.source" content="BaryCoord2D_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>BaryCoord2D</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="https://gwt.ucdavis.edu/">| website</a> |</p><p>Calculates the barycentric coordinates of a trianlge or quadrilateral. The function will return nan if the point is outside the element</p><p>Version : 1.0</p><p>Author : George Kourakos</p><p>email: <a href="mailto:gkourakos@ucdavis.edu">gkourakos@ucdavis.edu</a></p><p>web : <a href="https://gwt.ucdavis.edu/research-tools-and-applications/msim">https://gwt.ucdavis.edu/research-tools-and-applications/msim</a></p><p>Date :  30-Aug-2019</p><p>Department of Land Air and Water</p><p>University of California Davis</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Usage</a></li><li><a href="#2">Input:</a></li><li><a href="#3">Output</a></li><li><a href="#4">Example with triangle element</a></li><li><a href="#7">Example with quadrilateral element</a></li></ul></div><h2>Usage<a name="1"></a></h2><p>BC = BaryCoord2D( pnt, ND );</p><h2>Input:<a name="2"></a></h2><p><i><b>pnt</b></i> : [1 x 2] The coordinates of the point to calculate the barycentric               coordinates</p><p><i><b>ND</b></i> : [3 or 4 x2] the coordinates of the triangle or the quadrilateral                     element</p><h2>Output<a name="3"></a></h2><p><i><b>BC</b></i> : [3 or 4 x 1] The barycentric coordinates</p><h2>Example with triangle element<a name="4"></a></h2><p>Create an element and a point inside the element</p><pre class="codeinput">p = [1 6; 4 2; 8 7];
+point = [6 5.5];
+</pre><p>Calculate the unit barycentric coordinates of the point</p><pre class="codeinput">point_u = BaryCoord2D( point, p );
+</pre><p>Plot the triangle and the barycentric coordinates on each trinagle node</p><pre class="codeinput">plot(p([1:3 1],1), p([1:3 1],2),<span class="string">'.-'</span>)
+hold <span class="string">on</span>
+plot(point(1), point(2), <span class="string">'or'</span>)
+<span class="keyword">for</span> ii = 1:size(p,1)
+    text(p(ii,1), p(ii,2), num2str(point_u(ii)), <span class="string">'fontsize'</span>,12);
+<span class="keyword">end</span>
+axis <span class="string">equal</span>
+</pre><img vspace="5" hspace="5" src="BaryCoord2D_help_01.png" alt=""> <h2>Example with quadrilateral element<a name="7"></a></h2><p>Create an element and a point inside the element</p><pre class="codeinput">q = [1 2; 8 4; 5 7; 2 6];
+point = [7 4];
+</pre><p>Calculate the unit barycentric coordinates of the point</p><pre class="codeinput">point_u = BaryCoord2D( point, q );
+</pre><p>Plot the quadrilateral and the barycentric coordinates on each node</p><pre class="codeinput">clf
+plot(q([1:4 1],1), q([1:4 1],2),<span class="string">'.-'</span>)
+hold <span class="string">on</span>
+plot(point(1), point(2), <span class="string">'or'</span>)
+<span class="keyword">for</span> ii = 1:size(q,1)
+    text(q(ii,1), q(ii,2), num2str(point_u(ii)), <span class="string">'fontsize'</span>,12);
+<span class="keyword">end</span>
+axis <span class="string">equal</span>
+</pre><img vspace="5" hspace="5" src="BaryCoord2D_help_02.png" alt=""> <p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% BaryCoord2D
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <https://gwt.ucdavis.edu/ | website> |
+%
+%
+% Calculates the barycentric coordinates of a trianlge or
+% quadrilateral. The function will return nan if the point is outside the
+% element
+% 
+%
+% Version : 1.0
+%
+% Author : George Kourakos
+%
+% email: gkourakos@ucdavis.edu
+%
+% web : <https://gwt.ucdavis.edu/research-tools-and-applications/msim
+% https://gwt.ucdavis.edu/research-tools-and-applications/msim>
+%
+% Date :  30-Aug-2019
+%
+% Department of Land Air and Water
+%
+% University of California Davis
+%% Usage
+% BC = BaryCoord2D( pnt, ND );
+%
+%% Input:
+% _*pnt*_ : [1 x 2] The coordinates of the point to calculate the barycentric
+%               coordinates
+%
+% _*ND*_ : [3 or 4 x2] the coordinates of the triangle or the quadrilateral
+%                     element
+%
+%% Output
+% _*BC*_ : [3 or 4 x 1] The barycentric coordinates
+%
+%% Example with triangle element
+%
+% Create an element and a point inside the element
+p = [1 6; 4 2; 8 7];
+point = [6 5.5];
+%%%
+% Calculate the unit barycentric coordinates of the point
+point_u = BaryCoord2D( point, p );
+%%%
+% Plot the triangle and the barycentric coordinates on each trinagle node
+plot(p([1:3 1],1), p([1:3 1],2),'.-')
+hold on
+plot(point(1), point(2), 'or')
+for ii = 1:size(p,1)
+    text(p(ii,1), p(ii,2), num2str(point_u(ii)), 'fontsize',12);
+end
+axis equal
+%% Example with quadrilateral element
+% Create an element and a point inside the element
+q = [1 2; 8 4; 5 7; 2 6];
+point = [7 4];
+%%%
+% Calculate the unit barycentric coordinates of the point
+point_u = BaryCoord2D( point, q );
+%%%
+% Plot the quadrilateral and the barycentric coordinates on each node
+clf
+plot(q([1:4 1],1), q([1:4 1],2),'.-')
+hold on
+plot(point(1), point(2), 'or')
+for ii = 1:size(q,1)
+    text(q(ii,1), q(ii,2), num2str(point_u(ii)), 'fontsize',12);
+end
+axis equal
+
+
+%%
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>
