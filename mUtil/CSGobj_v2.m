@@ -55,9 +55,9 @@ classdef CSGobj_v2
                         if isfield(SH(ii,1),'LcMin');thresh.LcMin=SH(ii,1).LcMin;else thresh.LcMin=nan;end
                         if isfield(SH(ii,1),'LcMax');thresh.LcMax=SH(ii,1).LcMax;else thresh.LcMax=nan;end
                         for jj=1:size(Xs,1)
-                            for kk=1:size(Xs{jj,1},2)-1
-                                x1=Xs{jj,1}(1,kk);y1=Ys{jj,1}(1,kk);
-                                x2=Xs{jj,1}(1,kk+1);y2=Ys{jj,1}(1,kk+1);
+                            for kk=1:length(Xs{jj,1})-1
+                                x1=Xs{jj,1}(kk);y1=Ys{jj,1}(kk);
+                                x2=Xs{jj,1}(kk+1);y2=Ys{jj,1}(kk+1);
                                 CSG=CSG.addnewline([x1 y1 x2 y2],thresh);
                             end
                         end
