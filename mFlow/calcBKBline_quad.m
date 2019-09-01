@@ -25,8 +25,8 @@ function BKB=calcBKBline_quad(B,K,ii)
 % how to compute the product using matlab symbolic toolbox
 % syms b1 b2 b3
 % syms kx
-% B=[b1 b2]
-% BT = [b1;b2]
+% B=[b1 b2 b1]
+% BT = [b1;b2;b2]
 % BKB = BT*kx*B
 %
 % see also calcBKB, Assemble_LHS

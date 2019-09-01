@@ -28,9 +28,28 @@ function NvB=calcNvB(N,v,B,opt,ii)
 % University of California Davis
 %
 
-if opt.dim==1
+if opt.dim == 1
     switch opt.el_order
         case 'linear'
-            NvB=calcNDBline_Lin(N,v,B,ii);
+            NvB = calcNvBline_Lin(N,v,B,ii);
+        case 'quadratic'
+            NvB = calcNvBline_quad(N,v,B,ii);
+    end
+elseif opt.dim == 2
+    switch opt.el_type
+        case 'triangle'
+            switch opt.el_order
+                case 'linear'
+                    NvB = calcNvBtriang_Lin(N,v,B,ii);
+                case 'quadratic'
+                    NvB = calcNvBtriang_quad(N,v,B,ii);
+            end
+        case 'quad'
+            switch opt.el_order
+                case 'linear'
+                    NvB = calcNvBQuad_Lin(N,v,B,ii);
+                case 'quadratic_9'
+                    NvB = calcNvBQuad_quad(N,v,B,ii);
+            end
     end
 end
