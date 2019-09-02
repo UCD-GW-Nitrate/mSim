@@ -1,4 +1,4 @@
-function [B Jdet]=shapeDerivatives(p, MSH, n, opt)
+function [B, Jdet]=shapeDerivatives(p, MSH, n, opt)
 % [B Jdet]=shapeDerivatives(p, MSH, n, opt)
 %
 % Computes the shape function derivatives and the determinant of the
@@ -24,8 +24,8 @@ function [B Jdet]=shapeDerivatives(p, MSH, n, opt)
 % Version : 1.0
 % Author : George Kourakos
 % email: giorgk@gmail.com
-% web : http://groundwater.ucdavis.edu/msim
-% Date 18-Dec_2012
+% web : https://gwt.ucdavis.edu/research-tools-and-applications/msim
+% Date : 2-Sep-2019
 % Department of Land Air and Water
 % University of California Davis
 %

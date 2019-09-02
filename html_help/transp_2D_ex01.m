@@ -106,8 +106,71 @@ clf
 trisurf(MSH(3,1).elem(1,1).id,p(:,1),p(:,2),H)
 view(-18,2)
 %% Calculate velocity field
-% Once we have calculated the hydraulic head distribution we need to
-% convert this to velocity field.
+% Once we have calculated the hydraulic head distribution we can compute 
+% the velocity field.
+porosity = 0.1;
+Vel = calcVelocityField(p, MSH(3,1).elem.id, H, Tel./20, porosity*ones(Nel,1), simopt);
+cc = Calc_Barycenters(p, MSH(3,1).elem.id);
+quiver(cc(:,1),cc(:,2),Vel(:,1),Vel(:,2),3)
+axis equal
+axis([0 2000 0 1000])
+%% Transport simulation
+% Once the velocity is computed we can assmble the system matrices.
+%%%
+% However we need to prepare additional data
+%%%
+% *Dispersivity coefficients*
+aLT = [1000 100];
+%%%
+% *Radioactive decay*
+lambda = 1.8990e-04;
+%%%
+% *Equilibrium distribution coefficient*
+K_d = 0.5;
+%%%
+% *Bulk density*
+rho_b = 1;
+%%%
+% *Molecular diffusion coefficient*
+Dm = 1.1578e-004;%[m^2/day]
+%%%
+% *Boundary conditions*
+%%%
+% We will assume that there is a continuous source of contaminants of
+% quadrilateral shape that is defined by the elements that contain the
+% following 2 points
+conc_centers = [1028 505; 1024 479];
+%%%
+% to find the element ids and the the nodes associated with contaminant
+% source we can use the following function
+conc_elem_id = find_elem_id_point(p, MSH(3,1).elem.id, conc_centers, 5);
+%%%
+clf
+triplot(MSH(3,1).elem(1,1).id, p(:,1), p(:,2))
+hold on
+patch(p(MSH(3,1).elem(1,1).id(conc_elem_id(1),:), 1), p(MSH(3,1).elem(1,1).id(conc_elem_id(1),:), 2),'red');
+patch(p(MSH(3,1).elem(1,1).id(conc_elem_id(2),:), 1), p(MSH(3,1).elem(1,1).id(conc_elem_id(2),:), 2),'red');
+axis equal
+axis([0 2000 0 1000])
+%%% 
+% Make a list of the unique nodes associated with these two elements and 
+% create the variable that defines the boundary conditions 
+conc_nodes = unique([MSH(3,1).elem(1,1).id(conc_elem_id(1),:) MSH(3,1).elem(1,1).id(conc_elem_id(2),:)])';
+CC = [conc_nodes 10*ones(length(conc_nodes),1)];
+% Then we can assemble the system matrices
+[Dglo, Mglo, c]= Assemble_LHS_std(p, MSH(3,1).elem(1,1).id,...
+    aLT, Vel, rho_b, K_d, lambda, porosity, Dm, CC, simopt);
+%%
+F = sparse(Np,1);
+Cinit = zeros(Np, 1);
+wmega = 0.5;
+T = (0:150)'*365;
+C1 = SteadyFlowTransport(Mglo, Dglo, F, Cinit, T, c, wmega);
+%%
+itime = 150;
+clf
+trisurf(MSH(3,1).elem(1,1).id,p(:,1),p(:,2),C1(itime,:))
+view(0,90);
 %%
 % 
 % <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 

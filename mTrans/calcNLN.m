@@ -1,4 +1,4 @@
-function NLN=calcNLN(N,L)
+function NLN=calcNLN(N, L, opt)
 % NLN = calcNLN(N, L)
 % Computes the product N' x L x N for 1D linear elements in vectorized manner
 % This is used internally. Currently the computations are performed within

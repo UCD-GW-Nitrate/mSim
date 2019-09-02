@@ -44,7 +44,9 @@ function [Dglo Mglo c]= Assemble_LHS_std(p, MSH, A, V, rho_b, K_d, lambda, theta
 %
 
 
-
+if ~isfield(opt, 'assemblemode')
+    opt.assemblemode = 'vect';
+end
   
 
 
@@ -74,6 +76,7 @@ BEM=initialize_BEM(Nel,opt);
 
 if ~isfield(opt,'capacmode')
     opt.capacmode='lumped';
+    consistent = false;
 end
 
 if strcmp(opt.capacmode,'consistent')
@@ -81,11 +84,12 @@ if strcmp(opt.capacmode,'consistent')
     consistent=true;
 else
     opt.capacmode='lumped';
+    consistent = false;
     Mel=zeros(Nel,1);
 end
 
 for ii=1:size(pint,1)
-    [B Jdet]=shapeDerivatives(p, MSH, pint(ii,1:Npint-1),opt);
+    [B, Jdet]=shapeDerivatives(p, MSH, pint(ii,1:Npint-1),opt);
     N=shapefunctions(pint(ii,1:Npint-1),opt);
     
     Ael=node2element(N,MSH,A,Np,Nel,opt);
@@ -103,10 +107,10 @@ for ii=1:size(pint,1)
     if any(lambda~=0)
         lambda_el=node2element(N,MSH,lambda,Np,Nel,opt);
         L=lambda_el.*tempL;
-        BEM=BEM+bsxfun(@times,calcNLN(N,L),Jdet).*pint(ii,Npint);
+        BEM=BEM+bsxfun(@times,calcNLN(N,L,opt),Jdet).*pint(ii,Npint);
     end
     if consistent
-        Mel=Mel+bsxfun(@times,calcNLN(N,tempL),Jdet).*pint(ii,Npint);
+        Mel=Mel+bsxfun(@times,calcNLN(N,tempL,opt),Jdet).*pint(ii,Npint);
     else
         Mel=Mel+tempL.*pint(ii,Npint);
     end
