@@ -203,11 +203,15 @@
 				</tocitem>
 				<tocitem target="mapElemto2D_help.html" image="HelpIcon.FUNCTION"> mapElemto2D
 				</tocitem>
+				<tocitem target="mesh2poly_help.html" image="HelpIcon.FUNCTION"> mesh2poly
+				</tocitem>
 				<tocitem target="msim_compile_help.html" image="HelpIcon.FUNCTION"> msim_compile
 				</tocitem>
 				<tocitem target="msim_mesh_options_help.html" image="HelpIcon.FUNCTION"> msim_mesh_options
 				</tocitem>
 				<tocitem target="msim_polysplit_help.html" image="HelpIcon.FUNCTION"> msim_polysplit
+				</tocitem>
+				<tocitem target="poly2mesh_help.html" image="HelpIcon.FUNCTION"> poly2mesh
 				</tocitem>
 				<tocitem target="read_2D_Gmsh_help.html" image="HelpIcon.FUNCTION"> read_2D_Gmsh
 				</tocitem>
