@@ -1,0 +1,267 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Mesh with quadrilaterals</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-04"><meta name="DC.source" content="mesh_withquads.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Mesh with quadrilaterals</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>The goal of this example is to show how to create quadrilateral meshes. In addition we will use quadratic quadrilaterals where each element has 9 degrees of freedom.</p><p><img vspace="5" hspace="5" height="400" width="500" src="simple_quad_geom.png" alt=""> </p><p>The domain is a rectangle with dimensions 1km x 1km. We want also to refine the top right boundary of the mesh. In the flow example this corresponds to a discharge boundary.</p><!--/introduction--><p>Fist we define the domain in a structure similar to a matlab shapefile</p><pre class="codeinput">dom.Geometry=<span class="string">'Polygon'</span>;
+dom.X=[0 1000 1000 0 0 nan];
+dom.Y=[0 0 1000 1000 0 nan];
+</pre><p>Note that not all the fields that a shapefile has, are necessary (i.e. BoundingBox is not needed)</p><p>To refine the mesh along the top right boundary we create a dummy feature</p><pre class="codeinput">dummyLine.Geometry=<span class="string">'Line'</span>;
+dummyLine.X=[800 1000 1000 nan];
+dummyLine.Y=[1000 1000 800 nan];
+dummyLine.DistMax=350;
+dummyLine.DistMin=20;
+dummyLine.LcMax=200;
+dummyLine.LcMin=20;
+</pre><p>Next we define the wells and set the fields for refinement.</p><pre class="codeinput">xw=[255 750 413 758 261];
+yw=[802 738 514 293 192];
+<span class="keyword">for</span> i=1:length(xw)
+    wells(i,1).Geometry=<span class="string">'Point'</span>;
+    wells(i,1).X=xw(i);
+    wells(i,1).Y=yw(i);
+    wells(i,1).DistMax=350;
+    wells(i,1).DistMin=20;
+    wells(i,1).LcMax=100;
+    wells(i,1).LcMin=20;
+<span class="keyword">end</span>
+</pre><p>These features are all what we need to represent the geometry of the modeling domain. The nex step is to create an empty Constructive Solid Geometry object</p><pre class="codeinput">Simple_quad=CSGobj_v2(2,1,10,20,10); <span class="comment">% Dim, Npoly, Nline, Npoints, usertol</span>
+</pre><p>After the object is initialized we read the shapefiles using the method <b>.readshapefile.</b> Note that the we read first the variable that describes the aquifer outline.</p><pre class="codeinput">Simple_quad=Simple_quad.readshapefile(dom);
+Simple_quad=Simple_quad.readshapefile(dummyLine);
+Simple_quad=Simple_quad.readshapefile(wells);
+</pre><p>We initialized the mesh option structure and change the fields to the desired options. Here we will set as general maximum element size 200 m, element type quad for quadrilateral and element order 2 for quadratic. We have found that for quadrilateral it is better not to constraint the mesh on the features, therefore we will let the mesh to ignore the wells. The mesh will take into account the refinement around the wells but the wells willcorrespond to elements not to nodes.</p><pre class="codeinput">mopt = msim_mesh_options;
+mopt.lc_gen = 200;
+mopt.el_type = <span class="string">'quad'</span>;
+mopt.el_order = 2;
+mopt.embed_points = 0;
+</pre><p>Next we write the Gmsh input file and run the program to generate the mesh:</p><pre class="codeinput">Simple_quad.writegeo(<span class="string">'Simple_quad'</span>,mopt);
+gmsh_path=<span class="string">'/usr/bin/gmsh'</span>;
+Simple_quad.runGmsh(<span class="string">'Simple_quad'</span>,gmsh_path,[])
+</pre><pre class="codeoutput">Info    : Running '/usr/bin/gmsh Simple_quad.geo -2' [1 node(s), max. 1 thread(s)]
+Info    : Started on Fri Apr  4 13:41:36 2014
+Info    : Reading 'Simple_quad.geo'...
+Error   : 'Simple_quad.geo', line 23 : Point 3 already exists
+Error   : 'Simple_quad.geo', line 24 : Point 5 already exists
+Error   : 'Simple_quad.geo', line 25 : Point 6 already exists
+Error   : 'Simple_quad.geo', line 26 : Point 7 already exists
+Error   : 'Simple_quad.geo', line 27 : Point 8 already exists
+Error   : 'Simple_quad.geo', line 28 : Point 9 already exists
+Error   : 'Simple_quad.geo', line 29 : Point 10 already exists
+Error   : 'Simple_quad.geo', line 30 : Point 11 already exists
+Info    : Done reading 'Simple_quad.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Line)
+Info    : 5 points found in points clouds (0 edges)
+Info    : 39 points found in points clouds (2 edges)
+Info    : Meshing curve 2 (Line)
+Info    : Meshing curve 3 (Line)
+Info    : Meshing curve 4 (Line)
+Info    : Meshing curve 5 (Line)
+Info    : Meshing curve 6 (Line)
+Info    : Done meshing 1D (0.036002 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 1 (Plane, Frontal Quad)
+Info    : Blossom: 1378 internal 69 closed
+Info    : Blossom recombination algorithm completed (0.040003 s)
+Info    : Done meshing 2D (0.116008 s)
+Info    : Refining mesh...
+Info    : Meshing order 2, curvilinear ON...
+Info    : Meshing curves order 2 (1/6)...
+Info    : Meshing curves order 2 (2/6)...
+Info    : Meshing curves order 2 (3/6)...
+Info    : Meshing curves order 2 (4/6)...
+Info    : Meshing curves order 2 (5/6)...
+Info    : Meshing curves order 2 (6/6)...
+Info    : Meshing surfaces order 2 (1/1)...
+Info    : highOrderTools has been set up : 1812 nodes are considered
+Info    : Surface mesh : Worst Face Distorsion Mapping 1 Gamma 0 Nb elem. (0&lt;d&lt;0.2) = 0
+Info    : Done meshing order 2 (0.012 s)
+Info    : Blossom: 0 internal 0 closed
+Warning: 0 bytes allocated
+Info    : Blossom recombination algorithm completed (0.112007 s)
+Info    : Done refining mesh (0.144009 s)
+Info    : Meshing order 2, curvilinear ON...
+Info    : Meshing curves order 2 (1/6)...
+Info    : Meshing curves order 2 (2/6)...
+Info    : Meshing curves order 2 (3/6)...
+Info    : Meshing curves order 2 (4/6)...
+Info    : Meshing curves order 2 (5/6)...
+Info    : Meshing curves order 2 (6/6)...
+Info    : Meshing surfaces order 2 (1/1)...
+Info    : highOrderTools has been set up : 7196 nodes are considered
+Info    : Surface mesh : Worst Face Distorsion Mapping 1 Gamma 0 Nb elem. (0&lt;d&lt;0.2) = 0
+Info    : Done meshing order 2 (0.056003 s)
+Info    : 7937 vertices 1947 elements
+Info    : Writing 'Simple_quad.msh'...
+Info    : Done writing 'Simple_quad.msh'
+Info    : Stopped on Fri Apr  4 13:41:37 2014
+</pre><p>After the mesh is succesfully generated  we read the mesh into matlab workspace</p><pre class="codeinput">[p MSH]=read_2D_Gmsh(<span class="string">'Simple_quad'</span>);
+</pre><pre class="codeoutput">Reading points...
+Reading Elements...
+</pre><p>Matlab does not offer any function to visualize meshes with  quadratic quadrilateral elements. However we can plot the mesh nodes:</p><pre class="codeinput">plot(p(:,1),p(:,2),<span class="string">'.'</span>)
+axis <span class="string">equal</span>
+</pre><img vspace="5" hspace="5" src="mesh_withquads_01.png" alt=""> <p>To visualize the mesh we have to use paraview. Note also that Gmsh can be used to visualize the *.msh file even before we read the mesh into the matlab workspace.</p><pre class="codeinput">WriteVtkMesh(<span class="string">'Simple_quad'</span>,MSH(3,1).elem.id,p,[],[],<span class="string">'quad'</span>);
+</pre><pre class="codeoutput">Writing Nodes coord...
+Writing Elements...
+</pre><p><img vspace="5" hspace="5" src="simple_quad_mesh.png" alt=""> </p><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Mesh with quadrilaterals
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+% The goal of this example is to show how to create quadrilateral meshes. In
+% addition we will use quadratic quadrilaterals where each element has 9
+% degrees of freedom.
+% 
+% <<simple_quad_geom.png>>
+%
+% The domain is a rectangle with dimensions 1km x 1km. We want also to
+% refine the top right boundary of the mesh. In the flow example this
+% corresponds to a discharge boundary.
+
+%%
+% Fist we define the domain in a structure similar to a matlab shapefile
+dom.Geometry='Polygon';
+dom.X=[0 1000 1000 0 0 nan];
+dom.Y=[0 0 1000 1000 0 nan];
+%%%
+% Note that not all the fields that a shapefile has, are necessary (i.e.
+% BoundingBox is not needed)
+%%
+% To refine the mesh along the top right boundary we create a dummy feature
+dummyLine.Geometry='Line';
+dummyLine.X=[800 1000 1000 nan];
+dummyLine.Y=[1000 1000 800 nan];
+dummyLine.DistMax=350;
+dummyLine.DistMin=20;
+dummyLine.LcMax=200;
+dummyLine.LcMin=20;
+
+%%
+% Next we define the wells and set the fields for refinement.
+xw=[255 750 413 758 261];
+yw=[802 738 514 293 192];
+for i=1:length(xw)
+    wells(i,1).Geometry='Point';
+    wells(i,1).X=xw(i);
+    wells(i,1).Y=yw(i);
+    wells(i,1).DistMax=350;
+    wells(i,1).DistMin=20;
+    wells(i,1).LcMax=100;
+    wells(i,1).LcMin=20;
+end
+%%
+% These features are all what we need to represent the geometry of the modeling domain. 
+% The nex step is to create an empty Constructive Solid Geometry object
+Simple_quad=CSGobj_v2(2,1,10,20,10); % Dim, Npoly, Nline, Npoints, usertol
+%%
+% After the object is initialized we read the shapefiles using the method
+% *.readshapefile.* Note that the we read first the variable that describes the aquifer outline.
+Simple_quad=Simple_quad.readshapefile(dom);
+Simple_quad=Simple_quad.readshapefile(dummyLine);
+Simple_quad=Simple_quad.readshapefile(wells);
+%%
+% We initialized the mesh option structure and change the fields to the desired options. Here we 
+% will set as general maximum element size 200 m, element type quad for quadrilateral
+% and element order 2 for quadratic. We have found that for quadrilateral 
+% it is better not to constraint the mesh on the features, therefore we will let
+% the mesh to ignore the wells. The mesh will take into account the refinement 
+% around the wells but the wells willcorrespond to elements not to nodes.
+mopt = msim_mesh_options;
+mopt.lc_gen = 200; 
+mopt.el_type = 'quad';
+mopt.el_order = 2; 
+mopt.embed_points = 0; 
+%%
+% Next we write the Gmsh input file and run the program to generate the
+% mesh:
+Simple_quad.writegeo('Simple_quad',mopt);
+gmsh_path='/usr/bin/gmsh';
+Simple_quad.runGmsh('Simple_quad',gmsh_path,[])
+%%
+% After the mesh is succesfully generated  we read the mesh into matlab
+% workspace
+[p MSH]=read_2D_Gmsh('Simple_quad');
+%% 
+% Matlab does not offer any function to visualize meshes with  quadratic 
+% quadrilateral elements. However we can plot the mesh nodes:
+plot(p(:,1),p(:,2),'.')
+axis equal
+%%
+% To visualize the mesh we have to use paraview. Note also that Gmsh can be used to visualize the 
+% *.msh file even before we read the mesh into the matlab workspace.
+WriteVtkMesh('Simple_quad',MSH(3,1).elem.id,p,[],[],'quad');
+%%
+%
+% <<simple_quad_mesh.png>>
+%
+%%
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+
+##### SOURCE END #####
+--></body></html>

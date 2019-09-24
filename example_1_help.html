@@ -1,0 +1,381 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example 1</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-15"><meta name="DC.source" content="example_1_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Example 1</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>The goal of this example is to show how one can define constant head boundary conditions, general head boundary conditions and assign non uniform fluxes from geospatial data i.e. shapefiles, and eventually simulate a simple 2D aquifer.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">Load data</a></li><li><a href="#9">Assign fluxes</a></li><li><a href="#15">Assign boundary conditions</a></li><li><a href="#19">Assemble</a></li><li><a href="#25">Solve</a></li></ul></div><p>The domain for this example is shown in the following figure:</p><p><img vspace="5" hspace="5" height="400" width="500" src="domain2D.png" alt=""> </p><p>The boundary conditions for this example are :</p><div><ol><li>constant head equal to 30 m on the left boundary</li><li>general head boundary equal to 40 m with conductance equal 160 m^3/day on the right boundary.</li><li>No flow on the top and bottom boundaries.</li></ol></div><p>Each red polygon, which represent a different land use has different diffuse groundwater recharge value which is given in a shapefile.</p><h2>Load data<a name="3"></a></h2><p>The first step in any modeling exersize is the mesh generation. This is already covered in <a href="mesh_matlab_shapef.html">another tutorial</a>. For this example we have saved the data in <b>.mat</b> files and we will just import them into matlab workspace</p><pre class="codeinput">msim_root=<span class="string">'/home/giorgos/Documents/mSim_code/msim/'</span>;
+load([msim_root <span class="string">'html_help/DATA/shapefile_data.mat'</span>])
+load([msim_root <span class="string">'html_help/DATA/triangle_linear.mat'</span>])
+</pre><p>In the matlab workspace there are 4 structure variables which are self explainatory geospatial data, and the variables <b>p</b> and <b>MSH</b> which describe the mesh nodes and elements repsectively.</p><p>In particular the mesh has</p><pre class="codeinput">Nel = size(MSH(3,1).elem(1,1).id, 1)
+</pre><pre class="codeoutput">
+Nel =
+
+        3763
+
+</pre><p>elements and</p><pre class="codeinput">Np = size(p, 1)
+</pre><pre class="codeoutput">
+Np =
+
+        1933
+
+</pre><p>nodes</p><p>Here we will assume that the aquifer is uniform with hydaulic condutivity equal to 40 m/day and has a uniform thickness equal to 10 m. Therefore each element will have the same transmisivity value. In mSim we create a variable with <b>Nel</b> rows one for each element</p><pre class="codeinput">Tel=40*ones(Nel,1)*10; <span class="comment">%m^2/day</span>
+</pre><h2>Assign fluxes<a name="9"></a></h2><p>The groundwater recharge is a bit more complicated. Each land use polygon has its own recharge rate. Unfortunatelly the mesh generated by Gmsh wasn't able to create elements constraint on the recharge polygons. As a result there are mesh elements that lay between two or maybe more recharge polygons. To assigne a unique value per element we will compute first the element barycenters. Finally each element will be assigned the recharge rate of the polygon that the barycenter is in. If thats not clear I hope that after doing the computation below will be clarified. So first lets compute the barycenters of the elements. Because the calculation of barycenters is commonly used there is a vectorized function for this</p><pre class="codeinput">cc = Calc_Barycenters(p, MSH(3,1).elem(1,1).id);
+</pre><p>Next we will loop through the recharge polygons and  identify which element barycenters are inside that polygon and assign the approriate recharge value. But first we will create the appropriate structure variable</p><pre class="codeinput">FLUX(1,1).id = [1:Nel]';
+FLUX(1,1).val = zeros(Nel,1);
+</pre><p>Here we created a structure variable with 2 fields. We will add more fields later. The <b>id</b> field containts the ids of the elements, which is the numbering in the <b>MSH</b> variable and a field <b>val</b>  contains the flux rates and it is currently initialized to zero.  Now its time for the loop</p><pre class="codeinput"><span class="keyword">for</span> i=1:size(landuse,1)
+    id=find(inpolygon(cc(:,1), cc(:,2), landuse(i,1).X, landuse(i,1).Y));
+    FLUX(1,1).val(id,1)=landuse(i,1).Q_rch;
+<span class="keyword">end</span>
+</pre><p>Now we will add few more fields in this structure</p><pre class="codeinput">FLUX(1,1).dim=2;<span class="comment">%is the dimension of the elements</span>
+FLUX(1,1).el_type=<span class="string">'triangle'</span>; <span class="comment">%This is the type of element</span>
+FLUX(1,1).el_order=<span class="string">'linear'</span>; <span class="comment">%This is the element order</span>
+FLUX(1,1).id_el=1;<span class="comment">%This is the index of the elements in the MSH.elem array</span>
+</pre><p>In this example we will assign the stream rates directly to nodes. Therefore we will loop through the stream segments and identify which nodes are very close to the stream. In fact we will consider any node closer than 10 m to the stream as part of the stream. Because requesting the distance between points and lines is a typical way to identify boundary conditions, stresses etc. we wrote a vectorized function <a href="Dist_Point_LineSegment_help.html">Dist_Point_LineSegment</a> to do this faster. Note that this function is vectorized only for many-points-one-line or one-point-many-lines calculations. To allow vectorized computation the line have to be described in a somewhat ackward way as [x1 y1 x2 y2], where (x1,y1) and (x2,y2) are the two endpoints of the line. First we initialize an empty variable. At the end of the loop this variable will have two columns: a node id which is associated with stream flux and the rate</p><pre class="codeinput">FLUX_point=[]; <span class="comment">%if you expect a very large number of points consider allocating for faster implementation</span>
+<span class="keyword">for</span> i=1:size(streams,1)
+    id_on_that_strm=[];
+    <span class="keyword">for</span> j=1:size(streams(i,1).X,2)-2
+        l=[streams(i,1).X(j) streams(i,1).Y(j) streams(i,1).X(j+1) streams(i,1).Y(j+1)];
+        dst=Dist_Point_LineSegment(p(:,1),p(:,2),l);
+        id=find(dst&lt;10);
+        id_on_that_strm=[id_on_that_strm;id];
+    <span class="keyword">end</span>
+    id_on_that_strm = unique(id_on_that_strm);
+    FLUX_point=[FLUX_point;
+                id_on_that_strm <span class="keyword">...</span>
+                10*(streams(i,1).length*streams(i,1).Q) <span class="keyword">...</span><span class="comment"> % stream width x stream length x flux rate</span>
+                /length(id_on_that_strm)*ones(length(id_on_that_strm),1)]; <span class="comment">%the rate is distributed to the nodes equally</span>
+<span class="keyword">end</span>
+</pre><p>The last type of fluxes are the wells. Typically we assign the well pumping rates on nodes. To do so, for each well we will find the closest mesh node, assign the well rate, and append it to the <b>FLUX_point</b> variable.</p><pre class="codeinput"><span class="keyword">for</span> i=1:size(wells,1)
+    [~, id]=min(sqrt((wells(i,1).X - p(:,1)).^2+(wells(i,1).Y - p(:,2)).^2));
+    FLUX_point=[FLUX_point;id wells(i,1).Q];
+<span class="keyword">end</span>
+</pre><h2>Assign boundary conditions<a name="15"></a></h2><p>Next we define the boundary conditions. In the dom shapfile the 1st side corresponds to the right boundary and the 3rd side to the left boundary. Using again the vectorized function <a href="Dist_Point_LineSegment_help.html">Dist_Point_LineSegment</a> we identify the ids of the mesh nodes of the right and left boundary. The format for the constant head matrix is [id, head] and for the GHB is [id, head, conductane]</p><p>The left boundary is described from the line segment between the 3rd and 4th points of the dom shapefile.</p><pre class="codeinput">l=[dom.X(3) dom.Y(3) dom.X(4) dom.Y(4)];
+dst=Dist_Point_LineSegment(p(:,1),p(:,2),l);
+id_l=find(dst&lt;1);
+CH=[id_l 30*ones(length(id_l),1)];
+</pre><p>The right boundary is described from the line segment between the 1st and 2nd points of the dom shapefile.</p><pre class="codeinput">l=[dom.X(1) dom.Y(1) dom.X(2) dom.Y(2)];
+dst=Dist_Point_LineSegment(p(:,1),p(:,2),l);
+id_r=find(dst&lt;1);
+GHB=[id_r 40*ones(length(id_r),1) 160*ones(length(id_r),1)];
+</pre><p>It is always a good idea to check visually that the boundary conditions have been assigned correctly. One easy way to do so is by plotting each boundary node with a different color. First we will plot all mesh nodes and then the left righ boundaries and the FLUX_Points. In addition we will plot the positive FLUX_Points values, which correspond to streams, with different color from the negative ones which correspons to wells.</p><pre class="codeinput">plot(p(:,1),p(:,2),<span class="string">'.'</span>)
+hold <span class="string">on</span>
+plot(p(CH(:,1),1),p(CH(:,1),2),<span class="string">'.m'</span>)
+plot(p(GHB(:,1),1),p(GHB(:,1),2),<span class="string">'.g'</span>)
+plot(p(FLUX_point(FLUX_point(:,2)&gt;0,1),1),p(FLUX_point(FLUX_point(:,2)&gt;0,1),2),<span class="string">'.r'</span>)
+plot(p(FLUX_point(FLUX_point(:,2)&lt;0,1),1),p(FLUX_point(FLUX_point(:,2)&lt;0,1),2),<span class="string">'or'</span>)
+legend(<span class="string">'Mesh nodes'</span>,<span class="string">'Constant head boundary'</span>,<span class="string">'General headboundary'</span>,<span class="string">'Stream fluxes'</span>,<span class="string">'Well fluxes'</span>)
+axis([-200 6500 0 5300])
+axis <span class="string">equal</span>
+axis <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="example_1_help_01.png" alt=""> <h2>Assemble<a name="19"></a></h2><p>After identifing the boundary conditions, stresses and properties we can assemble the matrices. First we will define few general simulation options and then we will assemble the LHS</p><pre class="codeinput">simopt.dim=2;
+simopt.el_type=<span class="string">'triangle'</span>;
+simopt.el_order=<span class="string">'linear'</span>;
+[Kglo H]= Assemble_LHS(p, MSH(3,1).elem(1,1).id, Tel , CH, GHB, simopt);
+size(Kglo)
+</pre><pre class="codeoutput">
+ans =
+
+        1950        1950
+
+</pre><p>Note that the size of the Kglo matrix, which is the left hand size matrix, is different to that of the mesh size. This is due to the extra hypothetical nodes that are used to simulate the general head boundary conditions.</p><p>In a similar way, we assemble the right hand side. In fact we only need to assemble the flux properties that are defined on elements, since the ones that are defined on nodes are already in the form of a RHS vector.</p><pre class="codeinput">F_rch= Assemble_RHS(length(H),p, MSH, FLUX);
+</pre><p>To verify the assembly of the RHS, the sum(F_rch) should be equal to the total recharge from landuse polygons. The following loop calculates the total recharge from the shapefile</p><pre class="codeinput"><span class="keyword">for</span> i=1:size(landuse,1)
+    Q_rch(i)=landuse(i,1).Q_m3_day;
+<span class="keyword">end</span>;
+sum(Q_rch)
+</pre><pre class="codeoutput">
+ans =
+
+   5.5589e+03
+
+</pre><p>while sum(F_rch) is</p><pre class="codeinput">sum(F_rch)
+error = sum(Q_rch) - sum(F_rch)
+</pre><pre class="codeoutput">
+ans =
+
+   (1,1)      5.4920e+03
+
+
+error =
+
+   66.8135
+
+</pre><p>This descrepancy is due to the fact that few elements lay on two recharge polygons but they have been assigned the recharge value of the polygon where the barycenter falls.</p><h2>Solve<a name="25"></a></h2><p>Now we are ready to solve the system. Fist we will combine the fluxes to one vector and then solve</p><pre class="codeinput">F=F_rch+sparse(FLUX_point(:,1),1,FLUX_point(:,2),length(H),1);
+H=solve_system(Kglo,H,F);
+</pre><p>Simple triangular meshes can be easily visualized in Matlab</p><pre class="codeinput">clf
+trisurf(MSH(3,1).elem(1,1).id,p(:,1),p(:,2),H(1:size(p,1)))
+view(-10,16)
+</pre><img vspace="5" hspace="5" src="example_1_help_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Example 1
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+% The goal of this example is to show how one can define constant head
+% boundary conditions, general head boundary conditions and assign non
+% uniform fluxes from geospatial data i.e. shapefiles, and eventually
+% simulate a simple 2D aquifer.
+%%
+% The domain for this example is shown in the following figure:
+%
+% <<domain2D.png>>
+%
+%%
+% The boundary conditions for this example are :
+%
+% # constant head equal to 30 m on the left boundary 
+% # general head boundary equal to 40 m with conductance equal 160 m^3/day on the right
+% boundary. 
+% # No flow on the top and bottom boundaries.
+%
+% Each red polygon, which represent a different land use has different 
+% diffuse groundwater recharge value which is given in a shapefile. 
+%% Load data
+% The first step in any modeling exersize is the mesh generation. This is
+% already covered in <mesh_matlab_shapef.html another tutorial>. For this
+% example we have saved the data in *.mat* files and we will just import
+% them into matlab workspace
+msim_root='/home/giorgos/Documents/mSim_code/msim/';
+load([msim_root 'html_help/DATA/shapefile_data.mat'])
+load([msim_root 'html_help/DATA/triangle_linear.mat'])
+%%
+% In the matlab workspace there are 4 structure variables which are
+% self explainatory geospatial data, and the variables *p* and *MSH* which
+% describe the mesh nodes and elements repsectively. 
+%%
+% In particular the mesh has 
+Nel = size(MSH(3,1).elem(1,1).id, 1)
+%%
+% elements and
+Np = size(p, 1)
+%%
+% nodes
+%%
+% Here we will assume that the aquifer is uniform with hydaulic condutivity
+% equal to 40 m/day and has a uniform thickness equal to 10 m. Therefore
+% each element will have the same transmisivity value. In mSim we create a 
+% variable with *Nel* rows one for each element
+Tel=40*ones(Nel,1)*10; %m^2/day
+%% Assign fluxes
+% The groundwater recharge is a bit more complicated. Each land use polygon has its
+% own recharge rate. Unfortunatelly the mesh generated by Gmsh wasn't able
+% to create elements constraint on the recharge polygons. As a result there
+% are mesh elements that lay between two or maybe more recharge polygons.
+% To assigne a unique value per element we will compute first the element
+% barycenters. Finally each element will be assigned the recharge rate of
+% the polygon that the barycenter is in. If thats not clear I hope that
+% after doing the computation below will be clarified. So first lets
+% compute the barycenters of the elements. Because the calculation of
+% barycenters is commonly used there is a vectorized function for this
+cc = Calc_Barycenters(p, MSH(3,1).elem(1,1).id);
+%%
+% Next we will loop through the recharge polygons and  identify which
+% element barycenters are inside that polygon and assign the approriate
+% recharge value. But first we will create the appropriate structure variable
+FLUX(1,1).id = [1:Nel]';
+FLUX(1,1).val = zeros(Nel,1);
+%%
+% Here we created a structure variable with 2 fields. We will add more fields later.
+% The *id* field
+% containts the ids of the elements, which is the numbering in the *MSH* variable 
+% and a field *val*  contains the flux rates and it is currently initialized to
+% zero.  Now its time for the loop
+for i=1:size(landuse,1)
+    id=find(inpolygon(cc(:,1), cc(:,2), landuse(i,1).X, landuse(i,1).Y));
+    FLUX(1,1).val(id,1)=landuse(i,1).Q_rch;
+end
+%%
+% Now we will add few more fields in this structure
+FLUX(1,1).dim=2;%is the dimension of the elements
+FLUX(1,1).el_type='triangle'; %This is the type of element
+FLUX(1,1).el_order='linear'; %This is the element order
+FLUX(1,1).id_el=1;%This is the index of the elements in the MSH.elem array
+%%
+% In this example we will assign the stream rates directly to nodes.
+% Therefore we will loop through the stream segments and identify which
+% nodes are very close to the stream. In fact we will consider any node
+% closer than 10 m to the stream as part of the stream. Because requesting
+% the distance between points and lines is a typical way to identify
+% boundary conditions, stresses etc. we wrote a vectorized function
+% <Dist_Point_LineSegment_help.html Dist_Point_LineSegment> to do
+% this faster. Note that this function is vectorized only for 
+% many-points-one-line or one-point-many-lines calculations. To allow
+% vectorized computation the line have to be described in a somewhat ackward
+% way as [x1 y1 x2 y2], where (x1,y1) and (x2,y2) are the two endpoints of
+% the line. First we initialize an empty variable. At the end of the loop
+% this variable will have two columns: a node id which is associated with
+% stream flux and the rate 
+FLUX_point=[]; %if you expect a very large number of points consider allocating for faster implementation
+for i=1:size(streams,1)
+    id_on_that_strm=[];
+    for j=1:size(streams(i,1).X,2)-2
+        l=[streams(i,1).X(j) streams(i,1).Y(j) streams(i,1).X(j+1) streams(i,1).Y(j+1)];
+        dst=Dist_Point_LineSegment(p(:,1),p(:,2),l);
+        id=find(dst<10);
+        id_on_that_strm=[id_on_that_strm;id];
+    end
+    id_on_that_strm = unique(id_on_that_strm);
+    FLUX_point=[FLUX_point;
+                id_on_that_strm ...
+                10*(streams(i,1).length*streams(i,1).Q) ... % stream width x stream length x flux rate
+                /length(id_on_that_strm)*ones(length(id_on_that_strm),1)]; %the rate is distributed to the nodes equally
+end
+%%
+% The last type of fluxes are the wells. Typically we assign the well pumping
+% rates on nodes. To do so, for each well we will find the closest
+% mesh node, assign the well rate, and append it to the *FLUX_point* 
+% variable.
+for i=1:size(wells,1)
+    [~, id]=min(sqrt((wells(i,1).X - p(:,1)).^2+(wells(i,1).Y - p(:,2)).^2));
+    FLUX_point=[FLUX_point;id wells(i,1).Q];
+end
+%% Assign boundary conditions
+% Next we define the boundary conditions. In the dom shapfile the 1st side
+% corresponds to the right boundary and the 3rd side to the left boundary.
+% Using again the vectorized function 
+% <Dist_Point_LineSegment_help.html Dist_Point_LineSegment> we identify
+% the ids of the mesh nodes of the right and left boundary. The format for
+% the constant head matrix is [id, head] and for the GHB is [id, head,
+% conductane]
+%%
+% The left boundary is described from the line segment between the 
+% 3rd and 4th points of the dom shapefile.
+l=[dom.X(3) dom.Y(3) dom.X(4) dom.Y(4)];
+dst=Dist_Point_LineSegment(p(:,1),p(:,2),l);
+id_l=find(dst<1);
+CH=[id_l 30*ones(length(id_l),1)];
+%%
+% The right boundary is described from the line segment between the 
+% 1st and 2nd points of the dom shapefile.
+l=[dom.X(1) dom.Y(1) dom.X(2) dom.Y(2)];
+dst=Dist_Point_LineSegment(p(:,1),p(:,2),l);
+id_r=find(dst<1);
+GHB=[id_r 40*ones(length(id_r),1) 160*ones(length(id_r),1)];
+%%
+% It is always a good idea to check visually that the boundary conditions
+% have been assigned correctly. One easy way to do so is by plotting each boundary
+% node with a different color. First we will plot all mesh nodes and then
+% the left righ boundaries and the FLUX_Points. In addition
+% we will plot the positive FLUX_Points values, which correspond to streams,
+% with different color from the negative ones which correspons to wells.
+plot(p(:,1),p(:,2),'.')
+hold on
+plot(p(CH(:,1),1),p(CH(:,1),2),'.m')
+plot(p(GHB(:,1),1),p(GHB(:,1),2),'.g')
+plot(p(FLUX_point(FLUX_point(:,2)>0,1),1),p(FLUX_point(FLUX_point(:,2)>0,1),2),'.r')
+plot(p(FLUX_point(FLUX_point(:,2)<0,1),1),p(FLUX_point(FLUX_point(:,2)<0,1),2),'or')
+legend('Mesh nodes','Constant head boundary','General headboundary','Stream fluxes','Well fluxes')
+axis([-200 6500 0 5300])
+axis equal
+axis off
+%% Assemble
+% After identifing the boundary conditions, stresses and properties we can
+% assemble the matrices. First we will define few general simulation options and then
+% we will assemble the LHS
+simopt.dim=2;
+simopt.el_type='triangle';
+simopt.el_order='linear';
+[Kglo H]= Assemble_LHS(p, MSH(3,1).elem(1,1).id, Tel , CH, GHB, simopt);
+size(Kglo)
+%%
+% Note that the size of the Kglo matrix, which is the left hand size matrix,
+% is different to that of the mesh size.
+% This is due to the extra hypothetical nodes that are used to simulate the
+% general head boundary conditions.
+%%
+% In a similar way, we assemble the right hand side. In fact we only need to
+% assemble the flux properties that are defined on elements, since the ones
+% that are defined on nodes are already in the form of a RHS vector.
+F_rch= Assemble_RHS(length(H),p, MSH, FLUX);
+%%
+% To verify the assembly of the RHS, the sum(F_rch) should be equal to the
+% total recharge from landuse polygons. The following loop calculates
+% the total recharge from the shapefile
+for i=1:size(landuse,1)
+    Q_rch(i)=landuse(i,1).Q_m3_day;
+end;
+sum(Q_rch)
+%%
+% while sum(F_rch) is 
+sum(F_rch)
+error = sum(Q_rch) - sum(F_rch)
+%%
+% This descrepancy is due to the fact that
+% few elements lay on two recharge polygons but they have been assigned the
+% recharge value of the polygon where the barycenter falls.
+%% Solve
+% Now we are ready to solve the system. Fist we will combine the fluxes to
+% one vector and then solve
+F=F_rch+sparse(FLUX_point(:,1),1,FLUX_point(:,2),length(H),1);
+H=solve_system(Kglo,H,F);
+%% 
+% Simple triangular meshes can be easily visualized in Matlab
+clf
+trisurf(MSH(3,1).elem(1,1).id,p(:,1),p(:,2),H(1:size(p,1)))
+view(-10,16)
+
+
+##### SOURCE END #####
+--></body></html>

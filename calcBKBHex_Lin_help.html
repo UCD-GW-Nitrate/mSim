@@ -1,0 +1,257 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>calcBKBHex_Lin</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-03-28"><meta name="DC.source" content="calcBKBHex_Lin_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>calcBKBHex_Lin</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>Computes the product B' x K x B for 3D linear hexahedral elements in vectorized manner This is used internally from <a href="calcBKB_help.html">calcBKB</a>.</p><p>Version : 1.0</p><p>Author : George Kourakos</p><p>email: <a href="mailto:giorgk@gmail.com">giorgk@gmail.com</a></p><p>web : <a href="http://groundwater.ucdavis.edu/msim">http://groundwater.ucdavis.edu/msim</a></p><p>Date 28-Mar-2014</p><p>Department of Land Air and Water</p><p>University of California Davis</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Usage</a></li><li><a href="#2">Input</a></li><li><a href="#3">Output</a></li><li><a href="#4">How to compute</a></li></ul></div><h2>Usage<a name="1"></a></h2><p>BKB = calcBKBHex_Lin(B, K, ii)</p><h2>Input<a name="2"></a></h2><p><i><b>B</b></i>: [Nel x N_sh^2] contains the contributions of each element to the final      conductance matrix</p><p><i><b>K</b></i> : [Nel x Nanis] Hydraulic conductiviy element values. The number of columns     is defined by the anisotropy. Maximum number is 3.</p><p><i><b>ii</b></i> : In case of nested assembly this indicates the iteration. In       vectorized assembly this is not used</p><h2>Output<a name="3"></a></h2><p><i><b>BKB</b></i>: the product B'*K*B</p><h2>How to compute<a name="4"></a></h2><p>In mSim we avoid by hand computations at all costs, therefore we used the symbolic toolbox to perform the vectorized computations. The following code show how we computed the products.</p><pre class="codeinput">syms <span class="string">b1</span> <span class="string">b2</span> <span class="string">b3</span> <span class="string">b4</span> <span class="string">b5</span> <span class="string">b6</span> <span class="string">b7</span> <span class="string">b8</span>
+syms <span class="string">b9</span> <span class="string">b10</span> <span class="string">b11</span> <span class="string">b12</span> <span class="string">b13</span> <span class="string">b14</span> <span class="string">b15</span> <span class="string">b16</span>
+syms <span class="string">b17</span> <span class="string">b18</span> <span class="string">b19</span> <span class="string">b20</span> <span class="string">b21</span> <span class="string">b22</span> <span class="string">b23</span> <span class="string">b24</span>
+syms <span class="string">kx</span> <span class="string">ky</span> <span class="string">kz</span>
+B=[b1 b2 b3 b4 b5 b6 b7 b8;<span class="keyword">...</span>
+   b9 b10 b11 b12 b13 b14 b15 b16;<span class="keyword">...</span>
+   b17 b18 b19 b20 b21 b22 b23 b24];
+
+BT=[ b1 b9 b17;<span class="keyword">...</span>
+     b2 b10 b18;<span class="keyword">...</span>
+     b3 b11 b19;<span class="keyword">...</span>
+     b4 b12 b20;<span class="keyword">...</span>
+     b5 b13 b21;<span class="keyword">...</span>
+     b6 b14 b22;<span class="keyword">...</span>
+     b7 b15 b23;<span class="keyword">...</span>
+     b8 b16 b24];
+
+K=[kx 0 0;<span class="keyword">...</span>
+    0 ky 0;<span class="keyword">...</span>
+    0  0  kz];
+
+BKB=BT*K*B
+</pre><pre class="codeoutput"> 
+BKB =
+ 
+[      kx*b1^2 + ky*b9^2 + kz*b17^2,  b1*b2*kx + b9*b10*ky + b17*b18*kz,  b1*b3*kx + b9*b11*ky + b17*b19*kz,  b1*b4*kx + b9*b12*ky + b17*b20*kz,  b1*b5*kx + b9*b13*ky + b17*b21*kz,  b1*b6*kx + b9*b14*ky + b17*b22*kz,  b1*b7*kx + b9*b15*ky + b17*b23*kz,  b1*b8*kx + b9*b16*ky + b17*b24*kz]
+[ b1*b2*kx + b9*b10*ky + b17*b18*kz,      kx*b2^2 + ky*b10^2 + kz*b18^2, b2*b3*kx + b10*b11*ky + b18*b19*kz, b2*b4*kx + b10*b12*ky + b18*b20*kz, b2*b5*kx + b10*b13*ky + b18*b21*kz, b2*b6*kx + b10*b14*ky + b18*b22*kz, b2*b7*kx + b10*b15*ky + b18*b23*kz, b2*b8*kx + b10*b16*ky + b18*b24*kz]
+[ b1*b3*kx + b9*b11*ky + b17*b19*kz, b2*b3*kx + b10*b11*ky + b18*b19*kz,      kx*b3^2 + ky*b11^2 + kz*b19^2, b3*b4*kx + b11*b12*ky + b19*b20*kz, b3*b5*kx + b11*b13*ky + b19*b21*kz, b3*b6*kx + b11*b14*ky + b19*b22*kz, b3*b7*kx + b11*b15*ky + b19*b23*kz, b3*b8*kx + b11*b16*ky + b19*b24*kz]
+[ b1*b4*kx + b9*b12*ky + b17*b20*kz, b2*b4*kx + b10*b12*ky + b18*b20*kz, b3*b4*kx + b11*b12*ky + b19*b20*kz,      kx*b4^2 + ky*b12^2 + kz*b20^2, b4*b5*kx + b12*b13*ky + b20*b21*kz, b4*b6*kx + b12*b14*ky + b20*b22*kz, b4*b7*kx + b12*b15*ky + b20*b23*kz, b4*b8*kx + b12*b16*ky + b20*b24*kz]
+[ b1*b5*kx + b9*b13*ky + b17*b21*kz, b2*b5*kx + b10*b13*ky + b18*b21*kz, b3*b5*kx + b11*b13*ky + b19*b21*kz, b4*b5*kx + b12*b13*ky + b20*b21*kz,      kx*b5^2 + ky*b13^2 + kz*b21^2, b5*b6*kx + b13*b14*ky + b21*b22*kz, b5*b7*kx + b13*b15*ky + b21*b23*kz, b5*b8*kx + b13*b16*ky + b21*b24*kz]
+[ b1*b6*kx + b9*b14*ky + b17*b22*kz, b2*b6*kx + b10*b14*ky + b18*b22*kz, b3*b6*kx + b11*b14*ky + b19*b22*kz, b4*b6*kx + b12*b14*ky + b20*b22*kz, b5*b6*kx + b13*b14*ky + b21*b22*kz,      kx*b6^2 + ky*b14^2 + kz*b22^2, b6*b7*kx + b14*b15*ky + b22*b23*kz, b6*b8*kx + b14*b16*ky + b22*b24*kz]
+[ b1*b7*kx + b9*b15*ky + b17*b23*kz, b2*b7*kx + b10*b15*ky + b18*b23*kz, b3*b7*kx + b11*b15*ky + b19*b23*kz, b4*b7*kx + b12*b15*ky + b20*b23*kz, b5*b7*kx + b13*b15*ky + b21*b23*kz, b6*b7*kx + b14*b15*ky + b22*b23*kz,      kx*b7^2 + ky*b15^2 + kz*b23^2, b7*b8*kx + b15*b16*ky + b23*b24*kz]
+[ b1*b8*kx + b9*b16*ky + b17*b24*kz, b2*b8*kx + b10*b16*ky + b18*b24*kz, b3*b8*kx + b11*b16*ky + b19*b24*kz, b4*b8*kx + b12*b16*ky + b20*b24*kz, b5*b8*kx + b13*b16*ky + b21*b24*kz, b6*b8*kx + b14*b16*ky + b22*b24*kz, b7*b8*kx + b15*b16*ky + b23*b24*kz,      kx*b8^2 + ky*b16^2 + kz*b24^2]
+ 
+</pre><p>Next to convert the above complex expressions to vectorized expresions we used the following loop and copy the output to an editor and with minimum editing we wrote the final expressions without actually write by hand indices and symbols</p><pre class="codeinput">cnt=0;
+<span class="keyword">for</span> i=1:size(B,2)
+    <span class="keyword">for</span> j=1:size(B,2)
+        cnt=cnt+1;
+        fprintf([<span class="string">'BKB(:,%d) = '</span> char(BKB(i,j)) <span class="string">';\n'</span>],cnt);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">BKB(:,1) = b1^2*kx + b9^2*ky + b17^2*kz;
+BKB(:,2) = b1*b2*kx + b9*b10*ky + b17*b18*kz;
+BKB(:,3) = b1*b3*kx + b9*b11*ky + b17*b19*kz;
+BKB(:,4) = b1*b4*kx + b9*b12*ky + b17*b20*kz;
+BKB(:,5) = b1*b5*kx + b9*b13*ky + b17*b21*kz;
+BKB(:,6) = b1*b6*kx + b9*b14*ky + b17*b22*kz;
+BKB(:,7) = b1*b7*kx + b9*b15*ky + b17*b23*kz;
+BKB(:,8) = b1*b8*kx + b9*b16*ky + b17*b24*kz;
+BKB(:,9) = b1*b2*kx + b9*b10*ky + b17*b18*kz;
+BKB(:,10) = b2^2*kx + b10^2*ky + b18^2*kz;
+BKB(:,11) = b2*b3*kx + b10*b11*ky + b18*b19*kz;
+BKB(:,12) = b2*b4*kx + b10*b12*ky + b18*b20*kz;
+BKB(:,13) = b2*b5*kx + b10*b13*ky + b18*b21*kz;
+BKB(:,14) = b2*b6*kx + b10*b14*ky + b18*b22*kz;
+BKB(:,15) = b2*b7*kx + b10*b15*ky + b18*b23*kz;
+BKB(:,16) = b2*b8*kx + b10*b16*ky + b18*b24*kz;
+BKB(:,17) = b1*b3*kx + b9*b11*ky + b17*b19*kz;
+BKB(:,18) = b2*b3*kx + b10*b11*ky + b18*b19*kz;
+BKB(:,19) = b3^2*kx + b11^2*ky + b19^2*kz;
+BKB(:,20) = b3*b4*kx + b11*b12*ky + b19*b20*kz;
+BKB(:,21) = b3*b5*kx + b11*b13*ky + b19*b21*kz;
+BKB(:,22) = b3*b6*kx + b11*b14*ky + b19*b22*kz;
+BKB(:,23) = b3*b7*kx + b11*b15*ky + b19*b23*kz;
+BKB(:,24) = b3*b8*kx + b11*b16*ky + b19*b24*kz;
+BKB(:,25) = b1*b4*kx + b9*b12*ky + b17*b20*kz;
+BKB(:,26) = b2*b4*kx + b10*b12*ky + b18*b20*kz;
+BKB(:,27) = b3*b4*kx + b11*b12*ky + b19*b20*kz;
+BKB(:,28) = b4^2*kx + b12^2*ky + b20^2*kz;
+BKB(:,29) = b4*b5*kx + b12*b13*ky + b20*b21*kz;
+BKB(:,30) = b4*b6*kx + b12*b14*ky + b20*b22*kz;
+BKB(:,31) = b4*b7*kx + b12*b15*ky + b20*b23*kz;
+BKB(:,32) = b4*b8*kx + b12*b16*ky + b20*b24*kz;
+BKB(:,33) = b1*b5*kx + b9*b13*ky + b17*b21*kz;
+BKB(:,34) = b2*b5*kx + b10*b13*ky + b18*b21*kz;
+BKB(:,35) = b3*b5*kx + b11*b13*ky + b19*b21*kz;
+BKB(:,36) = b4*b5*kx + b12*b13*ky + b20*b21*kz;
+BKB(:,37) = b5^2*kx + b13^2*ky + b21^2*kz;
+BKB(:,38) = b5*b6*kx + b13*b14*ky + b21*b22*kz;
+BKB(:,39) = b5*b7*kx + b13*b15*ky + b21*b23*kz;
+BKB(:,40) = b5*b8*kx + b13*b16*ky + b21*b24*kz;
+BKB(:,41) = b1*b6*kx + b9*b14*ky + b17*b22*kz;
+BKB(:,42) = b2*b6*kx + b10*b14*ky + b18*b22*kz;
+BKB(:,43) = b3*b6*kx + b11*b14*ky + b19*b22*kz;
+BKB(:,44) = b4*b6*kx + b12*b14*ky + b20*b22*kz;
+BKB(:,45) = b5*b6*kx + b13*b14*ky + b21*b22*kz;
+BKB(:,46) = b6^2*kx + b14^2*ky + b22^2*kz;
+BKB(:,47) = b6*b7*kx + b14*b15*ky + b22*b23*kz;
+BKB(:,48) = b6*b8*kx + b14*b16*ky + b22*b24*kz;
+BKB(:,49) = b1*b7*kx + b9*b15*ky + b17*b23*kz;
+BKB(:,50) = b2*b7*kx + b10*b15*ky + b18*b23*kz;
+BKB(:,51) = b3*b7*kx + b11*b15*ky + b19*b23*kz;
+BKB(:,52) = b4*b7*kx + b12*b15*ky + b20*b23*kz;
+BKB(:,53) = b5*b7*kx + b13*b15*ky + b21*b23*kz;
+BKB(:,54) = b6*b7*kx + b14*b15*ky + b22*b23*kz;
+BKB(:,55) = b7^2*kx + b15^2*ky + b23^2*kz;
+BKB(:,56) = b7*b8*kx + b15*b16*ky + b23*b24*kz;
+BKB(:,57) = b1*b8*kx + b9*b16*ky + b17*b24*kz;
+BKB(:,58) = b2*b8*kx + b10*b16*ky + b18*b24*kz;
+BKB(:,59) = b3*b8*kx + b11*b16*ky + b19*b24*kz;
+BKB(:,60) = b4*b8*kx + b12*b16*ky + b20*b24*kz;
+BKB(:,61) = b5*b8*kx + b13*b16*ky + b21*b24*kz;
+BKB(:,62) = b6*b8*kx + b14*b16*ky + b22*b24*kz;
+BKB(:,63) = b7*b8*kx + b15*b16*ky + b23*b24*kz;
+BKB(:,64) = b8^2*kx + b16^2*ky + b24^2*kz;
+</pre><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% calcBKBHex_Lin
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+%
+% Computes the product B' x K x B for 3D linear hexahedral elements in vectorized manner
+% This is used internally from <calcBKB_help.html calcBKB>.
+%
+% Version : 1.0
+%
+% Author : George Kourakos
+%
+% email: giorgk@gmail.com
+%
+% web : http://groundwater.ucdavis.edu/msim
+%
+% Date 28-Mar-2014
+%
+% Department of Land Air and Water
+%
+% University of California Davis
+%
+%% Usage
+% BKB = calcBKBHex_Lin(B, K, ii)
+%
+%% Input
+% _*B*_: [Nel x N_sh^2] contains the contributions of each element to the final
+%      conductance matrix
+%
+% _*K*_ : [Nel x Nanis] Hydraulic conductiviy element values. The number of columns 
+%     is defined by the anisotropy. Maximum number is 3.
+%
+% _*ii*_ : In case of nested assembly this indicates the iteration. In
+%       vectorized assembly this is not used 
+%
+%% Output
+% _*BKB*_: the product B'*K*B
+%% How to compute
+% In mSim we avoid by hand computations at all costs, therefore we used the symbolic 
+% toolbox to perform the vectorized computations. The following code show 
+% how we computed the products.
+syms b1 b2 b3 b4 b5 b6 b7 b8
+syms b9 b10 b11 b12 b13 b14 b15 b16
+syms b17 b18 b19 b20 b21 b22 b23 b24 
+syms kx ky kz
+B=[b1 b2 b3 b4 b5 b6 b7 b8;...
+   b9 b10 b11 b12 b13 b14 b15 b16;...
+   b17 b18 b19 b20 b21 b22 b23 b24];
+
+BT=[ b1 b9 b17;...
+     b2 b10 b18;...
+     b3 b11 b19;...
+     b4 b12 b20;...
+     b5 b13 b21;...
+     b6 b14 b22;...
+     b7 b15 b23;...
+     b8 b16 b24];
+ 
+K=[kx 0 0;...
+    0 ky 0;...
+    0  0  kz];
+ 
+BKB=BT*K*B
+%%
+% Next to convert the above complex expressions to vectorized expresions we
+% used the following loop and copy the output to an editor and with minimum
+% editing we wrote the final expressions without actually write by hand indices
+% and symbols
+cnt=0;
+for i=1:size(B,2)
+    for j=1:size(B,2)
+        cnt=cnt+1;
+        fprintf(['BKB(:,%d) = ' char(BKB(i,j)) ';\n'],cnt);
+    end
+end
+%%
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>

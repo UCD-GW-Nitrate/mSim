@@ -1,0 +1,343 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>shapeDerivHex_quad_27</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-03"><meta name="DC.source" content="shapeDerivHex_quad_27_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>shapeDerivHex_quad_27</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>Computes the shape function derivatives and the determinant of the jacobian matrix for hexahedral quadratic elements (complete). This function is used internally from <a href="shapeDerivatives_help.html">shapeDerivatives</a>.</p><p>Version : 1.0</p><p>Author : George Kourakos</p><p>email: <a href="mailto:giorgk@gmail.com">giorgk@gmail.com</a></p><p>web : <a href="http://groundwater.ucdavis.edu/msim">http://groundwater.ucdavis.edu/msim</a></p><p>Date 18-Mar-2014</p><p>Department of Land Air and Water</p><p>University of California Davis</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Usage</a></li><li><a href="#2">Input</a></li><li><a href="#3">Output</a></li><li><a href="#4">Shape functions</a></li><li><a href="#5">Derivatives of shape functions</a></li></ul></div><h2>Usage<a name="1"></a></h2><p>[B Jdet] = shapeDerivHex_quad_27(p, MSH, n)</p><h2>Input<a name="2"></a></h2><p><i><b>p</b></i>: [Np x 3] Coodrinates of nodes [x1 y1 z1; x2 y2 z2;...xn yn zn], where <i>Np</i> is the number of nodes</p><p><i><b>MSH</b></i>: [Nel x Np_el] id of elements. Each row correspond to an element. <i>Nel</i> is the number of elements and <i>Np_el</i> is the number of nodes to define the element</p><p><i><b>n</b></i>: the integration point where the derivatives will be evaluated.</p><h2>Output<a name="3"></a></h2><p><i><b>B</b></i>: Shape function derivatives</p><p><i><b>Jdet</b></i>: The determinant of the Jacobian Matrix</p><h2>Shape functions<a name="4"></a></h2><p>N1 = (eta*xi*zta*(eta - 1)*(xi - 1)*(zta - 1))/8;</p><p>N2 = (eta*xi*zta*(eta - 1)*(xi + 1)*(zta - 1))/8;</p><p>N3 = (eta*xi*zta*(eta + 1)*(xi + 1)*(zta - 1))/8;</p><p>N4 = (eta*xi*zta*(eta + 1)*(xi - 1)*(zta - 1))/8;</p><p>N5 = (eta*xi*zta*(eta - 1)*(xi - 1)*(zta + 1))/8;</p><p>N6 = (eta*xi*zta*(eta - 1)*(xi + 1)*(zta + 1))/8;</p><p>N7 = (eta*xi*zta*(eta + 1)*(xi + 1)*(zta + 1))/8;</p><p>N8 = (eta*xi*zta*(eta + 1)*(xi - 1)*(zta + 1))/8;</p><p>N9 = -(eta*zta*(xi^2 - 1)*(eta - 1)*(zta - 1))/4;</p><p>N10 = -(xi*zta*(eta^2 - 1)*(xi + 1)*(zta - 1))/4;</p><p>N11 = -(eta*zta*(xi^2 - 1)*(eta + 1)*(zta - 1))/4;</p><p>N12 = -(xi*zta*(eta^2 - 1)*(xi - 1)*(zta - 1))/4;</p><p>N13 = -(eta*zta*(xi^2 - 1)*(eta - 1)*(zta + 1))/4;</p><p>N14 = -(xi*zta*(eta^2 - 1)*(xi + 1)*(zta + 1))/4;</p><p>N15 = -(eta*zta*(xi^2 - 1)*(eta + 1)*(zta + 1))/4;</p><p>N16 = -(xi*zta*(eta^2 - 1)*(xi - 1)*(zta + 1))/4;</p><p>N17 = -(eta*xi*(zta^2 - 1)*(eta - 1)*(xi - 1))/4;</p><p>N18 = -(eta*xi*(zta^2 - 1)*(eta - 1)*(xi + 1))/4;</p><p>N19 = -(eta*xi*(zta^2 - 1)*(eta + 1)*(xi + 1))/4;</p><p>N20 = -(eta*xi*(zta^2 - 1)*(eta + 1)*(xi - 1))/4;</p><p>N21 = (eta*(xi^2 - 1)*(zta^2 - 1)*(eta - 1))/2;</p><p>N22 = (xi*(eta^2 - 1)*(zta^2 - 1)*(xi + 1))/2;</p><p>N23 = (eta*(xi^2 - 1)*(zta^2 - 1)*(eta + 1))/2;</p><p>N24 = (xi*(eta^2 - 1)*(zta^2 - 1)*(xi - 1))/2;</p><p>N25 = (zta*(eta^2 - 1)*(xi^2 - 1)*(zta - 1))/2;</p><p>N26 = (zta*(eta^2 - 1)*(xi^2 - 1)*(zta + 1))/2;</p><p>N27 = -(eta^2 - 1)*(xi^2 - 1)*(zta^2 - 1);</p><h2>Derivatives of shape functions<a name="5"></a></h2><p>wrt. ksi:</p><p>dN1 = (eta*xi*zta*(eta - 1)*(zta - 1))/8 + (eta*zta*(eta - 1)*(xi - 1)*(zta - 1))/8;</p><p>dN2 = (eta*xi*zta*(eta - 1)*(zta - 1))/8 + (eta*zta*(eta - 1)*(xi + 1)*(zta - 1))/8;</p><p>dN3 = (eta*xi*zta*(eta + 1)*(zta - 1))/8 + (eta*zta*(eta + 1)*(xi + 1)*(zta - 1))/8;</p><p>dN4 = (eta*xi*zta*(eta + 1)*(zta - 1))/8 + (eta*zta*(eta + 1)*(xi - 1)*(zta - 1))/8;</p><p>dN5 = (eta*xi*zta*(eta - 1)*(zta + 1))/8 + (eta*zta*(eta - 1)*(xi - 1)*(zta + 1))/8;</p><p>dN6 = (eta*xi*zta*(eta - 1)*(zta + 1))/8 + (eta*zta*(eta - 1)*(xi + 1)*(zta + 1))/8;</p><p>dN7 = (eta*xi*zta*(eta + 1)*(zta + 1))/8 + (eta*zta*(eta + 1)*(xi + 1)*(zta + 1))/8;</p><p>dN8 = (eta*xi*zta*(eta + 1)*(zta + 1))/8 + (eta*zta*(eta + 1)*(xi - 1)*(zta + 1))/8;</p><p>dN9 = -(eta*xi*zta*(eta - 1)*(zta - 1))/2;</p><p>dN10 = - (xi*zta*(eta^2 - 1)*(zta - 1))/4 - (zta*(eta^2 - 1)*(xi + 1)*(zta - 1))/4;</p><p>dN11 = -(eta*xi*zta*(eta + 1)*(zta - 1))/2;</p><p>dN12 = - (xi*zta*(eta^2 - 1)*(zta - 1))/4 - (zta*(eta^2 - 1)*(xi - 1)*(zta - 1))/4;</p><p>dN13 = -(eta*xi*zta*(eta - 1)*(zta + 1))/2;</p><p>dN14 = - (xi*zta*(eta^2 - 1)*(zta + 1))/4 - (zta*(eta^2 - 1)*(xi + 1)*(zta + 1))/4;</p><p>dN15 = -(eta*xi*zta*(eta + 1)*(zta + 1))/2;</p><p>dN16 = - (xi*zta*(eta^2 - 1)*(zta + 1))/4 - (zta*(eta^2 - 1)*(xi - 1)*(zta + 1))/4;</p><p>dN17 = - (eta*xi*(zta^2 - 1)*(eta - 1))/4 - (eta*(zta^2 - 1)*(eta - 1)*(xi - 1))/4;</p><p>dN18 = - (eta*xi*(zta^2 - 1)*(eta - 1))/4 - (eta*(zta^2 - 1)*(eta - 1)*(xi + 1))/4;</p><p>dN19 = - (eta*xi*(zta^2 - 1)*(eta + 1))/4 - (eta*(zta^2 - 1)*(eta + 1)*(xi + 1))/4;</p><p>dN20 = - (eta*xi*(zta^2 - 1)*(eta + 1))/4 - (eta*(zta^2 - 1)*(eta + 1)*(xi - 1))/4;</p><p>dN21 = eta*xi*(zta^2 - 1)*(eta - 1);</p><p>dN22 = (xi*(eta^2 - 1)*(zta^2 - 1))/2 + ((eta^2 - 1)*(zta^2 - 1)*(xi + 1))/2;</p><p>dN23 = eta*xi*(zta^2 - 1)*(eta + 1);</p><p>dN24 = (xi*(eta^2 - 1)*(zta^2 - 1))/2 + ((eta^2 - 1)*(zta^2 - 1)*(xi - 1))/2;</p><p>dN25 = xi*zta*(eta^2 - 1)*(zta - 1);</p><p>dN26 = xi*zta*(eta^2 - 1)*(zta + 1);</p><p>dN27 = -2*xi*(eta^2 - 1)*(zta^2 - 1);</p><p>wrt. eta:</p><p>dN28 = (eta*xi*zta*(xi - 1)*(zta - 1))/8 + (xi*zta*(eta - 1)*(xi - 1)*(zta - 1))/8;</p><p>dN29 = (eta*xi*zta*(xi + 1)*(zta - 1))/8 + (xi*zta*(eta - 1)*(xi + 1)*(zta - 1))/8;</p><p>dN30 = (eta*xi*zta*(xi + 1)*(zta - 1))/8 + (xi*zta*(eta + 1)*(xi + 1)*(zta - 1))/8;</p><p>dN31 = (eta*xi*zta*(xi - 1)*(zta - 1))/8 + (xi*zta*(eta + 1)*(xi - 1)*(zta - 1))/8;</p><p>dN32 = (eta*xi*zta*(xi - 1)*(zta + 1))/8 + (xi*zta*(eta - 1)*(xi - 1)*(zta + 1))/8;</p><p>dN33 = (eta*xi*zta*(xi + 1)*(zta + 1))/8 + (xi*zta*(eta - 1)*(xi + 1)*(zta + 1))/8;</p><p>dN34 = (eta*xi*zta*(xi + 1)*(zta + 1))/8 + (xi*zta*(eta + 1)*(xi + 1)*(zta + 1))/8;</p><p>dN35 = (eta*xi*zta*(xi - 1)*(zta + 1))/8 + (xi*zta*(eta + 1)*(xi - 1)*(zta + 1))/8;</p><p>dN36 = - (eta*zta*(xi^2 - 1)*(zta - 1))/4 - (zta*(xi^2 - 1)*(eta - 1)*(zta - 1))/4;</p><p>dN37 = -(eta*xi*zta*(xi + 1)*(zta - 1))/2;</p><p>dN38 = - (eta*zta*(xi^2 - 1)*(zta - 1))/4 - (zta*(xi^2 - 1)*(eta + 1)*(zta - 1))/4;</p><p>dN39 = -(eta*xi*zta*(xi - 1)*(zta - 1))/2;</p><p>dN40 = - (eta*zta*(xi^2 - 1)*(zta + 1))/4 - (zta*(xi^2 - 1)*(eta - 1)*(zta + 1))/4;</p><p>dN41 = -(eta*xi*zta*(xi + 1)*(zta + 1))/2;</p><p>dN42 = - (eta*zta*(xi^2 - 1)*(zta + 1))/4 - (zta*(xi^2 - 1)*(eta + 1)*(zta + 1))/4;</p><p>dN43 = -(eta*xi*zta*(xi - 1)*(zta + 1))/2;</p><p>dN44 = - (eta*xi*(zta^2 - 1)*(xi - 1))/4 - (xi*(zta^2 - 1)*(eta - 1)*(xi - 1))/4;</p><p>dN45 = - (eta*xi*(zta^2 - 1)*(xi + 1))/4 - (xi*(zta^2 - 1)*(eta - 1)*(xi + 1))/4;</p><p>dN46 = - (eta*xi*(zta^2 - 1)*(xi + 1))/4 - (xi*(zta^2 - 1)*(eta + 1)*(xi + 1))/4;</p><p>dN47 = - (eta*xi*(zta^2 - 1)*(xi - 1))/4 - (xi*(zta^2 - 1)*(eta + 1)*(xi - 1))/4;</p><p>dN48 = (eta*(xi^2 - 1)*(zta^2 - 1))/2 + ((xi^2 - 1)*(zta^2 - 1)*(eta - 1))/2;</p><p>dN49 = eta*xi*(zta^2 - 1)*(xi + 1);</p><p>dN50 = (eta*(xi^2 - 1)*(zta^2 - 1))/2 + ((xi^2 - 1)*(zta^2 - 1)*(eta + 1))/2;</p><p>dN51 = eta*xi*(zta^2 - 1)*(xi - 1);</p><p>dN52 = eta*zta*(xi^2 - 1)*(zta - 1);</p><p>dN53 = eta*zta*(xi^2 - 1)*(zta + 1);</p><p>dN54 = -2*eta*(xi^2 - 1)*(zta^2 - 1);</p><p>wrt. zeta:</p><p>dN55 = (eta*xi*zta*(eta - 1)*(xi - 1))/8 + (eta*xi*(eta - 1)*(xi - 1)*(zta - 1))/8;</p><p>dN56 = (eta*xi*zta*(eta - 1)*(xi + 1))/8 + (eta*xi*(eta - 1)*(xi + 1)*(zta - 1))/8;</p><p>dN57 = (eta*xi*zta*(eta + 1)*(xi + 1))/8 + (eta*xi*(eta + 1)*(xi + 1)*(zta - 1))/8;</p><p>dN58 = (eta*xi*zta*(eta + 1)*(xi - 1))/8 + (eta*xi*(eta + 1)*(xi - 1)*(zta - 1))/8;</p><p>dN59 = (eta*xi*zta*(eta - 1)*(xi - 1))/8 + (eta*xi*(eta - 1)*(xi - 1)*(zta + 1))/8;</p><p>dN60 = (eta*xi*zta*(eta - 1)*(xi + 1))/8 + (eta*xi*(eta - 1)*(xi + 1)*(zta + 1))/8;</p><p>dN61 = (eta*xi*zta*(eta + 1)*(xi + 1))/8 + (eta*xi*(eta + 1)*(xi + 1)*(zta + 1))/8;</p><p>dN62 = (eta*xi*zta*(eta + 1)*(xi - 1))/8 + (eta*xi*(eta + 1)*(xi - 1)*(zta + 1))/8;</p><p>dN63 = - (eta*zta*(xi^2 - 1)*(eta - 1))/4 - (eta*(xi^2 - 1)*(eta - 1)*(zta - 1))/4;</p><p>dN64 = - (xi*zta*(eta^2 - 1)*(xi + 1))/4 - (xi*(eta^2 - 1)*(xi + 1)*(zta - 1))/4;</p><p>dN65 = - (eta*zta*(xi^2 - 1)*(eta + 1))/4 - (eta*(xi^2 - 1)*(eta + 1)*(zta - 1))/4;</p><p>dN66 = - (xi*zta*(eta^2 - 1)*(xi - 1))/4 - (xi*(eta^2 - 1)*(xi - 1)*(zta - 1))/4;</p><p>dN67 = - (eta*zta*(xi^2 - 1)*(eta - 1))/4 - (eta*(xi^2 - 1)*(eta - 1)*(zta + 1))/4;</p><p>dN68 = - (xi*zta*(eta^2 - 1)*(xi + 1))/4 - (xi*(eta^2 - 1)*(xi + 1)*(zta + 1))/4;</p><p>dN69 = - (eta*zta*(xi^2 - 1)*(eta + 1))/4 - (eta*(xi^2 - 1)*(eta + 1)*(zta + 1))/4;</p><p>dN70 = - (xi*zta*(eta^2 - 1)*(xi - 1))/4 - (xi*(eta^2 - 1)*(xi - 1)*(zta + 1))/4;</p><p>dN71 = -(eta*xi*zta*(eta - 1)*(xi - 1))/2;</p><p>dN72 = -(eta*xi*zta*(eta - 1)*(xi + 1))/2;</p><p>dN73 = -(eta*xi*zta*(eta + 1)*(xi + 1))/2;</p><p>dN74 = -(eta*xi*zta*(eta + 1)*(xi - 1))/2;</p><p>dN75 = eta*zta*(xi^2 - 1)*(eta - 1);</p><p>dN76 = xi*zta*(eta^2 - 1)*(xi + 1);</p><p>dN77 = eta*zta*(xi^2 - 1)*(eta + 1);</p><p>dN78 = xi*zta*(eta^2 - 1)*(xi - 1);</p><p>dN79 = (zta*(eta^2 - 1)*(xi^2 - 1))/2 + ((eta^2 - 1)*(xi^2 - 1)*(zta - 1))/2;</p><p>dN80 = (zta*(eta^2 - 1)*(xi^2 - 1))/2 + ((eta^2 - 1)*(xi^2 - 1)*(zta + 1))/2;</p><p>dN81 = -2*zta*(eta^2 - 1)*(xi^2 - 1);</p><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% shapeDerivHex_quad_27
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+%
+% Computes the shape function derivatives and the determinant of the 
+% jacobian matrix for hexahedral quadratic elements (complete).
+% This function is used internally from <shapeDerivatives_help.html shapeDerivatives>.
+% 
+%
+% Version : 1.0
+%
+% Author : George Kourakos
+%
+% email: giorgk@gmail.com
+%
+% web : http://groundwater.ucdavis.edu/msim
+%
+% Date 18-Mar-2014
+%
+% Department of Land Air and Water
+%
+% University of California Davis
+%
+%% Usage
+% [B Jdet] = shapeDerivHex_quad_27(p, MSH, n)
+%
+%% Input
+% _*p*_: [Np x 3] Coodrinates of nodes [x1 y1 z1; x2 y2 z2;...xn yn zn],
+% where _Np_ is the number of nodes
+%
+% _*MSH*_: [Nel x Np_el] id of elements. Each row correspond to an element.
+% _Nel_ is the number of elements and _Np_el_ is the number of nodes to define the element
+%
+% _*n*_: the integration point where the derivatives will be evaluated. 
+%
+%% Output
+% _*B*_: Shape function derivatives
+%
+% _*Jdet*_: The determinant of the Jacobian Matrix 
+%
+%% Shape functions
+% N1 = (eta*xi*zta*(eta - 1)*(xi - 1)*(zta - 1))/8;
+% 
+% N2 = (eta*xi*zta*(eta - 1)*(xi + 1)*(zta - 1))/8;
+% 
+% N3 = (eta*xi*zta*(eta + 1)*(xi + 1)*(zta - 1))/8;
+% 
+% N4 = (eta*xi*zta*(eta + 1)*(xi - 1)*(zta - 1))/8;
+% 
+% N5 = (eta*xi*zta*(eta - 1)*(xi - 1)*(zta + 1))/8;
+% 
+% N6 = (eta*xi*zta*(eta - 1)*(xi + 1)*(zta + 1))/8;
+% 
+% N7 = (eta*xi*zta*(eta + 1)*(xi + 1)*(zta + 1))/8;
+% 
+% N8 = (eta*xi*zta*(eta + 1)*(xi - 1)*(zta + 1))/8;
+% 
+% N9 = -(eta*zta*(xi^2 - 1)*(eta - 1)*(zta - 1))/4;
+% 
+% N10 = -(xi*zta*(eta^2 - 1)*(xi + 1)*(zta - 1))/4;
+% 
+% N11 = -(eta*zta*(xi^2 - 1)*(eta + 1)*(zta - 1))/4;
+% 
+% N12 = -(xi*zta*(eta^2 - 1)*(xi - 1)*(zta - 1))/4;
+% 
+% N13 = -(eta*zta*(xi^2 - 1)*(eta - 1)*(zta + 1))/4;
+% 
+% N14 = -(xi*zta*(eta^2 - 1)*(xi + 1)*(zta + 1))/4;
+% 
+% N15 = -(eta*zta*(xi^2 - 1)*(eta + 1)*(zta + 1))/4;
+% 
+% N16 = -(xi*zta*(eta^2 - 1)*(xi - 1)*(zta + 1))/4;
+% 
+% N17 = -(eta*xi*(zta^2 - 1)*(eta - 1)*(xi - 1))/4;
+% 
+% N18 = -(eta*xi*(zta^2 - 1)*(eta - 1)*(xi + 1))/4;
+% 
+% N19 = -(eta*xi*(zta^2 - 1)*(eta + 1)*(xi + 1))/4;
+% 
+% N20 = -(eta*xi*(zta^2 - 1)*(eta + 1)*(xi - 1))/4;
+% 
+% N21 = (eta*(xi^2 - 1)*(zta^2 - 1)*(eta - 1))/2;
+% 
+% N22 = (xi*(eta^2 - 1)*(zta^2 - 1)*(xi + 1))/2;
+% 
+% N23 = (eta*(xi^2 - 1)*(zta^2 - 1)*(eta + 1))/2;
+% 
+% N24 = (xi*(eta^2 - 1)*(zta^2 - 1)*(xi - 1))/2;
+% 
+% N25 = (zta*(eta^2 - 1)*(xi^2 - 1)*(zta - 1))/2;
+% 
+% N26 = (zta*(eta^2 - 1)*(xi^2 - 1)*(zta + 1))/2;
+% 
+% N27 = -(eta^2 - 1)*(xi^2 - 1)*(zta^2 - 1);
+%
+%% Derivatives of shape functions
+% wrt. ksi:
+%
+% dN1 = (eta*xi*zta*(eta - 1)*(zta - 1))/8 + (eta*zta*(eta - 1)*(xi - 1)*(zta - 1))/8;
+% 
+% dN2 = (eta*xi*zta*(eta - 1)*(zta - 1))/8 + (eta*zta*(eta - 1)*(xi + 1)*(zta - 1))/8;
+% 
+% dN3 = (eta*xi*zta*(eta + 1)*(zta - 1))/8 + (eta*zta*(eta + 1)*(xi + 1)*(zta - 1))/8;
+% 
+% dN4 = (eta*xi*zta*(eta + 1)*(zta - 1))/8 + (eta*zta*(eta + 1)*(xi - 1)*(zta - 1))/8;
+% 
+% dN5 = (eta*xi*zta*(eta - 1)*(zta + 1))/8 + (eta*zta*(eta - 1)*(xi - 1)*(zta + 1))/8;
+% 
+% dN6 = (eta*xi*zta*(eta - 1)*(zta + 1))/8 + (eta*zta*(eta - 1)*(xi + 1)*(zta + 1))/8;
+% 
+% dN7 = (eta*xi*zta*(eta + 1)*(zta + 1))/8 + (eta*zta*(eta + 1)*(xi + 1)*(zta + 1))/8;
+% 
+% dN8 = (eta*xi*zta*(eta + 1)*(zta + 1))/8 + (eta*zta*(eta + 1)*(xi - 1)*(zta + 1))/8;
+% 
+% dN9 = -(eta*xi*zta*(eta - 1)*(zta - 1))/2;
+% 
+% dN10 = - (xi*zta*(eta^2 - 1)*(zta - 1))/4 - (zta*(eta^2 - 1)*(xi + 1)*(zta - 1))/4;
+% 
+% dN11 = -(eta*xi*zta*(eta + 1)*(zta - 1))/2;
+% 
+% dN12 = - (xi*zta*(eta^2 - 1)*(zta - 1))/4 - (zta*(eta^2 - 1)*(xi - 1)*(zta - 1))/4;
+% 
+% dN13 = -(eta*xi*zta*(eta - 1)*(zta + 1))/2;
+% 
+% dN14 = - (xi*zta*(eta^2 - 1)*(zta + 1))/4 - (zta*(eta^2 - 1)*(xi + 1)*(zta + 1))/4;
+% 
+% dN15 = -(eta*xi*zta*(eta + 1)*(zta + 1))/2;
+% 
+% dN16 = - (xi*zta*(eta^2 - 1)*(zta + 1))/4 - (zta*(eta^2 - 1)*(xi - 1)*(zta + 1))/4;
+% 
+% dN17 = - (eta*xi*(zta^2 - 1)*(eta - 1))/4 - (eta*(zta^2 - 1)*(eta - 1)*(xi - 1))/4;
+% 
+% dN18 = - (eta*xi*(zta^2 - 1)*(eta - 1))/4 - (eta*(zta^2 - 1)*(eta - 1)*(xi + 1))/4;
+% 
+% dN19 = - (eta*xi*(zta^2 - 1)*(eta + 1))/4 - (eta*(zta^2 - 1)*(eta + 1)*(xi + 1))/4;
+% 
+% dN20 = - (eta*xi*(zta^2 - 1)*(eta + 1))/4 - (eta*(zta^2 - 1)*(eta + 1)*(xi - 1))/4;
+% 
+% dN21 = eta*xi*(zta^2 - 1)*(eta - 1);
+% 
+% dN22 = (xi*(eta^2 - 1)*(zta^2 - 1))/2 + ((eta^2 - 1)*(zta^2 - 1)*(xi + 1))/2;
+% 
+% dN23 = eta*xi*(zta^2 - 1)*(eta + 1);
+% 
+% dN24 = (xi*(eta^2 - 1)*(zta^2 - 1))/2 + ((eta^2 - 1)*(zta^2 - 1)*(xi - 1))/2;
+% 
+% dN25 = xi*zta*(eta^2 - 1)*(zta - 1);
+% 
+% dN26 = xi*zta*(eta^2 - 1)*(zta + 1);
+% 
+% dN27 = -2*xi*(eta^2 - 1)*(zta^2 - 1);
+%
+%
+% wrt. eta:
+%
+% dN28 = (eta*xi*zta*(xi - 1)*(zta - 1))/8 + (xi*zta*(eta - 1)*(xi - 1)*(zta - 1))/8;
+% 
+% dN29 = (eta*xi*zta*(xi + 1)*(zta - 1))/8 + (xi*zta*(eta - 1)*(xi + 1)*(zta - 1))/8;
+% 
+% dN30 = (eta*xi*zta*(xi + 1)*(zta - 1))/8 + (xi*zta*(eta + 1)*(xi + 1)*(zta - 1))/8;
+% 
+% dN31 = (eta*xi*zta*(xi - 1)*(zta - 1))/8 + (xi*zta*(eta + 1)*(xi - 1)*(zta - 1))/8;
+% 
+% dN32 = (eta*xi*zta*(xi - 1)*(zta + 1))/8 + (xi*zta*(eta - 1)*(xi - 1)*(zta + 1))/8;
+% 
+% dN33 = (eta*xi*zta*(xi + 1)*(zta + 1))/8 + (xi*zta*(eta - 1)*(xi + 1)*(zta + 1))/8;
+% 
+% dN34 = (eta*xi*zta*(xi + 1)*(zta + 1))/8 + (xi*zta*(eta + 1)*(xi + 1)*(zta + 1))/8;
+% 
+% dN35 = (eta*xi*zta*(xi - 1)*(zta + 1))/8 + (xi*zta*(eta + 1)*(xi - 1)*(zta + 1))/8;
+% 
+% dN36 = - (eta*zta*(xi^2 - 1)*(zta - 1))/4 - (zta*(xi^2 - 1)*(eta - 1)*(zta - 1))/4;
+% 
+% dN37 = -(eta*xi*zta*(xi + 1)*(zta - 1))/2;
+% 
+% dN38 = - (eta*zta*(xi^2 - 1)*(zta - 1))/4 - (zta*(xi^2 - 1)*(eta + 1)*(zta - 1))/4;
+% 
+% dN39 = -(eta*xi*zta*(xi - 1)*(zta - 1))/2;
+% 
+% dN40 = - (eta*zta*(xi^2 - 1)*(zta + 1))/4 - (zta*(xi^2 - 1)*(eta - 1)*(zta + 1))/4;
+% 
+% dN41 = -(eta*xi*zta*(xi + 1)*(zta + 1))/2;
+% 
+% dN42 = - (eta*zta*(xi^2 - 1)*(zta + 1))/4 - (zta*(xi^2 - 1)*(eta + 1)*(zta + 1))/4;
+% 
+% dN43 = -(eta*xi*zta*(xi - 1)*(zta + 1))/2;
+% 
+% dN44 = - (eta*xi*(zta^2 - 1)*(xi - 1))/4 - (xi*(zta^2 - 1)*(eta - 1)*(xi - 1))/4;
+% 
+% dN45 = - (eta*xi*(zta^2 - 1)*(xi + 1))/4 - (xi*(zta^2 - 1)*(eta - 1)*(xi + 1))/4;
+% 
+% dN46 = - (eta*xi*(zta^2 - 1)*(xi + 1))/4 - (xi*(zta^2 - 1)*(eta + 1)*(xi + 1))/4;
+% 
+% dN47 = - (eta*xi*(zta^2 - 1)*(xi - 1))/4 - (xi*(zta^2 - 1)*(eta + 1)*(xi - 1))/4;
+% 
+% dN48 = (eta*(xi^2 - 1)*(zta^2 - 1))/2 + ((xi^2 - 1)*(zta^2 - 1)*(eta - 1))/2;
+% 
+% dN49 = eta*xi*(zta^2 - 1)*(xi + 1);
+% 
+% dN50 = (eta*(xi^2 - 1)*(zta^2 - 1))/2 + ((xi^2 - 1)*(zta^2 - 1)*(eta + 1))/2;
+% 
+% dN51 = eta*xi*(zta^2 - 1)*(xi - 1);
+% 
+% dN52 = eta*zta*(xi^2 - 1)*(zta - 1);
+% 
+% dN53 = eta*zta*(xi^2 - 1)*(zta + 1);
+% 
+% dN54 = -2*eta*(xi^2 - 1)*(zta^2 - 1);
+%
+%
+% wrt. zeta:
+%
+% dN55 = (eta*xi*zta*(eta - 1)*(xi - 1))/8 + (eta*xi*(eta - 1)*(xi - 1)*(zta - 1))/8;
+% 
+% dN56 = (eta*xi*zta*(eta - 1)*(xi + 1))/8 + (eta*xi*(eta - 1)*(xi + 1)*(zta - 1))/8;
+% 
+% dN57 = (eta*xi*zta*(eta + 1)*(xi + 1))/8 + (eta*xi*(eta + 1)*(xi + 1)*(zta - 1))/8;
+% 
+% dN58 = (eta*xi*zta*(eta + 1)*(xi - 1))/8 + (eta*xi*(eta + 1)*(xi - 1)*(zta - 1))/8;
+% 
+% dN59 = (eta*xi*zta*(eta - 1)*(xi - 1))/8 + (eta*xi*(eta - 1)*(xi - 1)*(zta + 1))/8;
+% 
+% dN60 = (eta*xi*zta*(eta - 1)*(xi + 1))/8 + (eta*xi*(eta - 1)*(xi + 1)*(zta + 1))/8;
+% 
+% dN61 = (eta*xi*zta*(eta + 1)*(xi + 1))/8 + (eta*xi*(eta + 1)*(xi + 1)*(zta + 1))/8;
+% 
+% dN62 = (eta*xi*zta*(eta + 1)*(xi - 1))/8 + (eta*xi*(eta + 1)*(xi - 1)*(zta + 1))/8;
+% 
+% dN63 = - (eta*zta*(xi^2 - 1)*(eta - 1))/4 - (eta*(xi^2 - 1)*(eta - 1)*(zta - 1))/4;
+% 
+% dN64 = - (xi*zta*(eta^2 - 1)*(xi + 1))/4 - (xi*(eta^2 - 1)*(xi + 1)*(zta - 1))/4;
+% 
+% dN65 = - (eta*zta*(xi^2 - 1)*(eta + 1))/4 - (eta*(xi^2 - 1)*(eta + 1)*(zta - 1))/4;
+% 
+% dN66 = - (xi*zta*(eta^2 - 1)*(xi - 1))/4 - (xi*(eta^2 - 1)*(xi - 1)*(zta - 1))/4;
+% 
+% dN67 = - (eta*zta*(xi^2 - 1)*(eta - 1))/4 - (eta*(xi^2 - 1)*(eta - 1)*(zta + 1))/4;
+% 
+% dN68 = - (xi*zta*(eta^2 - 1)*(xi + 1))/4 - (xi*(eta^2 - 1)*(xi + 1)*(zta + 1))/4;
+% 
+% dN69 = - (eta*zta*(xi^2 - 1)*(eta + 1))/4 - (eta*(xi^2 - 1)*(eta + 1)*(zta + 1))/4;
+% 
+% dN70 = - (xi*zta*(eta^2 - 1)*(xi - 1))/4 - (xi*(eta^2 - 1)*(xi - 1)*(zta + 1))/4;
+% 
+% dN71 = -(eta*xi*zta*(eta - 1)*(xi - 1))/2;
+% 
+% dN72 = -(eta*xi*zta*(eta - 1)*(xi + 1))/2;
+% 
+% dN73 = -(eta*xi*zta*(eta + 1)*(xi + 1))/2;
+% 
+% dN74 = -(eta*xi*zta*(eta + 1)*(xi - 1))/2;
+% 
+% dN75 = eta*zta*(xi^2 - 1)*(eta - 1);
+% 
+% dN76 = xi*zta*(eta^2 - 1)*(xi + 1);
+% 
+% dN77 = eta*zta*(xi^2 - 1)*(eta + 1);
+% 
+% dN78 = xi*zta*(eta^2 - 1)*(xi - 1);
+% 
+% dN79 = (zta*(eta^2 - 1)*(xi^2 - 1))/2 + ((eta^2 - 1)*(xi^2 - 1)*(zta - 1))/2;
+% 
+% dN80 = (zta*(eta^2 - 1)*(xi^2 - 1))/2 + ((eta^2 - 1)*(xi^2 - 1)*(zta + 1))/2;
+% 
+% dN81 = -2*zta*(eta^2 - 1)*(xi^2 - 1);
+%
+%%
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>

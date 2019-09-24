@@ -1,0 +1,139 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Assemble_LHS_std</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-03-28"><meta name="DC.source" content="Assemble_LHS_std_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Assemble_LHS_std</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>Assembles the global advection-dispersion and sorption matrix of the advection dispersion equation for steady state flow field.</p><p>Version : 1.0</p><p>Author : George Kourakos</p><p>email: <a href="mailto:giorgk@gmail.com">giorgk@gmail.com</a></p><p>web : <a href="http://groundwater.ucdavis.edu/msim">http://groundwater.ucdavis.edu/msim</a></p><p>Date 28-Mar-2014</p><p>Department of Land Air and Water</p><p>University of California Davis</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Usage</a></li><li><a href="#2">Input</a></li><li><a href="#3">Output</a></li></ul></div><h2>Usage<a name="1"></a></h2><p>[Dglo Mglo c]= Assemble_LHS_std(p, MSH, A, V, rho_b, K_d, lambda, theta, Dm, CC, opt)</p><h2>Input<a name="2"></a></h2><p><i><b>p</b></i>: coordinates of the Mesh nodes</p><p><i><b>MSH</b></i>: Mesh structure</p><p><i><b>A</b></i>: dispertivity [aL, aTH, aTV].</p><p><i><b>V</b></i>: velocity</p><p><i><b>rho_b</b></i>: bulk density</p><p><i><b>K_d</b></i>: equilibrium distribution coefficient</p><p><i><b>lambda</b></i>: decay constant</p><p><i><b>theta</b></i>: porosity</p><p><i><b>Dm</b></i>: Molecular diffusion coefficient</p><p><i><b>CC</b></i>: Dirichlet boundary conditions</p><p><i><b>opt</b></i>: option structure with the following fields : <i>assemblemode</i> : 'vect' for vectorize or 'nested' (just dont used the                       latter) <i>capacmode</i> : 'lumped' or 'consistent' <i>int_ord</i> : Gaussian intergration order. If the field does not exist a default value will be used according to element order and the dimension of the problem <i>el_order</i> : 'linear' Currently this is the only option for transport <i>dim</i> : Dimension of the problem. <i>el_type</i> : this is the element type.</p><h2>Output<a name="3"></a></h2><p><i><b>Dglo</b></i>: Global advection dispersion matrix <i><b>Mglo</b></i>: Global sorption matrix <i><b>c</b></i>: The unkown concentration vector with nan values for unknown nodes scalar values for the dirichlet nodes</p><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Assemble_LHS_std
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+%
+% Assembles the global advection-dispersion and sorption matrix of the
+% advection dispersion equation for steady state flow field.
+%
+% Version : 1.0
+%
+% Author : George Kourakos
+%
+% email: giorgk@gmail.com
+%
+% web : http://groundwater.ucdavis.edu/msim
+%
+% Date 28-Mar-2014
+%
+% Department of Land Air and Water
+%
+% University of California Davis
+%
+%% Usage
+% [Dglo Mglo c]= Assemble_LHS_std(p, MSH, A, V, rho_b, K_d, lambda, theta, Dm, CC, opt)
+%
+%% Input
+% _*p*_: coordinates of the Mesh nodes
+%
+% _*MSH*_: Mesh structure
+%
+% _*A*_: dispertivity [aL, aTH, aTV].
+%
+% _*V*_: velocity
+%
+% _*rho_b*_: bulk density
+%
+% _*K_d*_: equilibrium distribution coefficient
+%
+% _*lambda*_: decay constant
+%
+% _*theta*_: porosity
+%
+% _*Dm*_: Molecular diffusion coefficient
+%
+% _*CC*_: Dirichlet boundary conditions
+%
+% _*opt*_: option structure with the following fields :
+% _assemblemode_ : 'vect' for vectorize or 'nested' (just dont used the
+%                       latter)
+% _capacmode_ : 'lumped' or 'consistent'
+% _int_ord_ : Gaussian intergration order. If the field does not exist a
+% default value will be used according to element order
+% and the dimension of the problem
+% _el_order_ : 'linear' Currently this is the only option for
+% transport
+% _dim_ : Dimension of the problem.
+% _el_type_ : this is the element type.  
+%% Output
+% _*Dglo*_: Global advection dispersion matrix
+% _*Mglo*_: Global sorption matrix
+% _*c*_: The unkown concentration vector with nan values for unknown nodes 
+% scalar values for the dirichlet nodes
+%%
+%
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>

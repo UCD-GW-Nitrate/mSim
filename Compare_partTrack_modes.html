@@ -1,0 +1,225 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Comparison of particle tracking modes</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-09-05"><meta name="DC.source" content="Compare_partTrack_modes.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Comparison of particle tracking modes</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>This tutorial shows how to run the particle tracking function under different modes. In particular we will compare the computational times on the same problem between the three different available particle tracking modes 1) Serial mode using Matlab functions, 2) Vectorized mode using Matlab function 3) Serial mode using C/C++ functions.</p><!--/introduction--><p>For this example we have already prepared the required data for the flow field. The flow domain is a rectangular aquifer with dimensions 40 km x 40 km which has been discretized into 554000 elements and 20 layers</p><pre class="codeinput">load <span class="string">Data4Part_exmpl1</span>
+</pre><p>The following plots show the triangulation of the domain and the water table. It can be seen that there are many wells ~40 and a stream segment wich recharges the aquifer</p><pre class="codeinput">subplot(1,2,1);trisurf(TR,XY(:,1),XY(:,2),H(:,1)); view(0,90);axis <span class="string">equal</span>; axis([0 40000 0 40000]);
+subplot(1,2,2);trisurf(TR,XY(:,1),XY(:,2),H(:,1),<span class="string">'edgecolor'</span>,<span class="string">'none'</span>); view(0,90);axis <span class="string">equal</span>; axis([0 40000 0 40000]);
+</pre><img vspace="5" hspace="5" src="Compare_partTrack_modes_01.png" alt=""> <p>The data are already prepared in the format suitable for particle tracking. However we need to modify the hydraulic conductivity. Note that Kx is a matrix (Nnd x 1), where Nnd is the number of mesh nodes. This means that Kx is defined on the nodes. We want to use an anisotropy ratio Kx/Kz = 10 and 25% porosity, therefore we create the following variables.</p><pre class="codeinput">K{1,1}=Kx;
+K{2,1}=Kx/10;
+por = 0.25;
+</pre><p>For this example we want to generate the particle positions so that their trajectories are somewhat similar. Therefore we will generate particles from the subdomain which is enclosed by the following coordinates:</p><pre class="codeinput">partdomX=[2500 7500];
+partdomY=[2500 37500];
+partdomZ=[-100 -150];
+</pre><p>Next we will define the number of particles we want to generate. Note that if you run all the cases this simulation will take few hours because of the large run time of the serial Matlab implementation. You can change the Ncase parameter to specify how many scenarios you want to run (e.g. 4-5 is ok. Choose larger number if you dont need your pc for few hours but not greater than 10)</p><pre class="codeinput">Nprt=[1 5 10 50 100 250  500 1000 1500 2000];
+Ncases = 10;
+</pre><p>For the particle tracking we need an option structure, which can be initialized as (while the cursor is on the part_options press F1 to get help about the available options)</p><pre class="codeinput">part_opt = part_options
+</pre><p>We will keep the default values in this example and change only the mode to 'serial' 'vect' and 'cpp' to run the serial, vectorized and the c++ serial mode of particle tracking. Also we set freqplot a large value to surpress the output.</p><pre class="codeinput">part_opt.freqplot = 1000;
+</pre><pre class="codeoutput">
+part_opt = 
+
+         Knodes: 1
+            Nal: 1000
+         search: 50
+       bed_corr: 0
+         ploton: 0
+           step: 5
+        minstep: 5
+         errmin: 0.0100
+         errmax: 0.1000
+         method: 'RK45'
+       pornodes: -1
+           Ngen: 15
+        maxstep: 0.5000
+    stall_times: 100
+       freqplot: 10
+           mode: 'vect'
+        el_type: 1
+
+</pre><p>The following is the core of this tutorial. Every loop we will generate a different number of particles and call the particle tracking function under different modes and keep a record of computational time for each mode. The main point here is that in all three modes the code to run the particle tracking is identical</p><pre class="codeinput"><span class="keyword">for</span> k=1:Ncases
+    xp=partdomX(1)+(partdomX(2)-partdomX(1))*rand(Nprt(k),1);
+    yp=partdomY(1)+(partdomY(2)-partdomY(1))*rand(Nprt(k),1);
+    zp=partdomZ(1)+(partdomZ(2)-partdomZ(1))*rand(Nprt(k),1);
+    part_opt.mode = <span class="string">'serial'</span>;
+    tic;
+    [XYZ Vxyz exitflag]=ParticleTracking_main([xp yp zp],XY,Z,TR,TRB,H,K,por,part_opt);
+    times(k,1)=toc;
+    part_opt.mode = <span class="string">'vect'</span>;
+    tic;
+    [XYZ Vxyz exitflag]=ParticleTracking_main([xp yp zp],XY,Z,TR,TRB,H,K,por,part_opt);
+    times(k,2)=toc;
+    part_opt.mode = <span class="string">'cpp'</span>;
+    tic;
+    [XYZ Vxyz exitflag]=ParticleTracking_main([xp yp zp],XY,Z,TR,TRB,H,K,por,part_opt);
+    times(k,3)=toc;
+<span class="keyword">end</span>
+</pre><p>Finally we will show the results on the following plot</p><pre class="codeinput">clf;
+plot(Nprt(1:Ncases),times, <span class="string">'linewidth'</span>,1.5)
+xlabel(<span class="string">'Number of Particles'</span>,<span class="string">'fontsize'</span>,12)
+ylabel(<span class="string">'Time of particle tracking [sec]'</span>,<span class="string">'fontsize'</span>,12)
+hh=legend(<span class="string">'Serial'</span>,<span class="string">'Vectorized'</span>,<span class="string">'C++'</span>);
+set(hh,<span class="string">'Location'</span>,<span class="string">'NorthWest'</span>,<span class="string">'fontsize'</span>,12)
+</pre><img vspace="5" hspace="5" src="Compare_partTrack_modes_02.png" alt=""> <p>Obviously the c++ implementation is the fastest. Indeed this is the option we typically choose. However the other modes can be usefull if one want to get an insight of the particle tracking flow field for example</p><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Comparison of particle tracking modes
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+% This tutorial shows how to run the particle tracking function under
+% different modes. In particular we will compare the computational times on
+% the same problem between the three different available particle tracking
+% modes 1) Serial mode using Matlab functions, 2) Vectorized mode using
+% Matlab function 3) Serial mode using C/C++ functions.
+%%%
+% For this example we have already prepared the required data for the flow field.
+% The flow domain is a rectangular aquifer with dimensions 40 km x 40 km 
+% which has been discretized into 554000 elements and 20 layers
+load Data4Part_exmpl1
+%%
+% The following plots show the triangulation of the domain and the water table.
+% It can be seen that there are many wells ~40 and a stream segment wich
+% recharges the aquifer
+subplot(1,2,1);trisurf(TR,XY(:,1),XY(:,2),H(:,1)); view(0,90);axis equal; axis([0 40000 0 40000]); 
+subplot(1,2,2);trisurf(TR,XY(:,1),XY(:,2),H(:,1),'edgecolor','none'); view(0,90);axis equal; axis([0 40000 0 40000]);
+%%
+% The data are already prepared in the format suitable for particle tracking. 
+% However we need to modify the hydraulic conductivity. Note that Kx is a 
+% matrix (Nnd x 1), where Nnd is the number of mesh nodes.
+% This means that Kx is defined on the nodes. We want to use an anisotropy 
+% ratio Kx/Kz = 10 and 25% porosity, therefore we create the following variables.
+K{1,1}=Kx;
+K{2,1}=Kx/10;
+por = 0.25;
+%%%
+% For this example we want to generate the particle positions so that their 
+% trajectories are somewhat similar. Therefore we will generate particles 
+% from the subdomain which is enclosed by the following coordinates:
+partdomX=[2500 7500];
+partdomY=[2500 37500];
+partdomZ=[-100 -150];
+%%%
+% Next we will define the number of particles we want to generate. 
+% Note that if you run all the cases this simulation will take few hours 
+% because of the large run time of the serial Matlab implementation. 
+% You can change the Ncase parameter to specify how many scenarios you want 
+% to run (e.g. 4-5 is ok. Choose larger number if you dont need your pc for
+% few hours but not greater than 10)
+Nprt=[1 5 10 50 100 250  500 1000 1500 2000];
+Ncases = 10;
+%%%
+% For the particle tracking we need an option structure, which can be 
+% initialized as (while the cursor is on the part_options press F1 to get 
+% help about the available options)
+part_opt = part_options
+%%%
+% We will keep the default values in this example and change only the 
+% mode to 'serial' 'vect' and 'cpp' to run the serial, vectorized and the 
+% c++ serial mode of particle tracking. Also we set freqplot a large value 
+% to surpress the output.
+part_opt.freqplot = 1000;
+%%
+% The following is the core of this tutorial. Every loop we will generate a
+% different number of particles and call the particle tracking function
+% under different modes and keep a record of computational time for each
+% mode. The main point here is that in all three modes the code to run the particle
+% tracking is identical
+for k=1:Ncases
+    xp=partdomX(1)+(partdomX(2)-partdomX(1))*rand(Nprt(k),1);
+    yp=partdomY(1)+(partdomY(2)-partdomY(1))*rand(Nprt(k),1);
+    zp=partdomZ(1)+(partdomZ(2)-partdomZ(1))*rand(Nprt(k),1);
+    part_opt.mode = 'serial';
+    tic;
+    [XYZ Vxyz exitflag]=ParticleTracking_main([xp yp zp],XY,Z,TR,TRB,H,K,por,part_opt);
+    times(k,1)=toc;
+    part_opt.mode = 'vect';
+    tic;
+    [XYZ Vxyz exitflag]=ParticleTracking_main([xp yp zp],XY,Z,TR,TRB,H,K,por,part_opt);
+    times(k,2)=toc;
+    part_opt.mode = 'cpp';
+    tic;
+    [XYZ Vxyz exitflag]=ParticleTracking_main([xp yp zp],XY,Z,TR,TRB,H,K,por,part_opt);
+    times(k,3)=toc;
+end
+%%
+% Finally we will show the results on the following plot
+clf;
+plot(Nprt(1:Ncases),times, 'linewidth',1.5)
+xlabel('Number of Particles','fontsize',12)
+ylabel('Time of particle tracking [sec]','fontsize',12)
+hh=legend('Serial','Vectorized','C++');
+set(hh,'Location','NorthWest','fontsize',12)
+%%
+% Obviously the c++ implementation is the fastest. Indeed this is the 
+% option we typically choose. However the other modes can be usefull if one 
+% want to get an insight of the particle tracking flow field for example
+%%
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>

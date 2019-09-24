@@ -1,0 +1,310 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Compare mSim with analytical solution</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-24"><meta name="DC.source" content="compareThiem.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Compare mSim with analytical solution</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Overview</a></li><li><a href="#2">Analytical solution</a></li><li><a href="#10">Numerical solution with mSim</a></li><li><a href="#29">Compare the solutions</a></li></ul></div><h2 id="1">Overview</h2><p>In this tutorial we will build a simple 3D cylindrical model with one well at the center and we will compare it with the Thiem, 1906 analytical solution.</p><h2 id="2">Analytical solution</h2><p>The analytical solution for radial flow to a well where the head h0 is known at some point at r0 distance close to well is given by :</p><p><img src="compareThiem_eq04222391172009901228.png" alt="$h(r)=\frac{Q}{2 \pi T}ln\frac{r}{r_0} + h_0$"></p><p>where Q is the pumping rate, T is the transmissivity.</p><p>To visualize the above equation we will generate random points within a disk of radious r0, triangulate them and plot</p><p>Lets define the inputs first</p><pre class="codeinput">r0 = 2000; <span class="comment">% [m]</span>
+h0 = 30; <span class="comment">% [m]</span>
+Q = 500; <span class="comment">% [m^3/day]</span>
+T = 50; <span class="comment">% [m^2/day]</span>
+</pre><p>Generate points on disk (This is actually a rectangle)</p><pre class="codeinput">[disk_pntsX, disk_pntsY] = meshgrid(-r0:10:r0);
+</pre><p>Evaluate the Thiem equation</p><pre class="codeinput">Thiem = @(r)(Q/(2*pi*T))*log(r/r0)+h0;
+disk_pntsR = sqrt(disk_pntsX.^2 + disk_pntsY.^2);
+</pre><p>and plot them</p><pre class="codeinput">mesh(disk_pntsX, disk_pntsY, Thiem(disk_pntsR),<span class="keyword">...</span>
+    <span class="string">'edgecolor'</span>,<span class="string">'none'</span>,<span class="string">'FaceColor'</span>,<span class="string">'interp'</span>,<span class="string">'FaceLighting'</span>,<span class="string">'phong'</span>)
+camlight <span class="string">right</span>
+view(-76, 13)
+drawnow
+</pre><img vspace="5" hspace="5" src="compareThiem_01.png" alt=""> <h2 id="10">Numerical solution with mSim</h2><p><b>Mesh generation</b></p><p>For the numerical solution we have first to generate a mesh.</p><p>First we are going to generate a cylindrical polygon with the help of the parametric equation of a circle x = r*cos(t), y = r*sin(t) where t spans from 0 to 2*pi for a full circle</p><pre class="codeinput">circle_bnd = [r0*cos(0:0.2:2*pi)' r0*sin(0:0.2:2*pi)'];
+</pre><p>Prepare the shapefile structure that is needed for the mesh generation for the domain</p><pre class="codeinput">circle_domain.Geometry = <span class="string">'Polygon'</span>;
+circle_domain.X = [circle_bnd(:,1)' circle_bnd(1,1) nan];
+circle_domain.Y = [circle_bnd(:,2)' circle_bnd(1,2) nan];
+</pre><p>and the well</p><pre class="codeinput">well.Geometry = <span class="string">'Point'</span>;
+well.X = 0;
+well.Y = 0;
+well.DistMin = 1;
+well.DistMax = r0;
+well.LcMin = 1;
+well.LcMax = 400;
+</pre><p>Construct the CSG object and generate the mesh</p><pre class="codeinput">circle_dom = CSGobj_v2(2,1,10,10,1);
+circle_dom = circle_dom.readshapefile(circle_domain);
+circle_dom = circle_dom.readshapefile(well);
+</pre><p>define the mesh options. Here the 400 m is roughly the distance between the boundary points when r0 = 2000 and 0.2 discretization of the parametric variable that generated the circular points.</p><pre class="codeinput">meshopt = msim_mesh_options;
+meshopt.lc_gen = 400;
+meshopt.embed_points = 1;
+</pre><p>run gmsh</p><pre class="codeinput">circle_dom.writegeo(<span class="string">'thiem_example'</span>, meshopt);
+gmsh_path = <span class="string">'/home/giorgk/Downloads/gmsh-4.4.1-Linux64/bin/gmsh'</span>;
+circle_dom.runGmsh(<span class="string">'thiem_example'</span>,gmsh_path,[]);
+</pre><pre class="codeoutput">Info    : Running '/home/giorgk/Downloads/gmsh-4.4.1-Linux64/bin/gmsh thiem_example.geo -2' [Gmsh 4.4.1, 1 node, max. 1 thread]
+Info    : Started on Tue Sep 24 03:17:50 2019
+Info    : Reading 'thiem_example.geo'...
+Info    : Done reading 'thiem_example.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Line)
+Info    : Meshing curve 2 (Line)
+Info    : Meshing curve 3 (Line)
+Info    : Meshing curve 4 (Line)
+Info    : Meshing curve 5 (Line)
+Info    : Meshing curve 6 (Line)
+Info    : Meshing curve 7 (Line)
+Info    : Meshing curve 8 (Line)
+Info    : Meshing curve 9 (Line)
+Info    : Meshing curve 10 (Line)
+Info    : Meshing curve 11 (Line)
+Info    : Meshing curve 12 (Line)
+Info    : Meshing curve 13 (Line)
+Info    : Meshing curve 14 (Line)
+Info    : Meshing curve 15 (Line)
+Info    : Meshing curve 16 (Line)
+Info    : Meshing curve 17 (Line)
+Info    : Meshing curve 18 (Line)
+Info    : Meshing curve 19 (Line)
+Info    : Meshing curve 20 (Line)
+Info    : Meshing curve 21 (Line)
+Info    : Meshing curve 22 (Line)
+Info    : Meshing curve 23 (Line)
+Info    : Meshing curve 24 (Line)
+Info    : Meshing curve 25 (Line)
+Info    : Meshing curve 26 (Line)
+Info    : Meshing curve 27 (Line)
+Info    : Meshing curve 28 (Line)
+Info    : Meshing curve 29 (Line)
+Info    : Meshing curve 30 (Line)
+Info    : Meshing curve 31 (Line)
+Info    : Meshing curve 32 (Line)
+Info    : Done meshing 1D (0.057594 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 1 (Plane, Delaunay)
+Info    : Done meshing 2D (0.171318 s)
+Info    : 1293 vertices 2617 elements
+Info    : Writing 'thiem_example.msh'...
+Info    : Done writing 'thiem_example.msh'
+Info    : Stopped on Tue Sep 24 03:17:50 2019
+</pre><p>read mesh into matlab</p><pre class="codeinput">[p, MSH]=read_2D_Gmsh(<span class="string">'thiem_example'</span>, 0, 0);
+</pre><pre class="codeoutput">Reading points...
+Reading Elements...
+</pre><p><b>Boundary conditions</b></p><p>First we will identify the boundary the mesh nodes and assign a constant head of h0</p><pre class="codeinput">id_bnd = find(sqrt(sum(p.^2,2)) &gt; 1999);
+CH = [id_bnd h0*ones(length(id_bnd),1)];
+</pre><p><b>Well flux</b></p><p>For the well we have to find first which node corresponds to the well</p><pre class="codeinput">id_well = find(sqrt(sum(p.^2,2)) &lt; 0.1);
+FLUX_well = [id_well -Q];
+</pre><p><b>Assemble</b></p><p>To assemble we need the transmissivity, which we defined as constant on the mesh nodes</p><pre class="codeinput">Tnd = T*ones(size(p,1),1);
+</pre><p>Set up the standard simulation options and assemble</p><pre class="codeinput">simopt.dim=2;
+simopt.el_type=<span class="string">'triangle'</span>;
+simopt.el_order=<span class="string">'linear'</span>;
+[Kglo, H]= Assemble_LHS(p, MSH(3,1).elem(1,1).id, Tnd , CH, [], simopt);
+</pre><p>Convert Point flux matrix to sparse vector</p><pre class="codeinput">F=sparse(FLUX_well(:,1),1,FLUX_well(:,2),length(H),1);
+</pre><p><b>Solve</b></p><pre class="codeinput">Hnumerical=solve_system(Kglo,H,F);
+</pre><h2 id="29">Compare the solutions</h2><p>To compare the the numerical solution of mSim with the analytical we have to evaluate the analytical over the points of the numerical.</p><pre class="codeinput">Hanalytical = Thiem(sqrt(sum(p.^2,2)));
+</pre><p>The numerical solution contains the center of well where the analytical solution cannot be defined. Therefore we will make them nan to both solutions.</p><pre class="codeinput">Hanalytical(id_well,1) = nan;
+Hnumerical(id_well,1) = nan;
+</pre><p>now we plot the relative error with respect the analytical solution</p><pre class="codeinput">trisurf(MSH(3,1).elem(1,1).id, p(:,1), p(:,2), 100*(Hnumerical - Hanalytical)./Hanalytical)
+title(<span class="string">'Relative error wrt analytical solution'</span>)
+zlabel(<span class="string">'%'</span>)
+view(0,0)
+colormap <span class="string">cool</span>
+drawnow
+</pre><img vspace="5" hspace="5" src="compareThiem_02.png" alt=""> <p>We can confirm that the numerical solution follows the analytical very close as the error is less that 1 percent.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Compare mSim with analytical solution
+%% Overview
+% In this tutorial we will build a simple 3D cylindrical model with one
+% well at the center and we will compare it with the Thiem, 1906 analytical
+% solution.
+%% Analytical solution 
+% The analytical solution for radial flow to a well where the head h0 is known
+% at some point at r0 distance close to well is given by :
+%%
+% $h(r)=\frac{Q}{2 \pi T}ln\frac{r}{r_0} + h_0$ 
+%%%
+% where Q is the pumping rate, T is the transmissivity.
+%%% 
+% To visualize the above equation we will generate random points within a
+% disk of radious r0, triangulate them and plot
+%%
+% Lets define the inputs first
+r0 = 2000; % [m]
+h0 = 30; % [m]
+Q = 500; % [m^3/day]
+T = 50; % [m^2/day]
+%%%
+% Generate points on disk (This is actually a rectangle)
+[disk_pntsX, disk_pntsY] = meshgrid(-r0:10:r0);
+%%%
+% Evaluate the Thiem equation
+Thiem = @(r)(Q/(2*pi*T))*log(r/r0)+h0;
+disk_pntsR = sqrt(disk_pntsX.^2 + disk_pntsY.^2);
+%%%
+% and plot them
+mesh(disk_pntsX, disk_pntsY, Thiem(disk_pntsR),...
+    'edgecolor','none','FaceColor','interp','FaceLighting','phong')
+camlight right
+view(-76, 13)
+drawnow
+%% Numerical solution with mSim
+%%
+% *Mesh generation*
+%%%
+% For the numerical solution we have first to generate a mesh.
+%%%
+% First we are going to generate a cylindrical polygon with the help of the
+% parametric equation of a circle x = r*cos(t), y = r*sin(t) where t spans
+% from 0 to 2*pi for a full circle
+circle_bnd = [r0*cos(0:0.2:2*pi)' r0*sin(0:0.2:2*pi)'];
+%%%
+% Prepare the shapefile structure that is needed for the mesh
+% generation for the domain
+circle_domain.Geometry = 'Polygon';
+circle_domain.X = [circle_bnd(:,1)' circle_bnd(1,1) nan]; 
+circle_domain.Y = [circle_bnd(:,2)' circle_bnd(1,2) nan]; 
+%%%
+% and the well
+well.Geometry = 'Point';
+well.X = 0;
+well.Y = 0;
+well.DistMin = 1;
+well.DistMax = r0;
+well.LcMin = 1;
+well.LcMax = 400;
+%%%
+% Construct the CSG object and generate the mesh
+circle_dom = CSGobj_v2(2,1,10,10,1);
+circle_dom = circle_dom.readshapefile(circle_domain);
+circle_dom = circle_dom.readshapefile(well);
+%%%
+% define the mesh options. Here the 400 m is roughly the distance between
+% the boundary points when r0 = 2000 and 0.2 discretization of the
+% parametric variable that generated the circular points.
+meshopt = msim_mesh_options;
+meshopt.lc_gen = 400;
+meshopt.embed_points = 1;
+%%%
+% run gmsh
+circle_dom.writegeo('thiem_example', meshopt);
+gmsh_path = '/home/giorgk/Downloads/gmsh-4.4.1-Linux64/bin/gmsh';
+circle_dom.runGmsh('thiem_example',gmsh_path,[]);
+%%
+% read mesh into matlab
+[p, MSH]=read_2D_Gmsh('thiem_example', 0, 0);
+%% 
+% *Boundary conditions*
+%%%
+% First we will identify the boundary the mesh nodes and assign a constant head of h0
+id_bnd = find(sqrt(sum(p.^2,2)) > 1999);
+CH = [id_bnd h0*ones(length(id_bnd),1)];
+%%
+% *Well flux*
+%%%
+% For the well we have to find first which node corresponds to the well
+id_well = find(sqrt(sum(p.^2,2)) < 0.1);
+FLUX_well = [id_well -Q];
+
+%%
+% *Assemble*
+%%%
+% To assemble we need the transmissivity, which we defined as constant on
+% the mesh nodes
+Tnd = T*ones(size(p,1),1);
+
+%%%
+% Set up the standard simulation options and assemble
+simopt.dim=2;
+simopt.el_type='triangle';
+simopt.el_order='linear';
+[Kglo, H]= Assemble_LHS(p, MSH(3,1).elem(1,1).id, Tnd , CH, [], simopt);
+%%%
+% Convert Point flux matrix to sparse vector
+F=sparse(FLUX_well(:,1),1,FLUX_well(:,2),length(H),1);
+%%%
+% *Solve*
+Hnumerical=solve_system(Kglo,H,F);
+%% Compare the solutions
+% To compare the the numerical solution of mSim with the analytical we have
+% to evaluate the analytical over the points of the numerical.
+Hanalytical = Thiem(sqrt(sum(p.^2,2)));
+%%%
+% The numerical solution contains the center of well where the
+% analytical solution cannot be defined. Therefore we will make them nan to
+% both solutions. 
+Hanalytical(id_well,1) = nan;
+Hnumerical(id_well,1) = nan;
+%%%
+% now we plot the relative error with respect the analytical solution
+trisurf(MSH(3,1).elem(1,1).id, p(:,1), p(:,2), 100*(Hnumerical - Hanalytical)./Hanalytical)
+title('Relative error wrt analytical solution')
+zlabel('%')
+view(0,0)
+colormap cool
+drawnow
+%%
+% We can confirm that the numerical solution follows the analytical very
+% close as the error is less that 1 percent.
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

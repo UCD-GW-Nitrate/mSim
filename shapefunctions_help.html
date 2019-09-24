@@ -1,0 +1,192 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>shapefunctions</title><meta name="generator" content="MATLAB 8.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-04-03"><meta name="DC.source" content="shapefunctions_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>shapefunctions</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>Computes the shape functions for a given parametric point and element type.</p><p>Version : 1.0</p><p>Author : George Kourakos</p><p>email: <a href="mailto:giorgk@gmail.com">giorgk@gmail.com</a></p><p>web : <a href="http://groundwater.ucdavis.edu/msim">http://groundwater.ucdavis.edu/msim</a></p><p>Date 18-Mar-2014</p><p>Department of Land Air and Water</p><p>University of California Davis</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Usage</a></li><li><a href="#2">Input</a></li><li><a href="#3">Output</a></li><li><a href="#4">Example</a></li></ul></div><h2>Usage<a name="1"></a></h2><p>N = shapefunctions(t, opt)</p><h2>Input<a name="2"></a></h2><p><i><b>t</b></i>: parametric point[Np x Nt] where Np is the number of parametric points and Nt is the number of natural coordinates required to decsribe the parametric point</p><p><i><b>opt</b></i>: Structure with the following fields:</p><p><i>dim</i>: dimension of the element</p><p><i>el_type</i>: element type (e.g. triangle, prism, etc...)</p><p><i>el_order</i>: element order (e.g. linear, quadratic)</p><h2>Output<a name="3"></a></h2><p><i><b>N</b></i>: [Np x N_sh] Matrix with the shape function values, (N_sh is the number of shape functions</p><h2>Example<a name="4"></a></h2><p>Lets create a quadratic triange element</p><pre class="codeinput">p = [5.5 1.5;<span class="keyword">...</span>
+     9.5 9.5;<span class="keyword">...</span>
+     2.5 9.5];
+p(4,:) = (p(1,:) + p(2,:))/2;
+p(5,:) = (p(2,:) + p(3,:))/2;
+p(6,:) = (p(3,:) + p(1,:))/2;
+</pre><p>Let's also a assign a property h to the nodes of this element</p><pre class="codeinput">h=[ 4; 7; 12; 14; 5; 2];
+</pre><p>Next we will create a set of parametric points. The sum of parametric point coordinates must not be greater that 1 otherwise the point is outside of the element.</p><pre class="codeinput">t=[];
+<span class="keyword">for</span> i = 0:0.1:1
+    <span class="keyword">for</span> j = 0:0.1:1
+        <span class="keyword">if</span> i + j &lt;=1
+            t=[t;i j];
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p>Now that we created a set of parametric points we will evaluate the shape functions</p><pre class="codeinput">N = shapefunctions(t, struct(<span class="string">'dim'</span>,2,<span class="string">'el_type'</span>,<span class="string">'triangle'</span>,<span class="string">'el_order'</span>,<span class="string">'quadratic'</span>));
+</pre><p>Now lets plot the property h along the element</p><pre class="codeinput"><span class="keyword">for</span> i = 1:size(t,1)
+    x = 0; y = 0; z = 0;
+    <span class="keyword">for</span> j = 1:size(N,2)
+        x = x + N(i,j)*p(j,1);
+        y = y + N(i,j)*p(j,2);
+        z = z + N(i,j)*h(j);
+    <span class="keyword">end</span>
+    plot3(x, y, z,<span class="string">'.'</span>)
+    hold <span class="string">on</span>
+<span class="keyword">end</span>
+grid <span class="string">on</span>
+view(-60,52)
+plot3(p(:,1),p(:,2),h,<span class="string">'or'</span>)
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="shapefunctions_help_01.png" alt=""> <p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2013a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% shapefunctions
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+%
+% Computes the shape functions for a given parametric point and element
+% type.
+% 
+%
+% Version : 1.0
+%
+% Author : George Kourakos
+%
+% email: giorgk@gmail.com
+%
+% web : http://groundwater.ucdavis.edu/msim
+%
+% Date 18-Mar-2014
+%
+% Department of Land Air and Water
+%
+% University of California Davis
+%
+%% Usage
+% N = shapefunctions(t, opt)
+%
+%% Input
+% _*t*_: parametric point[Np x Nt] where 
+% Np is the number of parametric points and Nt is the number of natural
+% coordinates required to decsribe the parametric point
+%
+% _*opt*_: Structure with the following fields:
+%
+% _dim_: dimension of the element
+%
+% _el_type_: element type (e.g. triangle, prism, etc...)
+%
+% _el_order_: element order (e.g. linear, quadratic)
+%
+%% Output
+% _*N*_: [Np x N_sh] Matrix with the shape function values, (N_sh is the number
+% of shape functions
+%
+%% Example
+% Lets create a quadratic triange element
+p = [5.5 1.5;...
+     9.5 9.5;...
+     2.5 9.5];
+p(4,:) = (p(1,:) + p(2,:))/2;
+p(5,:) = (p(2,:) + p(3,:))/2;
+p(6,:) = (p(3,:) + p(1,:))/2;
+%%
+% Let's also a assign a property h to the nodes of this element
+h=[ 4; 7; 12; 14; 5; 2];
+%%
+% Next we will create a set of parametric points. The sum of parametric
+% point coordinates must not be greater that 1 otherwise the point is
+% outside of the element.
+t=[];
+for i = 0:0.1:1
+    for j = 0:0.1:1
+        if i + j <=1
+            t=[t;i j];
+        end
+    end
+end
+%%
+% Now that we created a set of parametric points we will evaluate the shape
+% functions
+N = shapefunctions(t, struct('dim',2,'el_type','triangle','el_order','quadratic'));
+%%
+% Now lets plot the property h along the element
+for i = 1:size(t,1)
+    x = 0; y = 0; z = 0;
+    for j = 1:size(N,2)
+        x = x + N(i,j)*p(j,1);
+        y = y + N(i,j)*p(j,2);
+        z = z + N(i,j)*h(j);
+    end
+    plot3(x, y, z,'.')
+    hold on
+end
+grid on
+view(-60,52)
+plot3(p(:,1),p(:,2),h,'or')
+hold off     
+%%
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>

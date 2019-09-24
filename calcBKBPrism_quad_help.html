@@ -1,0 +1,547 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>calcBKBPrism_quad</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-03-28"><meta name="DC.source" content="calcBKBPrism_quad_help.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>calcBKBPrism_quad</h1><!--introduction--><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p>Computes the product B' x K x B for 3D quadratic prism elements in vectorized manner This is used internally from <a href="calcBKB_help.html">calcBKB</a>.</p><p>Version : 1.0</p><p>Author : George Kourakos</p><p>email: <a href="mailto:giorgk@gmail.com">giorgk@gmail.com</a></p><p>web : <a href="http://groundwater.ucdavis.edu/msim">http://groundwater.ucdavis.edu/msim</a></p><p>Date 28-Mar-2014</p><p>Department of Land Air and Water</p><p>University of California Davis</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Usage</a></li><li><a href="#2">Input</a></li><li><a href="#3">Output</a></li><li><a href="#4">How to compute</a></li></ul></div><h2>Usage<a name="1"></a></h2><p>BKB = calcBKBPrism_quad(B, K, ii)</p><h2>Input<a name="2"></a></h2><p><i><b>B</b></i>: [Nel x N_sh^2] contains the contributions of each element to the final      conductance matrix</p><p><i><b>K</b></i> : [Nel x Nanis] Hydraulic conductiviy element values. The number of columns     is defined by the anisotropy. Maximum number is 3.</p><p><i><b>ii</b></i> : In case of nested assembly this indicates the iteration. In       vectorized assembly this is not used</p><h2>Output<a name="3"></a></h2><p><i><b>BKB</b></i>: the product B'*K*B</p><h2>How to compute<a name="4"></a></h2><p>In mSim we avoid by hand computations at all costs, therefore we used the symbolic toolbox to perform the vectorized computations. The following code show how we computed the products.</p><pre class="codeinput">syms <span class="string">b1</span> <span class="string">b2</span> <span class="string">b3</span> <span class="string">b4</span> <span class="string">b5</span> <span class="string">b6</span> <span class="string">b7</span> <span class="string">b8</span> <span class="string">b9</span> <span class="string">b10</span> <span class="string">b11</span> <span class="string">b12</span> <span class="string">b13</span> <span class="string">b14</span> <span class="string">b15</span> <span class="string">b16</span> <span class="string">b17</span> <span class="string">b18</span>
+syms <span class="string">b19</span> <span class="string">b20</span> <span class="string">b21</span> <span class="string">b22</span> <span class="string">b23</span> <span class="string">b24</span> <span class="string">b25</span> <span class="string">b26</span> <span class="string">b27</span> <span class="string">b28</span> <span class="string">b29</span> <span class="string">b30</span> <span class="string">b31</span> <span class="string">b32</span> <span class="string">b33</span> <span class="string">b34</span> <span class="string">b35</span> <span class="string">b36</span>
+syms <span class="string">b37</span> <span class="string">b38</span> <span class="string">b39</span> <span class="string">b40</span> <span class="string">b41</span> <span class="string">b42</span> <span class="string">b43</span> <span class="string">b44</span> <span class="string">b45</span> <span class="string">b46</span> <span class="string">b47</span> <span class="string">b48</span> <span class="string">b49</span> <span class="string">b50</span> <span class="string">b51</span> <span class="string">b52</span> <span class="string">b53</span> <span class="string">b54</span>
+syms <span class="string">kx</span> <span class="string">ky</span> <span class="string">kz</span>
+B=[b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18;<span class="keyword">...</span>
+   b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 b33 b34 b35 b36;<span class="keyword">...</span>
+   b37 b38 b39 b40 b41 b42 b43 b44 b45 b46 b47 b48 b49 b50 b51 b52 b53 b54];
+
+BT=[ b1 b19 b37;<span class="keyword">...</span>
+     b2 b20 b38;<span class="keyword">...</span>
+     b3 b21 b39;<span class="keyword">...</span>
+     b4 b22 b40;<span class="keyword">...</span>
+     b5 b23 b41;<span class="keyword">...</span>
+     b6 b24 b42;<span class="keyword">...</span>
+     b7 b25 b43;<span class="keyword">...</span>
+     b8 b26 b44;<span class="keyword">...</span>
+     b9 b27 b45;<span class="keyword">...</span>
+     b10 b28 b46;<span class="keyword">...</span>
+     b11 b29 b47;<span class="keyword">...</span>
+     b12 b30 b48;<span class="keyword">...</span>
+     b13 b31 b49;<span class="keyword">...</span>
+     b14 b32 b50;<span class="keyword">...</span>
+     b15 b33 b51;<span class="keyword">...</span>
+     b16 b34 b52;<span class="keyword">...</span>
+     b17 b35 b53;<span class="keyword">...</span>
+     b18 b36 b54];
+
+K=[kx 0 0;<span class="keyword">...</span>
+    0 ky 0;<span class="keyword">...</span>
+    0  0  kz];
+
+BKB=BT*K*B
+</pre><pre class="codeoutput"> 
+BKB =
+ 
+[       kx*b1^2 + ky*b19^2 + kz*b37^2,  b1*b2*kx + b19*b20*ky + b37*b38*kz,  b1*b3*kx + b19*b21*ky + b37*b39*kz,  b1*b4*kx + b19*b22*ky + b37*b40*kz,  b1*b5*kx + b19*b23*ky + b37*b41*kz,  b1*b6*kx + b19*b24*ky + b37*b42*kz,  b1*b7*kx + b19*b25*ky + b37*b43*kz,  b1*b8*kx + b19*b26*ky + b37*b44*kz,  b1*b9*kx + b19*b27*ky + b37*b45*kz,  b1*b10*kx + b19*b28*ky + b37*b46*kz,  b1*b11*kx + b19*b29*ky + b37*b47*kz,  b1*b12*kx + b19*b30*ky + b37*b48*kz,  b1*b13*kx + b19*b31*ky + b37*b49*kz,  b1*b14*kx + b19*b32*ky + b37*b50*kz,  b1*b15*kx + b19*b33*ky + b37*b51*kz,  b1*b16*kx + b19*b34*ky + b37*b52*kz,  b1*b17*kx + b19*b35*ky + b37*b53*kz,  b1*b18*kx + b19*b36*ky + b37*b54*kz]
+[  b1*b2*kx + b19*b20*ky + b37*b38*kz,       kx*b2^2 + ky*b20^2 + kz*b38^2,  b2*b3*kx + b20*b21*ky + b38*b39*kz,  b2*b4*kx + b20*b22*ky + b38*b40*kz,  b2*b5*kx + b20*b23*ky + b38*b41*kz,  b2*b6*kx + b20*b24*ky + b38*b42*kz,  b2*b7*kx + b20*b25*ky + b38*b43*kz,  b2*b8*kx + b20*b26*ky + b38*b44*kz,  b2*b9*kx + b20*b27*ky + b38*b45*kz,  b2*b10*kx + b20*b28*ky + b38*b46*kz,  b2*b11*kx + b20*b29*ky + b38*b47*kz,  b2*b12*kx + b20*b30*ky + b38*b48*kz,  b2*b13*kx + b20*b31*ky + b38*b49*kz,  b2*b14*kx + b20*b32*ky + b38*b50*kz,  b2*b15*kx + b20*b33*ky + b38*b51*kz,  b2*b16*kx + b20*b34*ky + b38*b52*kz,  b2*b17*kx + b20*b35*ky + b38*b53*kz,  b2*b18*kx + b20*b36*ky + b38*b54*kz]
+[  b1*b3*kx + b19*b21*ky + b37*b39*kz,  b2*b3*kx + b20*b21*ky + b38*b39*kz,       kx*b3^2 + ky*b21^2 + kz*b39^2,  b3*b4*kx + b21*b22*ky + b39*b40*kz,  b3*b5*kx + b21*b23*ky + b39*b41*kz,  b3*b6*kx + b21*b24*ky + b39*b42*kz,  b3*b7*kx + b21*b25*ky + b39*b43*kz,  b3*b8*kx + b21*b26*ky + b39*b44*kz,  b3*b9*kx + b21*b27*ky + b39*b45*kz,  b3*b10*kx + b21*b28*ky + b39*b46*kz,  b3*b11*kx + b21*b29*ky + b39*b47*kz,  b3*b12*kx + b21*b30*ky + b39*b48*kz,  b3*b13*kx + b21*b31*ky + b39*b49*kz,  b3*b14*kx + b21*b32*ky + b39*b50*kz,  b3*b15*kx + b21*b33*ky + b39*b51*kz,  b3*b16*kx + b21*b34*ky + b39*b52*kz,  b3*b17*kx + b21*b35*ky + b39*b53*kz,  b3*b18*kx + b21*b36*ky + b39*b54*kz]
+[  b1*b4*kx + b19*b22*ky + b37*b40*kz,  b2*b4*kx + b20*b22*ky + b38*b40*kz,  b3*b4*kx + b21*b22*ky + b39*b40*kz,       kx*b4^2 + ky*b22^2 + kz*b40^2,  b4*b5*kx + b22*b23*ky + b40*b41*kz,  b4*b6*kx + b22*b24*ky + b40*b42*kz,  b4*b7*kx + b22*b25*ky + b40*b43*kz,  b4*b8*kx + b22*b26*ky + b40*b44*kz,  b4*b9*kx + b22*b27*ky + b40*b45*kz,  b4*b10*kx + b22*b28*ky + b40*b46*kz,  b4*b11*kx + b22*b29*ky + b40*b47*kz,  b4*b12*kx + b22*b30*ky + b40*b48*kz,  b4*b13*kx + b22*b31*ky + b40*b49*kz,  b4*b14*kx + b22*b32*ky + b40*b50*kz,  b4*b15*kx + b22*b33*ky + b40*b51*kz,  b4*b16*kx + b22*b34*ky + b40*b52*kz,  b4*b17*kx + b22*b35*ky + b40*b53*kz,  b4*b18*kx + b22*b36*ky + b40*b54*kz]
+[  b1*b5*kx + b19*b23*ky + b37*b41*kz,  b2*b5*kx + b20*b23*ky + b38*b41*kz,  b3*b5*kx + b21*b23*ky + b39*b41*kz,  b4*b5*kx + b22*b23*ky + b40*b41*kz,       kx*b5^2 + ky*b23^2 + kz*b41^2,  b5*b6*kx + b23*b24*ky + b41*b42*kz,  b5*b7*kx + b23*b25*ky + b41*b43*kz,  b5*b8*kx + b23*b26*ky + b41*b44*kz,  b5*b9*kx + b23*b27*ky + b41*b45*kz,  b5*b10*kx + b23*b28*ky + b41*b46*kz,  b5*b11*kx + b23*b29*ky + b41*b47*kz,  b5*b12*kx + b23*b30*ky + b41*b48*kz,  b5*b13*kx + b23*b31*ky + b41*b49*kz,  b5*b14*kx + b23*b32*ky + b41*b50*kz,  b5*b15*kx + b23*b33*ky + b41*b51*kz,  b5*b16*kx + b23*b34*ky + b41*b52*kz,  b5*b17*kx + b23*b35*ky + b41*b53*kz,  b5*b18*kx + b23*b36*ky + b41*b54*kz]
+[  b1*b6*kx + b19*b24*ky + b37*b42*kz,  b2*b6*kx + b20*b24*ky + b38*b42*kz,  b3*b6*kx + b21*b24*ky + b39*b42*kz,  b4*b6*kx + b22*b24*ky + b40*b42*kz,  b5*b6*kx + b23*b24*ky + b41*b42*kz,       kx*b6^2 + ky*b24^2 + kz*b42^2,  b6*b7*kx + b24*b25*ky + b42*b43*kz,  b6*b8*kx + b24*b26*ky + b42*b44*kz,  b6*b9*kx + b24*b27*ky + b42*b45*kz,  b6*b10*kx + b24*b28*ky + b42*b46*kz,  b6*b11*kx + b24*b29*ky + b42*b47*kz,  b6*b12*kx + b24*b30*ky + b42*b48*kz,  b6*b13*kx + b24*b31*ky + b42*b49*kz,  b6*b14*kx + b24*b32*ky + b42*b50*kz,  b6*b15*kx + b24*b33*ky + b42*b51*kz,  b6*b16*kx + b24*b34*ky + b42*b52*kz,  b6*b17*kx + b24*b35*ky + b42*b53*kz,  b6*b18*kx + b24*b36*ky + b42*b54*kz]
+[  b1*b7*kx + b19*b25*ky + b37*b43*kz,  b2*b7*kx + b20*b25*ky + b38*b43*kz,  b3*b7*kx + b21*b25*ky + b39*b43*kz,  b4*b7*kx + b22*b25*ky + b40*b43*kz,  b5*b7*kx + b23*b25*ky + b41*b43*kz,  b6*b7*kx + b24*b25*ky + b42*b43*kz,       kx*b7^2 + ky*b25^2 + kz*b43^2,  b7*b8*kx + b25*b26*ky + b43*b44*kz,  b7*b9*kx + b25*b27*ky + b43*b45*kz,  b7*b10*kx + b25*b28*ky + b43*b46*kz,  b7*b11*kx + b25*b29*ky + b43*b47*kz,  b7*b12*kx + b25*b30*ky + b43*b48*kz,  b7*b13*kx + b25*b31*ky + b43*b49*kz,  b7*b14*kx + b25*b32*ky + b43*b50*kz,  b7*b15*kx + b25*b33*ky + b43*b51*kz,  b7*b16*kx + b25*b34*ky + b43*b52*kz,  b7*b17*kx + b25*b35*ky + b43*b53*kz,  b7*b18*kx + b25*b36*ky + b43*b54*kz]
+[  b1*b8*kx + b19*b26*ky + b37*b44*kz,  b2*b8*kx + b20*b26*ky + b38*b44*kz,  b3*b8*kx + b21*b26*ky + b39*b44*kz,  b4*b8*kx + b22*b26*ky + b40*b44*kz,  b5*b8*kx + b23*b26*ky + b41*b44*kz,  b6*b8*kx + b24*b26*ky + b42*b44*kz,  b7*b8*kx + b25*b26*ky + b43*b44*kz,       kx*b8^2 + ky*b26^2 + kz*b44^2,  b8*b9*kx + b26*b27*ky + b44*b45*kz,  b8*b10*kx + b26*b28*ky + b44*b46*kz,  b8*b11*kx + b26*b29*ky + b44*b47*kz,  b8*b12*kx + b26*b30*ky + b44*b48*kz,  b8*b13*kx + b26*b31*ky + b44*b49*kz,  b8*b14*kx + b26*b32*ky + b44*b50*kz,  b8*b15*kx + b26*b33*ky + b44*b51*kz,  b8*b16*kx + b26*b34*ky + b44*b52*kz,  b8*b17*kx + b26*b35*ky + b44*b53*kz,  b8*b18*kx + b26*b36*ky + b44*b54*kz]
+[  b1*b9*kx + b19*b27*ky + b37*b45*kz,  b2*b9*kx + b20*b27*ky + b38*b45*kz,  b3*b9*kx + b21*b27*ky + b39*b45*kz,  b4*b9*kx + b22*b27*ky + b40*b45*kz,  b5*b9*kx + b23*b27*ky + b41*b45*kz,  b6*b9*kx + b24*b27*ky + b42*b45*kz,  b7*b9*kx + b25*b27*ky + b43*b45*kz,  b8*b9*kx + b26*b27*ky + b44*b45*kz,       kx*b9^2 + ky*b27^2 + kz*b45^2,  b9*b10*kx + b27*b28*ky + b45*b46*kz,  b9*b11*kx + b27*b29*ky + b45*b47*kz,  b9*b12*kx + b27*b30*ky + b45*b48*kz,  b9*b13*kx + b27*b31*ky + b45*b49*kz,  b9*b14*kx + b27*b32*ky + b45*b50*kz,  b9*b15*kx + b27*b33*ky + b45*b51*kz,  b9*b16*kx + b27*b34*ky + b45*b52*kz,  b9*b17*kx + b27*b35*ky + b45*b53*kz,  b9*b18*kx + b27*b36*ky + b45*b54*kz]
+[ b1*b10*kx + b19*b28*ky + b37*b46*kz, b2*b10*kx + b20*b28*ky + b38*b46*kz, b3*b10*kx + b21*b28*ky + b39*b46*kz, b4*b10*kx + b22*b28*ky + b40*b46*kz, b5*b10*kx + b23*b28*ky + b41*b46*kz, b6*b10*kx + b24*b28*ky + b42*b46*kz, b7*b10*kx + b25*b28*ky + b43*b46*kz, b8*b10*kx + b26*b28*ky + b44*b46*kz, b9*b10*kx + b27*b28*ky + b45*b46*kz,       kx*b10^2 + ky*b28^2 + kz*b46^2, b10*b11*kx + b28*b29*ky + b46*b47*kz, b10*b12*kx + b28*b30*ky + b46*b48*kz, b10*b13*kx + b28*b31*ky + b46*b49*kz, b10*b14*kx + b28*b32*ky + b46*b50*kz, b10*b15*kx + b28*b33*ky + b46*b51*kz, b10*b16*kx + b28*b34*ky + b46*b52*kz, b10*b17*kx + b28*b35*ky + b46*b53*kz, b10*b18*kx + b28*b36*ky + b46*b54*kz]
+[ b1*b11*kx + b19*b29*ky + b37*b47*kz, b2*b11*kx + b20*b29*ky + b38*b47*kz, b3*b11*kx + b21*b29*ky + b39*b47*kz, b4*b11*kx + b22*b29*ky + b40*b47*kz, b5*b11*kx + b23*b29*ky + b41*b47*kz, b6*b11*kx + b24*b29*ky + b42*b47*kz, b7*b11*kx + b25*b29*ky + b43*b47*kz, b8*b11*kx + b26*b29*ky + b44*b47*kz, b9*b11*kx + b27*b29*ky + b45*b47*kz, b10*b11*kx + b28*b29*ky + b46*b47*kz,       kx*b11^2 + ky*b29^2 + kz*b47^2, b11*b12*kx + b29*b30*ky + b47*b48*kz, b11*b13*kx + b29*b31*ky + b47*b49*kz, b11*b14*kx + b29*b32*ky + b47*b50*kz, b11*b15*kx + b29*b33*ky + b47*b51*kz, b11*b16*kx + b29*b34*ky + b47*b52*kz, b11*b17*kx + b29*b35*ky + b47*b53*kz, b11*b18*kx + b29*b36*ky + b47*b54*kz]
+[ b1*b12*kx + b19*b30*ky + b37*b48*kz, b2*b12*kx + b20*b30*ky + b38*b48*kz, b3*b12*kx + b21*b30*ky + b39*b48*kz, b4*b12*kx + b22*b30*ky + b40*b48*kz, b5*b12*kx + b23*b30*ky + b41*b48*kz, b6*b12*kx + b24*b30*ky + b42*b48*kz, b7*b12*kx + b25*b30*ky + b43*b48*kz, b8*b12*kx + b26*b30*ky + b44*b48*kz, b9*b12*kx + b27*b30*ky + b45*b48*kz, b10*b12*kx + b28*b30*ky + b46*b48*kz, b11*b12*kx + b29*b30*ky + b47*b48*kz,       kx*b12^2 + ky*b30^2 + kz*b48^2, b12*b13*kx + b30*b31*ky + b48*b49*kz, b12*b14*kx + b30*b32*ky + b48*b50*kz, b12*b15*kx + b30*b33*ky + b48*b51*kz, b12*b16*kx + b30*b34*ky + b48*b52*kz, b12*b17*kx + b30*b35*ky + b48*b53*kz, b12*b18*kx + b30*b36*ky + b48*b54*kz]
+[ b1*b13*kx + b19*b31*ky + b37*b49*kz, b2*b13*kx + b20*b31*ky + b38*b49*kz, b3*b13*kx + b21*b31*ky + b39*b49*kz, b4*b13*kx + b22*b31*ky + b40*b49*kz, b5*b13*kx + b23*b31*ky + b41*b49*kz, b6*b13*kx + b24*b31*ky + b42*b49*kz, b7*b13*kx + b25*b31*ky + b43*b49*kz, b8*b13*kx + b26*b31*ky + b44*b49*kz, b9*b13*kx + b27*b31*ky + b45*b49*kz, b10*b13*kx + b28*b31*ky + b46*b49*kz, b11*b13*kx + b29*b31*ky + b47*b49*kz, b12*b13*kx + b30*b31*ky + b48*b49*kz,       kx*b13^2 + ky*b31^2 + kz*b49^2, b13*b14*kx + b31*b32*ky + b49*b50*kz, b13*b15*kx + b31*b33*ky + b49*b51*kz, b13*b16*kx + b31*b34*ky + b49*b52*kz, b13*b17*kx + b31*b35*ky + b49*b53*kz, b13*b18*kx + b31*b36*ky + b49*b54*kz]
+[ b1*b14*kx + b19*b32*ky + b37*b50*kz, b2*b14*kx + b20*b32*ky + b38*b50*kz, b3*b14*kx + b21*b32*ky + b39*b50*kz, b4*b14*kx + b22*b32*ky + b40*b50*kz, b5*b14*kx + b23*b32*ky + b41*b50*kz, b6*b14*kx + b24*b32*ky + b42*b50*kz, b7*b14*kx + b25*b32*ky + b43*b50*kz, b8*b14*kx + b26*b32*ky + b44*b50*kz, b9*b14*kx + b27*b32*ky + b45*b50*kz, b10*b14*kx + b28*b32*ky + b46*b50*kz, b11*b14*kx + b29*b32*ky + b47*b50*kz, b12*b14*kx + b30*b32*ky + b48*b50*kz, b13*b14*kx + b31*b32*ky + b49*b50*kz,       kx*b14^2 + ky*b32^2 + kz*b50^2, b14*b15*kx + b32*b33*ky + b50*b51*kz, b14*b16*kx + b32*b34*ky + b50*b52*kz, b14*b17*kx + b32*b35*ky + b50*b53*kz, b14*b18*kx + b32*b36*ky + b50*b54*kz]
+[ b1*b15*kx + b19*b33*ky + b37*b51*kz, b2*b15*kx + b20*b33*ky + b38*b51*kz, b3*b15*kx + b21*b33*ky + b39*b51*kz, b4*b15*kx + b22*b33*ky + b40*b51*kz, b5*b15*kx + b23*b33*ky + b41*b51*kz, b6*b15*kx + b24*b33*ky + b42*b51*kz, b7*b15*kx + b25*b33*ky + b43*b51*kz, b8*b15*kx + b26*b33*ky + b44*b51*kz, b9*b15*kx + b27*b33*ky + b45*b51*kz, b10*b15*kx + b28*b33*ky + b46*b51*kz, b11*b15*kx + b29*b33*ky + b47*b51*kz, b12*b15*kx + b30*b33*ky + b48*b51*kz, b13*b15*kx + b31*b33*ky + b49*b51*kz, b14*b15*kx + b32*b33*ky + b50*b51*kz,       kx*b15^2 + ky*b33^2 + kz*b51^2, b15*b16*kx + b33*b34*ky + b51*b52*kz, b15*b17*kx + b33*b35*ky + b51*b53*kz, b15*b18*kx + b33*b36*ky + b51*b54*kz]
+[ b1*b16*kx + b19*b34*ky + b37*b52*kz, b2*b16*kx + b20*b34*ky + b38*b52*kz, b3*b16*kx + b21*b34*ky + b39*b52*kz, b4*b16*kx + b22*b34*ky + b40*b52*kz, b5*b16*kx + b23*b34*ky + b41*b52*kz, b6*b16*kx + b24*b34*ky + b42*b52*kz, b7*b16*kx + b25*b34*ky + b43*b52*kz, b8*b16*kx + b26*b34*ky + b44*b52*kz, b9*b16*kx + b27*b34*ky + b45*b52*kz, b10*b16*kx + b28*b34*ky + b46*b52*kz, b11*b16*kx + b29*b34*ky + b47*b52*kz, b12*b16*kx + b30*b34*ky + b48*b52*kz, b13*b16*kx + b31*b34*ky + b49*b52*kz, b14*b16*kx + b32*b34*ky + b50*b52*kz, b15*b16*kx + b33*b34*ky + b51*b52*kz,       kx*b16^2 + ky*b34^2 + kz*b52^2, b16*b17*kx + b34*b35*ky + b52*b53*kz, b16*b18*kx + b34*b36*ky + b52*b54*kz]
+[ b1*b17*kx + b19*b35*ky + b37*b53*kz, b2*b17*kx + b20*b35*ky + b38*b53*kz, b3*b17*kx + b21*b35*ky + b39*b53*kz, b4*b17*kx + b22*b35*ky + b40*b53*kz, b5*b17*kx + b23*b35*ky + b41*b53*kz, b6*b17*kx + b24*b35*ky + b42*b53*kz, b7*b17*kx + b25*b35*ky + b43*b53*kz, b8*b17*kx + b26*b35*ky + b44*b53*kz, b9*b17*kx + b27*b35*ky + b45*b53*kz, b10*b17*kx + b28*b35*ky + b46*b53*kz, b11*b17*kx + b29*b35*ky + b47*b53*kz, b12*b17*kx + b30*b35*ky + b48*b53*kz, b13*b17*kx + b31*b35*ky + b49*b53*kz, b14*b17*kx + b32*b35*ky + b50*b53*kz, b15*b17*kx + b33*b35*ky + b51*b53*kz, b16*b17*kx + b34*b35*ky + b52*b53*kz,       kx*b17^2 + ky*b35^2 + kz*b53^2, b17*b18*kx + b35*b36*ky + b53*b54*kz]
+[ b1*b18*kx + b19*b36*ky + b37*b54*kz, b2*b18*kx + b20*b36*ky + b38*b54*kz, b3*b18*kx + b21*b36*ky + b39*b54*kz, b4*b18*kx + b22*b36*ky + b40*b54*kz, b5*b18*kx + b23*b36*ky + b41*b54*kz, b6*b18*kx + b24*b36*ky + b42*b54*kz, b7*b18*kx + b25*b36*ky + b43*b54*kz, b8*b18*kx + b26*b36*ky + b44*b54*kz, b9*b18*kx + b27*b36*ky + b45*b54*kz, b10*b18*kx + b28*b36*ky + b46*b54*kz, b11*b18*kx + b29*b36*ky + b47*b54*kz, b12*b18*kx + b30*b36*ky + b48*b54*kz, b13*b18*kx + b31*b36*ky + b49*b54*kz, b14*b18*kx + b32*b36*ky + b50*b54*kz, b15*b18*kx + b33*b36*ky + b51*b54*kz, b16*b18*kx + b34*b36*ky + b52*b54*kz, b17*b18*kx + b35*b36*ky + b53*b54*kz,       kx*b18^2 + ky*b36^2 + kz*b54^2]
+ 
+</pre><p>Next to convert the above complex expressions to vectorized expresions we used the following loop and copy the output to an editor and with minimum editing we wrote the final expressions without actually write by hand indices and symbols</p><pre class="codeinput">cnt=0;
+<span class="keyword">for</span> i=1:size(B,2)
+    <span class="keyword">for</span> j=1:size(B,2)
+        cnt=cnt+1;
+        fprintf([<span class="string">'BKB(:,%d) = '</span> char(BKB(i,j)) <span class="string">';\n'</span>],cnt);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">BKB(:,1) = b1^2*kx + b19^2*ky + b37^2*kz;
+BKB(:,2) = b1*b2*kx + b19*b20*ky + b37*b38*kz;
+BKB(:,3) = b1*b3*kx + b19*b21*ky + b37*b39*kz;
+BKB(:,4) = b1*b4*kx + b19*b22*ky + b37*b40*kz;
+BKB(:,5) = b1*b5*kx + b19*b23*ky + b37*b41*kz;
+BKB(:,6) = b1*b6*kx + b19*b24*ky + b37*b42*kz;
+BKB(:,7) = b1*b7*kx + b19*b25*ky + b37*b43*kz;
+BKB(:,8) = b1*b8*kx + b19*b26*ky + b37*b44*kz;
+BKB(:,9) = b1*b9*kx + b19*b27*ky + b37*b45*kz;
+BKB(:,10) = b1*b10*kx + b19*b28*ky + b37*b46*kz;
+BKB(:,11) = b1*b11*kx + b19*b29*ky + b37*b47*kz;
+BKB(:,12) = b1*b12*kx + b19*b30*ky + b37*b48*kz;
+BKB(:,13) = b1*b13*kx + b19*b31*ky + b37*b49*kz;
+BKB(:,14) = b1*b14*kx + b19*b32*ky + b37*b50*kz;
+BKB(:,15) = b1*b15*kx + b19*b33*ky + b37*b51*kz;
+BKB(:,16) = b1*b16*kx + b19*b34*ky + b37*b52*kz;
+BKB(:,17) = b1*b17*kx + b19*b35*ky + b37*b53*kz;
+BKB(:,18) = b1*b18*kx + b19*b36*ky + b37*b54*kz;
+BKB(:,19) = b1*b2*kx + b19*b20*ky + b37*b38*kz;
+BKB(:,20) = b2^2*kx + b20^2*ky + b38^2*kz;
+BKB(:,21) = b2*b3*kx + b20*b21*ky + b38*b39*kz;
+BKB(:,22) = b2*b4*kx + b20*b22*ky + b38*b40*kz;
+BKB(:,23) = b2*b5*kx + b20*b23*ky + b38*b41*kz;
+BKB(:,24) = b2*b6*kx + b20*b24*ky + b38*b42*kz;
+BKB(:,25) = b2*b7*kx + b20*b25*ky + b38*b43*kz;
+BKB(:,26) = b2*b8*kx + b20*b26*ky + b38*b44*kz;
+BKB(:,27) = b2*b9*kx + b20*b27*ky + b38*b45*kz;
+BKB(:,28) = b2*b10*kx + b20*b28*ky + b38*b46*kz;
+BKB(:,29) = b2*b11*kx + b20*b29*ky + b38*b47*kz;
+BKB(:,30) = b2*b12*kx + b20*b30*ky + b38*b48*kz;
+BKB(:,31) = b2*b13*kx + b20*b31*ky + b38*b49*kz;
+BKB(:,32) = b2*b14*kx + b20*b32*ky + b38*b50*kz;
+BKB(:,33) = b2*b15*kx + b20*b33*ky + b38*b51*kz;
+BKB(:,34) = b2*b16*kx + b20*b34*ky + b38*b52*kz;
+BKB(:,35) = b2*b17*kx + b20*b35*ky + b38*b53*kz;
+BKB(:,36) = b2*b18*kx + b20*b36*ky + b38*b54*kz;
+BKB(:,37) = b1*b3*kx + b19*b21*ky + b37*b39*kz;
+BKB(:,38) = b2*b3*kx + b20*b21*ky + b38*b39*kz;
+BKB(:,39) = b3^2*kx + b21^2*ky + b39^2*kz;
+BKB(:,40) = b3*b4*kx + b21*b22*ky + b39*b40*kz;
+BKB(:,41) = b3*b5*kx + b21*b23*ky + b39*b41*kz;
+BKB(:,42) = b3*b6*kx + b21*b24*ky + b39*b42*kz;
+BKB(:,43) = b3*b7*kx + b21*b25*ky + b39*b43*kz;
+BKB(:,44) = b3*b8*kx + b21*b26*ky + b39*b44*kz;
+BKB(:,45) = b3*b9*kx + b21*b27*ky + b39*b45*kz;
+BKB(:,46) = b3*b10*kx + b21*b28*ky + b39*b46*kz;
+BKB(:,47) = b3*b11*kx + b21*b29*ky + b39*b47*kz;
+BKB(:,48) = b3*b12*kx + b21*b30*ky + b39*b48*kz;
+BKB(:,49) = b3*b13*kx + b21*b31*ky + b39*b49*kz;
+BKB(:,50) = b3*b14*kx + b21*b32*ky + b39*b50*kz;
+BKB(:,51) = b3*b15*kx + b21*b33*ky + b39*b51*kz;
+BKB(:,52) = b3*b16*kx + b21*b34*ky + b39*b52*kz;
+BKB(:,53) = b3*b17*kx + b21*b35*ky + b39*b53*kz;
+BKB(:,54) = b3*b18*kx + b21*b36*ky + b39*b54*kz;
+BKB(:,55) = b1*b4*kx + b19*b22*ky + b37*b40*kz;
+BKB(:,56) = b2*b4*kx + b20*b22*ky + b38*b40*kz;
+BKB(:,57) = b3*b4*kx + b21*b22*ky + b39*b40*kz;
+BKB(:,58) = b4^2*kx + b22^2*ky + b40^2*kz;
+BKB(:,59) = b4*b5*kx + b22*b23*ky + b40*b41*kz;
+BKB(:,60) = b4*b6*kx + b22*b24*ky + b40*b42*kz;
+BKB(:,61) = b4*b7*kx + b22*b25*ky + b40*b43*kz;
+BKB(:,62) = b4*b8*kx + b22*b26*ky + b40*b44*kz;
+BKB(:,63) = b4*b9*kx + b22*b27*ky + b40*b45*kz;
+BKB(:,64) = b4*b10*kx + b22*b28*ky + b40*b46*kz;
+BKB(:,65) = b4*b11*kx + b22*b29*ky + b40*b47*kz;
+BKB(:,66) = b4*b12*kx + b22*b30*ky + b40*b48*kz;
+BKB(:,67) = b4*b13*kx + b22*b31*ky + b40*b49*kz;
+BKB(:,68) = b4*b14*kx + b22*b32*ky + b40*b50*kz;
+BKB(:,69) = b4*b15*kx + b22*b33*ky + b40*b51*kz;
+BKB(:,70) = b4*b16*kx + b22*b34*ky + b40*b52*kz;
+BKB(:,71) = b4*b17*kx + b22*b35*ky + b40*b53*kz;
+BKB(:,72) = b4*b18*kx + b22*b36*ky + b40*b54*kz;
+BKB(:,73) = b1*b5*kx + b19*b23*ky + b37*b41*kz;
+BKB(:,74) = b2*b5*kx + b20*b23*ky + b38*b41*kz;
+BKB(:,75) = b3*b5*kx + b21*b23*ky + b39*b41*kz;
+BKB(:,76) = b4*b5*kx + b22*b23*ky + b40*b41*kz;
+BKB(:,77) = b5^2*kx + b23^2*ky + b41^2*kz;
+BKB(:,78) = b5*b6*kx + b23*b24*ky + b41*b42*kz;
+BKB(:,79) = b5*b7*kx + b23*b25*ky + b41*b43*kz;
+BKB(:,80) = b5*b8*kx + b23*b26*ky + b41*b44*kz;
+BKB(:,81) = b5*b9*kx + b23*b27*ky + b41*b45*kz;
+BKB(:,82) = b5*b10*kx + b23*b28*ky + b41*b46*kz;
+BKB(:,83) = b5*b11*kx + b23*b29*ky + b41*b47*kz;
+BKB(:,84) = b5*b12*kx + b23*b30*ky + b41*b48*kz;
+BKB(:,85) = b5*b13*kx + b23*b31*ky + b41*b49*kz;
+BKB(:,86) = b5*b14*kx + b23*b32*ky + b41*b50*kz;
+BKB(:,87) = b5*b15*kx + b23*b33*ky + b41*b51*kz;
+BKB(:,88) = b5*b16*kx + b23*b34*ky + b41*b52*kz;
+BKB(:,89) = b5*b17*kx + b23*b35*ky + b41*b53*kz;
+BKB(:,90) = b5*b18*kx + b23*b36*ky + b41*b54*kz;
+BKB(:,91) = b1*b6*kx + b19*b24*ky + b37*b42*kz;
+BKB(:,92) = b2*b6*kx + b20*b24*ky + b38*b42*kz;
+BKB(:,93) = b3*b6*kx + b21*b24*ky + b39*b42*kz;
+BKB(:,94) = b4*b6*kx + b22*b24*ky + b40*b42*kz;
+BKB(:,95) = b5*b6*kx + b23*b24*ky + b41*b42*kz;
+BKB(:,96) = b6^2*kx + b24^2*ky + b42^2*kz;
+BKB(:,97) = b6*b7*kx + b24*b25*ky + b42*b43*kz;
+BKB(:,98) = b6*b8*kx + b24*b26*ky + b42*b44*kz;
+BKB(:,99) = b6*b9*kx + b24*b27*ky + b42*b45*kz;
+BKB(:,100) = b6*b10*kx + b24*b28*ky + b42*b46*kz;
+BKB(:,101) = b6*b11*kx + b24*b29*ky + b42*b47*kz;
+BKB(:,102) = b6*b12*kx + b24*b30*ky + b42*b48*kz;
+BKB(:,103) = b6*b13*kx + b24*b31*ky + b42*b49*kz;
+BKB(:,104) = b6*b14*kx + b24*b32*ky + b42*b50*kz;
+BKB(:,105) = b6*b15*kx + b24*b33*ky + b42*b51*kz;
+BKB(:,106) = b6*b16*kx + b24*b34*ky + b42*b52*kz;
+BKB(:,107) = b6*b17*kx + b24*b35*ky + b42*b53*kz;
+BKB(:,108) = b6*b18*kx + b24*b36*ky + b42*b54*kz;
+BKB(:,109) = b1*b7*kx + b19*b25*ky + b37*b43*kz;
+BKB(:,110) = b2*b7*kx + b20*b25*ky + b38*b43*kz;
+BKB(:,111) = b3*b7*kx + b21*b25*ky + b39*b43*kz;
+BKB(:,112) = b4*b7*kx + b22*b25*ky + b40*b43*kz;
+BKB(:,113) = b5*b7*kx + b23*b25*ky + b41*b43*kz;
+BKB(:,114) = b6*b7*kx + b24*b25*ky + b42*b43*kz;
+BKB(:,115) = b7^2*kx + b25^2*ky + b43^2*kz;
+BKB(:,116) = b7*b8*kx + b25*b26*ky + b43*b44*kz;
+BKB(:,117) = b7*b9*kx + b25*b27*ky + b43*b45*kz;
+BKB(:,118) = b7*b10*kx + b25*b28*ky + b43*b46*kz;
+BKB(:,119) = b7*b11*kx + b25*b29*ky + b43*b47*kz;
+BKB(:,120) = b7*b12*kx + b25*b30*ky + b43*b48*kz;
+BKB(:,121) = b7*b13*kx + b25*b31*ky + b43*b49*kz;
+BKB(:,122) = b7*b14*kx + b25*b32*ky + b43*b50*kz;
+BKB(:,123) = b7*b15*kx + b25*b33*ky + b43*b51*kz;
+BKB(:,124) = b7*b16*kx + b25*b34*ky + b43*b52*kz;
+BKB(:,125) = b7*b17*kx + b25*b35*ky + b43*b53*kz;
+BKB(:,126) = b7*b18*kx + b25*b36*ky + b43*b54*kz;
+BKB(:,127) = b1*b8*kx + b19*b26*ky + b37*b44*kz;
+BKB(:,128) = b2*b8*kx + b20*b26*ky + b38*b44*kz;
+BKB(:,129) = b3*b8*kx + b21*b26*ky + b39*b44*kz;
+BKB(:,130) = b4*b8*kx + b22*b26*ky + b40*b44*kz;
+BKB(:,131) = b5*b8*kx + b23*b26*ky + b41*b44*kz;
+BKB(:,132) = b6*b8*kx + b24*b26*ky + b42*b44*kz;
+BKB(:,133) = b7*b8*kx + b25*b26*ky + b43*b44*kz;
+BKB(:,134) = b8^2*kx + b26^2*ky + b44^2*kz;
+BKB(:,135) = b8*b9*kx + b26*b27*ky + b44*b45*kz;
+BKB(:,136) = b8*b10*kx + b26*b28*ky + b44*b46*kz;
+BKB(:,137) = b8*b11*kx + b26*b29*ky + b44*b47*kz;
+BKB(:,138) = b8*b12*kx + b26*b30*ky + b44*b48*kz;
+BKB(:,139) = b8*b13*kx + b26*b31*ky + b44*b49*kz;
+BKB(:,140) = b8*b14*kx + b26*b32*ky + b44*b50*kz;
+BKB(:,141) = b8*b15*kx + b26*b33*ky + b44*b51*kz;
+BKB(:,142) = b8*b16*kx + b26*b34*ky + b44*b52*kz;
+BKB(:,143) = b8*b17*kx + b26*b35*ky + b44*b53*kz;
+BKB(:,144) = b8*b18*kx + b26*b36*ky + b44*b54*kz;
+BKB(:,145) = b1*b9*kx + b19*b27*ky + b37*b45*kz;
+BKB(:,146) = b2*b9*kx + b20*b27*ky + b38*b45*kz;
+BKB(:,147) = b3*b9*kx + b21*b27*ky + b39*b45*kz;
+BKB(:,148) = b4*b9*kx + b22*b27*ky + b40*b45*kz;
+BKB(:,149) = b5*b9*kx + b23*b27*ky + b41*b45*kz;
+BKB(:,150) = b6*b9*kx + b24*b27*ky + b42*b45*kz;
+BKB(:,151) = b7*b9*kx + b25*b27*ky + b43*b45*kz;
+BKB(:,152) = b8*b9*kx + b26*b27*ky + b44*b45*kz;
+BKB(:,153) = b9^2*kx + b27^2*ky + b45^2*kz;
+BKB(:,154) = b9*b10*kx + b27*b28*ky + b45*b46*kz;
+BKB(:,155) = b9*b11*kx + b27*b29*ky + b45*b47*kz;
+BKB(:,156) = b9*b12*kx + b27*b30*ky + b45*b48*kz;
+BKB(:,157) = b9*b13*kx + b27*b31*ky + b45*b49*kz;
+BKB(:,158) = b9*b14*kx + b27*b32*ky + b45*b50*kz;
+BKB(:,159) = b9*b15*kx + b27*b33*ky + b45*b51*kz;
+BKB(:,160) = b9*b16*kx + b27*b34*ky + b45*b52*kz;
+BKB(:,161) = b9*b17*kx + b27*b35*ky + b45*b53*kz;
+BKB(:,162) = b9*b18*kx + b27*b36*ky + b45*b54*kz;
+BKB(:,163) = b1*b10*kx + b19*b28*ky + b37*b46*kz;
+BKB(:,164) = b2*b10*kx + b20*b28*ky + b38*b46*kz;
+BKB(:,165) = b3*b10*kx + b21*b28*ky + b39*b46*kz;
+BKB(:,166) = b4*b10*kx + b22*b28*ky + b40*b46*kz;
+BKB(:,167) = b5*b10*kx + b23*b28*ky + b41*b46*kz;
+BKB(:,168) = b6*b10*kx + b24*b28*ky + b42*b46*kz;
+BKB(:,169) = b7*b10*kx + b25*b28*ky + b43*b46*kz;
+BKB(:,170) = b8*b10*kx + b26*b28*ky + b44*b46*kz;
+BKB(:,171) = b9*b10*kx + b27*b28*ky + b45*b46*kz;
+BKB(:,172) = b10^2*kx + b28^2*ky + b46^2*kz;
+BKB(:,173) = b10*b11*kx + b28*b29*ky + b46*b47*kz;
+BKB(:,174) = b10*b12*kx + b28*b30*ky + b46*b48*kz;
+BKB(:,175) = b10*b13*kx + b28*b31*ky + b46*b49*kz;
+BKB(:,176) = b10*b14*kx + b28*b32*ky + b46*b50*kz;
+BKB(:,177) = b10*b15*kx + b28*b33*ky + b46*b51*kz;
+BKB(:,178) = b10*b16*kx + b28*b34*ky + b46*b52*kz;
+BKB(:,179) = b10*b17*kx + b28*b35*ky + b46*b53*kz;
+BKB(:,180) = b10*b18*kx + b28*b36*ky + b46*b54*kz;
+BKB(:,181) = b1*b11*kx + b19*b29*ky + b37*b47*kz;
+BKB(:,182) = b2*b11*kx + b20*b29*ky + b38*b47*kz;
+BKB(:,183) = b3*b11*kx + b21*b29*ky + b39*b47*kz;
+BKB(:,184) = b4*b11*kx + b22*b29*ky + b40*b47*kz;
+BKB(:,185) = b5*b11*kx + b23*b29*ky + b41*b47*kz;
+BKB(:,186) = b6*b11*kx + b24*b29*ky + b42*b47*kz;
+BKB(:,187) = b7*b11*kx + b25*b29*ky + b43*b47*kz;
+BKB(:,188) = b8*b11*kx + b26*b29*ky + b44*b47*kz;
+BKB(:,189) = b9*b11*kx + b27*b29*ky + b45*b47*kz;
+BKB(:,190) = b10*b11*kx + b28*b29*ky + b46*b47*kz;
+BKB(:,191) = b11^2*kx + b29^2*ky + b47^2*kz;
+BKB(:,192) = b11*b12*kx + b29*b30*ky + b47*b48*kz;
+BKB(:,193) = b11*b13*kx + b29*b31*ky + b47*b49*kz;
+BKB(:,194) = b11*b14*kx + b29*b32*ky + b47*b50*kz;
+BKB(:,195) = b11*b15*kx + b29*b33*ky + b47*b51*kz;
+BKB(:,196) = b11*b16*kx + b29*b34*ky + b47*b52*kz;
+BKB(:,197) = b11*b17*kx + b29*b35*ky + b47*b53*kz;
+BKB(:,198) = b11*b18*kx + b29*b36*ky + b47*b54*kz;
+BKB(:,199) = b1*b12*kx + b19*b30*ky + b37*b48*kz;
+BKB(:,200) = b2*b12*kx + b20*b30*ky + b38*b48*kz;
+BKB(:,201) = b3*b12*kx + b21*b30*ky + b39*b48*kz;
+BKB(:,202) = b4*b12*kx + b22*b30*ky + b40*b48*kz;
+BKB(:,203) = b5*b12*kx + b23*b30*ky + b41*b48*kz;
+BKB(:,204) = b6*b12*kx + b24*b30*ky + b42*b48*kz;
+BKB(:,205) = b7*b12*kx + b25*b30*ky + b43*b48*kz;
+BKB(:,206) = b8*b12*kx + b26*b30*ky + b44*b48*kz;
+BKB(:,207) = b9*b12*kx + b27*b30*ky + b45*b48*kz;
+BKB(:,208) = b10*b12*kx + b28*b30*ky + b46*b48*kz;
+BKB(:,209) = b11*b12*kx + b29*b30*ky + b47*b48*kz;
+BKB(:,210) = b12^2*kx + b30^2*ky + b48^2*kz;
+BKB(:,211) = b12*b13*kx + b30*b31*ky + b48*b49*kz;
+BKB(:,212) = b12*b14*kx + b30*b32*ky + b48*b50*kz;
+BKB(:,213) = b12*b15*kx + b30*b33*ky + b48*b51*kz;
+BKB(:,214) = b12*b16*kx + b30*b34*ky + b48*b52*kz;
+BKB(:,215) = b12*b17*kx + b30*b35*ky + b48*b53*kz;
+BKB(:,216) = b12*b18*kx + b30*b36*ky + b48*b54*kz;
+BKB(:,217) = b1*b13*kx + b19*b31*ky + b37*b49*kz;
+BKB(:,218) = b2*b13*kx + b20*b31*ky + b38*b49*kz;
+BKB(:,219) = b3*b13*kx + b21*b31*ky + b39*b49*kz;
+BKB(:,220) = b4*b13*kx + b22*b31*ky + b40*b49*kz;
+BKB(:,221) = b5*b13*kx + b23*b31*ky + b41*b49*kz;
+BKB(:,222) = b6*b13*kx + b24*b31*ky + b42*b49*kz;
+BKB(:,223) = b7*b13*kx + b25*b31*ky + b43*b49*kz;
+BKB(:,224) = b8*b13*kx + b26*b31*ky + b44*b49*kz;
+BKB(:,225) = b9*b13*kx + b27*b31*ky + b45*b49*kz;
+BKB(:,226) = b10*b13*kx + b28*b31*ky + b46*b49*kz;
+BKB(:,227) = b11*b13*kx + b29*b31*ky + b47*b49*kz;
+BKB(:,228) = b12*b13*kx + b30*b31*ky + b48*b49*kz;
+BKB(:,229) = b13^2*kx + b31^2*ky + b49^2*kz;
+BKB(:,230) = b13*b14*kx + b31*b32*ky + b49*b50*kz;
+BKB(:,231) = b13*b15*kx + b31*b33*ky + b49*b51*kz;
+BKB(:,232) = b13*b16*kx + b31*b34*ky + b49*b52*kz;
+BKB(:,233) = b13*b17*kx + b31*b35*ky + b49*b53*kz;
+BKB(:,234) = b13*b18*kx + b31*b36*ky + b49*b54*kz;
+BKB(:,235) = b1*b14*kx + b19*b32*ky + b37*b50*kz;
+BKB(:,236) = b2*b14*kx + b20*b32*ky + b38*b50*kz;
+BKB(:,237) = b3*b14*kx + b21*b32*ky + b39*b50*kz;
+BKB(:,238) = b4*b14*kx + b22*b32*ky + b40*b50*kz;
+BKB(:,239) = b5*b14*kx + b23*b32*ky + b41*b50*kz;
+BKB(:,240) = b6*b14*kx + b24*b32*ky + b42*b50*kz;
+BKB(:,241) = b7*b14*kx + b25*b32*ky + b43*b50*kz;
+BKB(:,242) = b8*b14*kx + b26*b32*ky + b44*b50*kz;
+BKB(:,243) = b9*b14*kx + b27*b32*ky + b45*b50*kz;
+BKB(:,244) = b10*b14*kx + b28*b32*ky + b46*b50*kz;
+BKB(:,245) = b11*b14*kx + b29*b32*ky + b47*b50*kz;
+BKB(:,246) = b12*b14*kx + b30*b32*ky + b48*b50*kz;
+BKB(:,247) = b13*b14*kx + b31*b32*ky + b49*b50*kz;
+BKB(:,248) = b14^2*kx + b32^2*ky + b50^2*kz;
+BKB(:,249) = b14*b15*kx + b32*b33*ky + b50*b51*kz;
+BKB(:,250) = b14*b16*kx + b32*b34*ky + b50*b52*kz;
+BKB(:,251) = b14*b17*kx + b32*b35*ky + b50*b53*kz;
+BKB(:,252) = b14*b18*kx + b32*b36*ky + b50*b54*kz;
+BKB(:,253) = b1*b15*kx + b19*b33*ky + b37*b51*kz;
+BKB(:,254) = b2*b15*kx + b20*b33*ky + b38*b51*kz;
+BKB(:,255) = b3*b15*kx + b21*b33*ky + b39*b51*kz;
+BKB(:,256) = b4*b15*kx + b22*b33*ky + b40*b51*kz;
+BKB(:,257) = b5*b15*kx + b23*b33*ky + b41*b51*kz;
+BKB(:,258) = b6*b15*kx + b24*b33*ky + b42*b51*kz;
+BKB(:,259) = b7*b15*kx + b25*b33*ky + b43*b51*kz;
+BKB(:,260) = b8*b15*kx + b26*b33*ky + b44*b51*kz;
+BKB(:,261) = b9*b15*kx + b27*b33*ky + b45*b51*kz;
+BKB(:,262) = b10*b15*kx + b28*b33*ky + b46*b51*kz;
+BKB(:,263) = b11*b15*kx + b29*b33*ky + b47*b51*kz;
+BKB(:,264) = b12*b15*kx + b30*b33*ky + b48*b51*kz;
+BKB(:,265) = b13*b15*kx + b31*b33*ky + b49*b51*kz;
+BKB(:,266) = b14*b15*kx + b32*b33*ky + b50*b51*kz;
+BKB(:,267) = b15^2*kx + b33^2*ky + b51^2*kz;
+BKB(:,268) = b15*b16*kx + b33*b34*ky + b51*b52*kz;
+BKB(:,269) = b15*b17*kx + b33*b35*ky + b51*b53*kz;
+BKB(:,270) = b15*b18*kx + b33*b36*ky + b51*b54*kz;
+BKB(:,271) = b1*b16*kx + b19*b34*ky + b37*b52*kz;
+BKB(:,272) = b2*b16*kx + b20*b34*ky + b38*b52*kz;
+BKB(:,273) = b3*b16*kx + b21*b34*ky + b39*b52*kz;
+BKB(:,274) = b4*b16*kx + b22*b34*ky + b40*b52*kz;
+BKB(:,275) = b5*b16*kx + b23*b34*ky + b41*b52*kz;
+BKB(:,276) = b6*b16*kx + b24*b34*ky + b42*b52*kz;
+BKB(:,277) = b7*b16*kx + b25*b34*ky + b43*b52*kz;
+BKB(:,278) = b8*b16*kx + b26*b34*ky + b44*b52*kz;
+BKB(:,279) = b9*b16*kx + b27*b34*ky + b45*b52*kz;
+BKB(:,280) = b10*b16*kx + b28*b34*ky + b46*b52*kz;
+BKB(:,281) = b11*b16*kx + b29*b34*ky + b47*b52*kz;
+BKB(:,282) = b12*b16*kx + b30*b34*ky + b48*b52*kz;
+BKB(:,283) = b13*b16*kx + b31*b34*ky + b49*b52*kz;
+BKB(:,284) = b14*b16*kx + b32*b34*ky + b50*b52*kz;
+BKB(:,285) = b15*b16*kx + b33*b34*ky + b51*b52*kz;
+BKB(:,286) = b16^2*kx + b34^2*ky + b52^2*kz;
+BKB(:,287) = b16*b17*kx + b34*b35*ky + b52*b53*kz;
+BKB(:,288) = b16*b18*kx + b34*b36*ky + b52*b54*kz;
+BKB(:,289) = b1*b17*kx + b19*b35*ky + b37*b53*kz;
+BKB(:,290) = b2*b17*kx + b20*b35*ky + b38*b53*kz;
+BKB(:,291) = b3*b17*kx + b21*b35*ky + b39*b53*kz;
+BKB(:,292) = b4*b17*kx + b22*b35*ky + b40*b53*kz;
+BKB(:,293) = b5*b17*kx + b23*b35*ky + b41*b53*kz;
+BKB(:,294) = b6*b17*kx + b24*b35*ky + b42*b53*kz;
+BKB(:,295) = b7*b17*kx + b25*b35*ky + b43*b53*kz;
+BKB(:,296) = b8*b17*kx + b26*b35*ky + b44*b53*kz;
+BKB(:,297) = b9*b17*kx + b27*b35*ky + b45*b53*kz;
+BKB(:,298) = b10*b17*kx + b28*b35*ky + b46*b53*kz;
+BKB(:,299) = b11*b17*kx + b29*b35*ky + b47*b53*kz;
+BKB(:,300) = b12*b17*kx + b30*b35*ky + b48*b53*kz;
+BKB(:,301) = b13*b17*kx + b31*b35*ky + b49*b53*kz;
+BKB(:,302) = b14*b17*kx + b32*b35*ky + b50*b53*kz;
+BKB(:,303) = b15*b17*kx + b33*b35*ky + b51*b53*kz;
+BKB(:,304) = b16*b17*kx + b34*b35*ky + b52*b53*kz;
+BKB(:,305) = b17^2*kx + b35^2*ky + b53^2*kz;
+BKB(:,306) = b17*b18*kx + b35*b36*ky + b53*b54*kz;
+BKB(:,307) = b1*b18*kx + b19*b36*ky + b37*b54*kz;
+BKB(:,308) = b2*b18*kx + b20*b36*ky + b38*b54*kz;
+BKB(:,309) = b3*b18*kx + b21*b36*ky + b39*b54*kz;
+BKB(:,310) = b4*b18*kx + b22*b36*ky + b40*b54*kz;
+BKB(:,311) = b5*b18*kx + b23*b36*ky + b41*b54*kz;
+BKB(:,312) = b6*b18*kx + b24*b36*ky + b42*b54*kz;
+BKB(:,313) = b7*b18*kx + b25*b36*ky + b43*b54*kz;
+BKB(:,314) = b8*b18*kx + b26*b36*ky + b44*b54*kz;
+BKB(:,315) = b9*b18*kx + b27*b36*ky + b45*b54*kz;
+BKB(:,316) = b10*b18*kx + b28*b36*ky + b46*b54*kz;
+BKB(:,317) = b11*b18*kx + b29*b36*ky + b47*b54*kz;
+BKB(:,318) = b12*b18*kx + b30*b36*ky + b48*b54*kz;
+BKB(:,319) = b13*b18*kx + b31*b36*ky + b49*b54*kz;
+BKB(:,320) = b14*b18*kx + b32*b36*ky + b50*b54*kz;
+BKB(:,321) = b15*b18*kx + b33*b36*ky + b51*b54*kz;
+BKB(:,322) = b16*b18*kx + b34*b36*ky + b52*b54*kz;
+BKB(:,323) = b17*b18*kx + b35*b36*ky + b53*b54*kz;
+BKB(:,324) = b18^2*kx + b36^2*ky + b54^2*kz;
+</pre><p><a href="msim_help_main.html">| main</a>   <a href="msim_help_demos.html">| Tutorials</a> <a href="msim_function_categories.html">| Functions</a> <a href="http://www.subsurface.gr">| website</a> |</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% calcBKBPrism_quad
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+%
+% Computes the product B' x K x B for 3D quadratic prism elements in vectorized manner
+% This is used internally from <calcBKB_help.html calcBKB>.
+%
+% Version : 1.0
+%
+% Author : George Kourakos
+%
+% email: giorgk@gmail.com
+%
+% web : http://groundwater.ucdavis.edu/msim
+%
+% Date 28-Mar-2014
+%
+% Department of Land Air and Water
+%
+% University of California Davis
+%
+%% Usage
+% BKB = calcBKBPrism_quad(B, K, ii)
+%
+%% Input
+% _*B*_: [Nel x N_sh^2] contains the contributions of each element to the final
+%      conductance matrix
+%
+% _*K*_ : [Nel x Nanis] Hydraulic conductiviy element values. The number of columns 
+%     is defined by the anisotropy. Maximum number is 3.
+%
+% _*ii*_ : In case of nested assembly this indicates the iteration. In
+%       vectorized assembly this is not used 
+%
+%% Output
+% _*BKB*_: the product B'*K*B
+%% How to compute
+% In mSim we avoid by hand computations at all costs, therefore we used the symbolic 
+% toolbox to perform the vectorized computations. The following code show 
+% how we computed the products.
+syms b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18
+syms b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 b33 b34 b35 b36
+syms b37 b38 b39 b40 b41 b42 b43 b44 b45 b46 b47 b48 b49 b50 b51 b52 b53 b54
+syms kx ky kz
+B=[b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15 b16 b17 b18;...
+   b19 b20 b21 b22 b23 b24 b25 b26 b27 b28 b29 b30 b31 b32 b33 b34 b35 b36;...
+   b37 b38 b39 b40 b41 b42 b43 b44 b45 b46 b47 b48 b49 b50 b51 b52 b53 b54];
+
+BT=[ b1 b19 b37;...
+     b2 b20 b38;...
+     b3 b21 b39;...
+     b4 b22 b40;...
+     b5 b23 b41;...
+     b6 b24 b42;...
+     b7 b25 b43;...
+     b8 b26 b44;...
+     b9 b27 b45;...
+     b10 b28 b46;...
+     b11 b29 b47;...
+     b12 b30 b48;...
+     b13 b31 b49;...
+     b14 b32 b50;...
+     b15 b33 b51;...
+     b16 b34 b52;...
+     b17 b35 b53;...
+     b18 b36 b54];
+ 
+K=[kx 0 0;...
+    0 ky 0;...
+    0  0  kz];
+ 
+BKB=BT*K*B
+%%
+% Next to convert the above complex expressions to vectorized expresions we
+% used the following loop and copy the output to an editor and with minimum
+% editing we wrote the final expressions without actually write by hand indices
+% and symbols
+cnt=0;
+for i=1:size(B,2)
+    for j=1:size(B,2)
+        cnt=cnt+1;
+        fprintf(['BKB(:,%d) = ' char(BKB(i,j)) ';\n'],cnt);
+    end
+end
+%%
+% 
+% <msim_help_main.html | main>   <msim_help_demos.html | Tutorials> 
+% <msim_function_categories.html | Functions> <http://www.subsurface.gr | website> |
+%
+##### SOURCE END #####
+--></body></html>
