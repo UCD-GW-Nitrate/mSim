@@ -7,15 +7,18 @@
 % for simulating steady state groundwater flow in 2D. The tutorials cover
 % most of the type of elements, boundary conditions and stress types that
 % one encounters in groundwater flow simulations.
-% 
+%%%
 % # <example_1_help.html Example 1> Triangular elements, constant head
 % boundary conditions, general head boundary conditions, non-uniform diffuse 
-% groundwater recharge, uniform hydraulic conductivity 
+% groundwater recharge, uniform hydraulic conductivity.
 % # <example_2_help.html Example 2> Quadrilateral elements, non-uniform
-% hydraulic conductivity, lateral fluxes, quadratic elements
+% hydraulic conductivity, lateral fluxes, quadratic elements.
+% # <compareThiem.html Comparison with analytical solution> In this example
+% we compare the mSim solution with the well know Thiem analytical solution 
+% of radial flow around a well.
 % # <Coastal_Aquifer.html Coastal Aquifer Simulation> This is a real world
 % example that uses the 2D groundwater flow equation to simulate the
-% seawater intrusion based on the sharp interface approxination
+% seawater intrusion based on the sharp interface approxination.
 % # <PumpingOptimizationExample1.html Pumping optimization> This is a
 % hypothetical example that shows how to combine mSim with matlab
 % optimization algorithms.
