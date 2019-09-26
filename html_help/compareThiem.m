@@ -1,6 +1,6 @@
-%
 %% Compare mSim with analytical solution
-%% Overview
+% *Overview*
+%%%
 % In this tutorial we will build a simple 3D cylindrical model with one
 % well at the center and we will compare it with the Thiem, 1906 analytical
 % solution.
@@ -28,7 +28,7 @@ T = 200; % [m^2/day]
 Thiem = @(r)(Q/(2*pi*T))*log(r/r0)+h0;
 disk_pntsR = sqrt(disk_pntsX.^2 + disk_pntsY.^2);
 %%%
-% and plot them
+% Plot
 mesh(disk_pntsX, disk_pntsY, Thiem(disk_pntsR),...
     'edgecolor','none','FaceColor','interp','FaceLighting','phong')
 camlight right
@@ -60,42 +60,42 @@ well.DistMax = r0;
 well.LcMin = 1;
 well.LcMax = 400;
 %%%
-% Construct the CSG object and generate the mesh
+% Construct the CSG object
 circle_dom = CSGobj_v2(2,1,10,10,1);
 circle_dom = circle_dom.readshapefile(circle_domain);
 circle_dom = circle_dom.readshapefile(well);
 %%%
-% define the mesh options. Here the 400 m is roughly the distance between
+% Define the mesh options. Here the 400 m is roughly the distance between
 % the boundary points when r0 = 2000 and 0.2 discretization of the
 % parametric variable that generated the circular points.
 meshopt = msim_mesh_options;
 meshopt.lc_gen = 400;
 meshopt.embed_points = 1;
 %%%
-% run gmsh
+% Generate the mesh run gmsh
 circle_dom.writegeo('thiem_example', meshopt);
 gmsh_path = '/home/giorgk/Downloads/gmsh-4.4.1-Linux64/bin/gmsh';
 circle_dom.runGmsh('thiem_example',gmsh_path,[]);
 %%
-% read mesh into matlab
+% Read mesh into matlab
 [p, MSH]=read_2D_Gmsh('thiem_example', 0, 0);
 %% 
 % *Boundary conditions*
 %%%
-% First we will identify the boundary the mesh nodes and assign a constant head of h0
+% In the first line we identify the boundary nodes of the mesh and then assign a constant head of h0
 id_bnd = find(sqrt(sum(p.^2,2)) > 1999);
 CH = [id_bnd h0*ones(length(id_bnd),1)];
 %%
 % *Well flux*
 %%%
-% For the well we have to find first which node corresponds to the well
+% For the well we find which node corresponds to the it.
 id_well = find(sqrt(sum(p.^2,2)) < 0.1);
 FLUX_well = [id_well -Q];
 
 %%
 % *Assemble*
 %%%
-% To assemble we need the transmissivity, which we defined as constant on
+% To assemble we need the transmissivity, which we set as constant on
 % the mesh nodes
 Tnd = T*ones(size(p,1),1);
 
@@ -112,7 +112,7 @@ F=sparse(FLUX_well(:,1),1,FLUX_well(:,2),length(H),1);
 % *Solve*
 Hnumerical=solve_system(Kglo,H,F);
 %% Compare the solutions
-% To compare the the numerical solution of mSim with the analytical we have
+% To compare the numerical solution of mSim with the analytical we have
 % to evaluate the analytical over the points of the numerical.
 Hanalytical = Thiem(sqrt(sum(p.^2,2)));
 %%%
@@ -122,7 +122,7 @@ Hanalytical = Thiem(sqrt(sum(p.^2,2)));
 Hanalytical(id_well,1) = nan;
 Hnumerical(id_well,1) = nan;
 %%%
-% now we plot the relative error with respect the analytical solution
+% Now we plot the relative error with respect the analytical solution
 trisurf(MSH(3,1).elem(1,1).id, p(:,1), p(:,2), 100*(Hnumerical - Hanalytical)./Hanalytical)
 title('Relative error wrt analytical solution')
 zlabel('%')
@@ -132,13 +132,13 @@ drawnow
 %%
 % We can confirm that the numerical solution follows the analytical one very
 % close as the error is less that 1 percent.
-%% 3D NUmerical solution with mSim
+%% 3D Numerical solution with mSim
 % Next we will simulate the flow around a well using a 3D cylindrical domain.
 % Although we could use the triangular mesh and extrude it into 3D prism
 % elements, for this example we will generate a new mesh using
 % quadrilaterals which will gives us hexahedral elements for the 3D mesh.
 %%%
-% We will reuse the CSG object but we are going to change the mesh options
+% We will reuse the CSG object but change the mesh options
 meshopt_quad = msim_mesh_options;
 meshopt_quad.lc_gen = 400; 
 meshopt_quad.el_type = 'quad';
@@ -149,14 +149,16 @@ circle_dom.writegeo('thiem_example_quads', meshopt_quad);
 circle_dom.runGmsh('thiem_example_quads',gmsh_path,[])
 [p_q, MSH_q]=read_2D_Gmsh('thiem_example_quads', 0, 0);
 %%
- %}
+% Next the 2D mesh is extruded to form a 3D mesh. For that we set the
+% elevation of the top and bottom and the number of layers. 
 Ztop = 30*ones(size(p_q,1),1);
 Zbot = 0*ones(size(p_q,1),1);
 Zdistribution = [0:0.2:1];
 [p3D, MSH3D] = extrude_mesh(p_q, MSH_q, Ztop, Zbot, Zdistribution, 'linear');
 %%%
-% *Boundary conditions
-% In a similar way with the 2D model we will identify the mesh nodes that
+% *Boundary conditions*
+%%%
+% In a similar way with the 2D case we identify the mesh nodes that
 % lay on the circle with radius r0
 id_bnd = find(sqrt(sum(p3D.^2,2)) > 1999);
 CH = [id_bnd h0*ones(length(id_bnd),1)];
@@ -181,15 +183,14 @@ well_elem_coords = p_q(MSH_q(3,1).elem.id(el_id,:),:);
 % the pumping will be distributed to all mesh nodes with the same x y locations
 % as the ones of the 2D element that contains the well. However the
 % contribution on each node can be estimated based on the barycentric coordinates of the
-% point with respect the element. In mSim we can calculate the barycentric
+% well with respect the element. In mSim we can calculate the barycentric
 % coordinates for 2D elements as:
 bary_coords = BaryCoord2D( [0, 0], well_elem_coords(:,1:2) );
-%%
 clf
 plot(well_elem_coords([1:4 1],1),well_elem_coords([1:4 1],2),'.-')
 hold on
 plot(0, 0, 'or')
-text(0.01, 0.01, 'well', 'fontsize', 20)
+text(0.01, 0.01, 'well', 'fontsize', 16)
 for ii = 1:4
     text(well_elem_coords(ii,1)+0.01, well_elem_coords(ii,2)+0.01, num2str(bary_coords(ii)), 'fontsize', 14);
 end
@@ -204,15 +205,17 @@ for ii = 1:size(well_elem_coords,1)
     FLUX_well = [FLUX_well;k -Q*bary_coords(ii)/length(k) * ones(length(k),1)];
 end
 sum(FLUX_well(:,2))
-%%%
+%%
 % The last line is used as a verification that the fluxes have been distributed correctly.
-%%%
+%%
 % *Assemble*
+%%%
 % For the assembly we need to specify the hydraulic conductivity. The depth
-% of the aquifer is 20 meters therefore the conductivity is uniform on each
+% of the aquifer is 30 meters therefore the conductivity is uniform on each
 % element and equal to:
-Kel = T/30*ones( size(MSH3dD(4,1).elem(1,1).id,1), 1);
-% First we setup the options
+Kel = T/30*ones( size(MSH3D(4,1).elem(1,1).id,1), 1);
+%%%
+% Nest we setup the simulation options
 simopt.dim = 3;
 simopt.el_type = 'hex';
 simopt.el_order = 'linear';
@@ -220,9 +223,10 @@ simopt.el_order = 'linear';
 %%%
 % Convert Point flux matrix to sparse vector
 F=sparse(FLUX_well(:,1),1,FLUX_well(:,2),length(H),1);
-%%%
+%%
 % *Solve*
-% This problem in 3D is now non linear as the conductance matrix Kglo 
+%%%
+% This problem in 3D is non-linear as the conductance matrix Kglo 
 % depends on the elevation of the mesh vertices of the free surface boundary.
 %%%
 % Therefore we will solve this problem iteratively.
@@ -252,10 +256,38 @@ while true
     Hold = Hnew;
     iter = iter + 1;
 end
-
+%%
+% In this example we have set a rather strict error criterion,
+% that the mean square error is less than 0.0001. This is achieved after 7
+% iterations.
+clf
+semilogy(err,'o-')
+grid on
+ylabel('Mean square error [m]')
+xlabel('Iteration')
+drawnow
 %% Compare with analytical
+% To compare the 3D numerical solution with the analytical we have to
+% evaluate the analytical solution over the nodes of the 2D mesh that was
+% used to extrude and generate the 3D mesh.
 Hanalytical = Thiem(sqrt(sum(p_q.^2,2)));
-plot3(p_q(:,1), p_q(:,2), 100*(Hnew(id_top) - Hanalytical)./Hanalytical,'.')
+%%%
+% The 2D mesh consists of quadrilaterals, yet matlab does not have any
+% function to plot a quadrelateral mesh. Therefore we will triangulate the
+% mesh first and use the trisurf as we did previously for the triangular
+% mesh.
+tr = delaunay(p_q(:,1), p_q(:,2));
+clf
+trisurf(tr, p_q(:,1), p_q(:,2), 100*(Hnew(id_top) - Hanalytical)./Hanalytical)
+title('Relative error wrt analytical solution')
+zlabel('%')
+view(0,0)
+colormap cool
+drawnow
+%%%
+% Again we see that the error of the numerical solution is less than 1%
+% expect very close to the well point where the analytical solution cannot be defined.
+
 
 
 
