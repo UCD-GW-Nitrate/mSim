@@ -38,7 +38,16 @@ p_tmp=p(b,:);
 p_tmp_min=min(p_tmp,[],1);
 p_tmp_max=max(p_tmp,[],1);
 Len=sum(sqrt((p_tmp_max-p_tmp_min).^2));
-p_param=nanmean(bsxfun(@rdivide,bsxfun(@minus,p_tmp,p_tmp_min),(p_tmp_max-p_tmp_min)),2);
+% Since we use this function often in octave where nanmin is missing we
+% will add the following hack
+if exist ("OCTAVE_VERSION", "builtin")
+    % Many years later I can't remember why I had to use nanmean instead of
+    % mean. It seems impossible to have nan values here, unless the domain
+    % is zero. (25-Sep-2019)
+    p_param = mean(bsxfun(@rdivide,bsxfun(@minus,p_tmp,p_tmp_min),(p_tmp_max-p_tmp_min)),2);
+else
+    p_param = nanmean(bsxfun(@rdivide,bsxfun(@minus,p_tmp,p_tmp_min),(p_tmp_max-p_tmp_min)),2);
+end
 
 p_real=p_param.*Len;
 p_real=reshape(p_real(m),size(MSH,1),2);
