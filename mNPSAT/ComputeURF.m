@@ -168,7 +168,7 @@ if isfield(opt,'lambda')
         lambda = interp1(P, lambda, p_1d, 'nearest');
     end
 end
-[Dglo Mglo c]= Assemble_LHS_std(p_1d, MSH(2,1).elem(1,1).id,...
+[Dglo, Mglo, c]= Assemble_LHS_std(p_1d, MSH(2,1).elem(1,1).id,...
     aL, Vel, rho_b, K_d, lambda, theta, Dm, CC, opt);
 
 Cinit=zeros(Np,1);

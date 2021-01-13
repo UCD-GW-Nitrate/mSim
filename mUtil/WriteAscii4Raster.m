@@ -31,7 +31,7 @@ end
 fid=fopen([filename '.asc'],'w');
 if fid < 0
     error(['Cannot create the file "' [filename '.asc'] '"' ])
-    return
+    return;
 end
 fprintf(fid,'NCOLS %g\n',nc);
 fprintf(fid,'NROWS %g\n',nr);
@@ -39,10 +39,17 @@ fprintf(fid,'XLLCORNER %f\n',xl);
 fprintf(fid,'YLLCORNER %f\n',yl);
 fprintf(fid,'CELLSIZE %f\n',csz);
 fprintf(fid,'NODATA_VALUE %g\n',nodata);
-for i=1:nr
-    for j=1:nc
-        fprintf(fid,'%10.5f ',TAB(i,j));
-    end
-    fprintf(fid,'\n');
+frmt = '%10.5f ';
+for j=1:nc
+    frmt = [frmt ' %10.5f'];
 end
+frmt = [frmt '\n'];
+fprintf(fid,frmt ,TAB');
+
+%for i=1:nr
+%    for j=1:nc
+%        fprintf(fid,'%10.5f ',TAB(i,j));
+%    end
+%    fprintf(fid,'\n');
+%end
 fclose(fid);
