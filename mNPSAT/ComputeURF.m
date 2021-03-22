@@ -1,4 +1,4 @@
-function URF=ComputeURF(XYZ, Vxyz, opt)
+function [URF, v_eff] = ComputeURF(XYZ, Vxyz, opt)
 % URF=ComputeURF(XYZ, Vxyz, opt)
 % Computes the Unit Response Function for a given streamline. This function
 % discretizes the streamline and solves the 1D Advection Dispersion
@@ -62,13 +62,33 @@ if ~isfield(opt,'Lmin')
     opt.Lmin = 100;
 end
 
+if ~isfield(opt,'Agemin')
+    opt.Agemin = 1;
+end
+
+% Until I found how the 0 0 0 point is written in the files I'll remove the
+% first point with a warning
+if sqrt(sum(XYZ(1,:).^2)) < 0.1
+    XYZ(1,:) = [];
+    Vxyz(1,:) = [];
+    warning('The first point of streamline is (0 0 0) and will be removed')
+end
+
+tmp = cumsum(sqrt(sum(diff(XYZ).^2,2)));
+id_zero = find(tmp == 0);
+XYZ(id_zero,:) = [];
+Vxyz(id_zero,:) = [];
+
 
 T=(0:opt.dt:opt.Ttime)'*365;
 
-
-
 Dm= 1.1578e-004;
 P=[0;cumsum(sqrt(sum(diff(XYZ).^2,2)))];
+id_zero = find(diff(P) == 0) + 1;
+P(id_zero,:) = [];
+Vxyz(id_zero,:) = [];
+
+[arrival_time, mean_vel] = calculate_arrival_time(P,Vxyz); % The time units are im days
 
 if ~isfield(opt,'lambda')
     lambda = 0;
@@ -99,26 +119,26 @@ if opt.dx > 0.1*aL
    opt.dx = 0.1*aL;
 end
 
-if P(end) < opt.Lmin
+if arrival_time/365 < opt.Agemin % P(end) < opt.Lmin
     lambda = mean(lambda);
     P=flipud(P(end)-P);
     dL = diff(P);
     v = flipud(sqrt(sum(Vxyz.^2,2)));
     age = [0;cumsum(dL./v(1:end-1))];
     v=P(end)./age(end);
-    urf=ADE1Danalytical(P,T,v,1,aL,Dm,lambda,1);
-    val = urf(:,end)';
+    C=ADE1Danalytical(P,T,v,1,aL,Dm,lambda,1);
+    val = C(:,end)';
     val(:,1)=[];
     negval=-1*val;
     negval=[zeros(1,1) negval];
     negval=negval(1,1:size(val,2)); 
     URF=val+negval;
+    v_eff = [nan nan];
     return
 end
 XYZ=flipud(XYZ);
 Vxyz=flipud(Vxyz);
 P=[0;cumsum(sqrt(sum(diff(XYZ).^2,2)))];
-
 
 V=sqrt(sum(Vxyz.^2,2));
 p_1d=0;Msh_1D=[];Np=1;Vel=[];
@@ -168,7 +188,7 @@ if isfield(opt,'lambda')
         lambda = interp1(P, lambda, p_1d, 'nearest');
     end
 end
-[Dglo Mglo c]= Assemble_LHS_std(p_1d, MSH(2,1).elem(1,1).id,...
+[Dglo, Mglo, c]= Assemble_LHS_std(p_1d, MSH(2,1).elem(1,1).id,...
     aL, Vel, rho_b, K_d, lambda, theta, Dm, CC, opt);
 
 Cinit=zeros(Np,1);
@@ -181,9 +201,39 @@ negval=-1*val;
 negval=[zeros(1,1) negval];
 negval=negval(1,1:size(val,2)); 
 URF=val+negval;
+v_eff = nan;
+%v_eff = [calculate_effective_velocity(URF, P(end), aL, mean_vel*365) mean_vel*365];
+end
 
 
+function v_eff = calculate_effective_velocity(val, sL, aL, mean_vel)
+    ft_ade = fittype('ade_fnc( t, v, L, aL)', 'independent', 't', 'dependent', 'c', 'problem',{'L', 'aL'});
+    [xData, yData] = prepareCurveData( 1:length(val), val );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.StartPoint = mean_vel;
+    [fitresult, gof] = fit( xData, yData, ft_ade, opts, 'problem',{sL aL});
+    v_eff = coeffvalues(fitresult);
+end
 
+function c = ade_fnc_inner( t, v, L, aL, Dm)
+    D = aL*v+Dm;
+    c = 0.5.*erfc( (L - v.*t)./(2.*sqrt(D.*t)) ) + ...
+        sqrt( v.^2.*t/(pi.*D) ) .* ...
+        exp( -(L - v.*t).^2./(4.*D.*t) ) - ...
+        0.5.*(1 + v.*L./D + v.^2.*t./D) .* ...
+        exp(v.*L./D) .* ...
+        erfc( (L+v.*t)./(2.*sqrt(D.*t)) );
+end
+
+function [age, Vm] = calculate_arrival_time(P,V)
+    P=flipud(P(end)-P);
+    dL = diff(P);
+    v = flipud(sqrt(sum(V.^2,2)));
+    age = [0;cumsum(dL./v(1:end-1))];
+    age = age(end);
+    Vm = P(end)./age;
+end
 
 
 
